@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- auto-deploy test 1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -154,28 +153,6 @@ h2 em{font-style:italic;color:var(--green);}
 .atag{background:rgba(60,142,57,0.08);border:1px solid rgba(60,142,57,0.2);color:var(--green-l);font-size:0.7rem;padding:0.28rem 0.72rem;border-radius:1px;letter-spacing:0.04em;}
 .h-right p{color:rgba(244,242,238,0.55);font-size:0.9rem;line-height:1.78;font-weight:300;margin-bottom:1.8rem;}
 .note-box{background:rgba(60,142,57,0.06);border:1px solid rgba(60,142,57,0.18);border-left:3px solid var(--green);padding:1.1rem 1.4rem;font-size:0.8rem;color:rgba(244,242,238,0.65);line-height:1.6;}
-
-/* ── SHOP ── */
-#shop{background:var(--dark);}
-.shop-intro{max-width:560px;margin-bottom:3rem;}
-.shop-intro p{color:var(--mid);font-size:0.92rem;line-height:1.78;font-weight:300;}
-.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
-.product{background:var(--card);border:1px solid var(--border);border-radius:2px;overflow:hidden;transition:all 0.3s;display:flex;flex-direction:column;}
-.product:hover{border-color:rgba(60,142,57,0.4);transform:translateY(-3px);}
-.product-img{width:100%;aspect-ratio:4/3;background-size:cover;background-position:center;position:relative;}
-.product-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(8,8,8,0.4));}
-.product-tag{position:absolute;top:0.9rem;left:0.9rem;background:var(--green);color:var(--white);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:700;padding:0.28rem 0.7rem;border-radius:1px;z-index:2;}
-.product-body{padding:1.5rem 1.4rem;display:flex;flex-direction:column;flex:1;}
-.product-name{font-family:var(--serif);font-size:1.3rem;font-weight:600;margin-bottom:0.4rem;color:var(--white);}
-.product-desc{font-size:0.82rem;color:rgba(244,242,238,0.6);line-height:1.65;margin-bottom:1.3rem;flex:1;font-weight:300;}
-.product-foot{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:auto;}
-.product-price{font-family:var(--serif);font-size:1.5rem;font-weight:700;color:var(--green);}
-.product-price small{font-size:0.65rem;color:var(--mid);font-family:var(--sans);font-weight:400;display:block;letter-spacing:0.04em;}
-.buy-btn{background:var(--green);color:var(--white);border:none;padding:0.7rem 1.2rem;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;cursor:pointer;border-radius:2px;transition:all 0.2s;font-family:var(--sans);}
-.buy-btn:hover{background:var(--green-l);transform:translateY(-1px);}
-.buy-btn:disabled{opacity:0.5;cursor:not-allowed;}
-.shop-note{margin-top:3rem;padding:1.2rem 1.5rem;background:rgba(60,142,57,0.06);border:1px solid rgba(60,142,57,0.18);border-left:3px solid var(--green);font-size:0.83rem;color:rgba(244,242,238,0.65);line-height:1.65;border-radius:2px;}
-.shop-note strong{color:var(--white);font-weight:500;}
 
 /* ── REVIEWS ── */
 #reviews{background:var(--black);}
@@ -371,79 +348,6 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
   #cta{padding:6rem 1.8rem;}
   .btn-row{flex-wrap:wrap;}
 }
-
-/* ── PHONE POLISH (≤ 640px) ── */
-@media(max-width:640px){
-  :root{--nav-h:62px;}
-  nav{padding:0 1.1rem;}
-  .nav-logo img,nav>a>img{height:34px;}
-  .nav-cta{display:none;}
-
-  /* Hero */
-  #hero{height:100svh;min-height:580px;}
-  .slide{align-items:flex-end;padding-bottom:9rem;}
-  .slide-content{padding:0 1.4rem;max-width:100%;}
-  .slide-tag{font-size:0.6rem;margin-bottom:1rem;letter-spacing:0.18em;}
-  .slide h1{font-size:clamp(2.4rem,11vw,3.4rem);line-height:1.02;margin-bottom:0.9rem;}
-  .slide-sub{font-size:0.88rem;line-height:1.6;margin-bottom:1.5rem;max-width:100%;}
-  .slide-btns{gap:0.6rem;width:100%;}
-  .slide-btns .btn-p,.slide-btns .btn-g{flex:1;justify-content:center;padding:0.9rem 1rem;font-size:0.72rem;}
-  .slide-ov{background:linear-gradient(180deg,rgba(8,8,8,0.55) 0%,rgba(8,8,8,0.35) 35%,rgba(8,8,8,0.92) 100%);}
-  .hero-ctrl{left:1.4rem;bottom:1.2rem;gap:0.8rem;}
-  .arr{width:34px;height:34px;font-size:0.8rem;}
-  .arrows{margin-left:0.4rem;}
-
-  /* Strip */
-  .strip{padding:1.8rem 1.2rem;gap:1.2rem;}
-  .stat{flex:1;min-width:90px;}
-  .stat-n{font-size:1.8rem;}
-  .stat-l{font-size:0.55rem;}
-
-  /* Sections */
-  section{padding:4rem 1.3rem;}
-  h2{font-size:2rem;}
-  .sec-tag{font-size:0.58rem;margin-bottom:0.7rem;}
-
-  /* About */
-  .about-img{min-height:230px;}
-  .about-text{padding:2.4rem 1.3rem;}
-  .about-text p{font-size:0.92rem;line-height:1.75;}
-
-  /* Services */
-  .svc-intro{margin-bottom:2.2rem;}
-  .tabs{gap:0;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;margin-bottom:2rem;}
-  .tab{padding:0.68rem 1.1rem;font-size:0.68rem;flex-shrink:0;}
-  .sc{padding:1.8rem 1.4rem;}
-  .sc-name{font-size:1.2rem;}
-  .sc-price{font-size:1.4rem;}
-
-  /* Hours */
-  #hours{padding:3.5rem 1.3rem;gap:2.2rem;}
-  .htbl td{padding:0.78rem 0;font-size:0.82rem;}
-
-  /* Reviews */
-  #reviews{padding:4rem 1.3rem;}
-
-  /* Booking */
-  #booking{padding:4rem 1.1rem;}
-
-  /* Contact */
-  #contact{padding:4rem 1.3rem;}
-
-  /* CTA */
-  #cta{padding:4.5rem 1.3rem;}
-
-  /* Footer */
-  footer{padding:2.2rem 1.3rem;gap:1.4rem;}
-
-  /* Mobile nav tweaks */
-  .mob-nav{padding:1.2rem 1.5rem 3rem;}
-  .mob-nav a{font-size:0.95rem;padding:0.8rem 0;}
-  .mob-book{font-size:0.82rem!important;padding:0.95rem!important;}
-
-  /* Toast */
-  .toast{bottom:1rem;right:1rem;left:1rem;max-width:none;font-size:0.78rem;}
-}
 </style>
 </head>
 <body>
@@ -474,7 +378,7 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
         </div>
       </div>
     </li>
-    <li><a href="#shop">Shop</a></li>
+    <li><a href="https://www.profoundmobiletend.com/shop" target="_blank">Shop</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#hours">Hours</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -495,7 +399,7 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
   <div class="mob-label">Full Package</div>
   <a href="#booking" onclick="scrollToBooking('full-detail')">Profound Full Detail — Get Quote</a>
   <div class="mob-label">Menu</div>
-  <a href="#shop">Shop</a>
+  <a href="https://www.profoundmobiletend.com/shop" target="_blank">Shop</a>
   <a href="#about">About</a>
   <a href="#hours">Hours</a>
   <a href="#contact">Contact</a>
@@ -637,107 +541,6 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
     <div class="area-tags">
       <span class="atag">Baltimore</span><span class="atag">Towson</span><span class="atag">Columbia</span><span class="atag">Ellicott City</span><span class="atag">Annapolis</span><span class="atag">Bowie</span><span class="atag">Silver Spring</span><span class="atag">Washington DC</span><span class="atag">+ More</span>
     </div>
-  </div>
-</section>
-
-<!-- ══ SHOP ══ -->
-<section id="shop">
-  <div class="reveal">
-    <div class="sec-tag">Shop</div>
-    <h2>Detail <em>Packages</em></h2>
-    <div class="shop-intro">
-      <p>Book and prepay for your detail online. Secure checkout, instant confirmation — we'll reach out to schedule your appointment within 24 hours.</p>
-    </div>
-  </div>
-
-  <div class="shop-grid reveal">
-    <div class="product">
-      <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ae1a7fa4-6346-44eb-9abf-e771da04ce77/profound+Mobile+Tend')">
-        <span class="product-tag">Entry</span>
-      </div>
-      <div class="product-body">
-        <div class="product-name">Standard Hand Wash</div>
-        <p class="product-desc">Exterior hand wash, tire shine, and window clean. Perfect for regular upkeep.</p>
-        <div class="product-foot">
-          <div class="product-price">$54.99<small>45–60 min</small></div>
-          <button class="buy-btn" data-product="hand-wash" data-price="5499" data-name="Standard Hand Wash">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/7b28311d-d47f-4246-a657-e30cb382c478/Profound+Mobile+Tend')">
-        <span class="product-tag">Popular</span>
-      </div>
-      <div class="product-body">
-        <div class="product-name">Basic Wash</div>
-        <p class="product-desc">Full exterior wash with decontamination and premium protectant. Long-lasting shine.</p>
-        <div class="product-foot">
-          <div class="product-price">$149.99<small>60–75 min</small></div>
-          <button class="buy-btn" data-product="basic-wash" data-price="14999" data-name="Basic Wash">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ae1a7fa4-6346-44eb-9abf-e771da04ce77/profound+Mobile+Tend');background-position:65% center;">
-        <span class="product-tag">Signature</span>
-      </div>
-      <div class="product-body">
-        <div class="product-name">Wash &amp; Wax</div>
-        <p class="product-desc">Hand wash plus premium carnauba wax. Protection and shine for up to 3 months.</p>
-        <div class="product-foot">
-          <div class="product-price">$134.99<small>90–120 min</small></div>
-          <button class="buy-btn" data-product="wash-wax" data-price="13499" data-name="Wash &amp; Wax">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/7b28311d-d47f-4246-a657-e30cb382c478/Profound+Mobile+Tend')">
-        <span class="product-tag">Essential</span>
-      </div>
-      <div class="product-body">
-        <div class="product-name">Standard Interior Detail</div>
-        <p class="product-desc">Vacuum, wipe down, seat cleaning, and interior glass. Fresh cabin, every time.</p>
-        <div class="product-foot">
-          <div class="product-price">$144.99<small>2–3 hrs</small></div>
-          <button class="buy-btn" data-product="std-interior" data-price="14499" data-name="Standard Interior Detail">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ae1a7fa4-6346-44eb-9abf-e771da04ce77/profound+Mobile+Tend')">
-        <span class="product-tag">Premium</span>
-      </div>
-      <div class="product-body">
-        <div class="product-name">Full Interior Detail</div>
-        <p class="product-desc">Deep extraction, leather conditioning, stain treatment, and odor elimination.</p>
-        <div class="product-foot">
-          <div class="product-price">$209.99<small>3–5 hrs</small></div>
-          <button class="buy-btn" data-product="full-interior" data-price="20999" data-name="Full Interior Detail">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/7b28311d-d47f-4246-a657-e30cb382c478/Profound+Mobile+Tend')">
-        <span class="product-tag">Best Value</span>
-      </div>
-      <div class="product-body">
-        <div class="product-name">Profound Full Detail</div>
-        <p class="product-desc">Interior + exterior complete package. Our signature, top-to-bottom restoration.</p>
-        <div class="product-foot">
-          <div class="product-price">Quote<small>4–6 hrs</small></div>
-          <button class="buy-btn" data-product="full-detail" data-price="0" data-name="Profound Full Detail" onclick="scrollToBooking('full-detail')">Get Quote</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="shop-note reveal">
-    <strong>✝ Secure Checkout —</strong> Payments are processed securely via Square. After purchase, we'll confirm your appointment time within 24 hours via email or phone. Questions? <a href="#contact" style="color:var(--green-l);">Contact us</a>.
   </div>
 </section>
 
@@ -923,7 +726,7 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
   </div>
   <ul class="f-links">
     <li><a href="#services">Services</a></li>
-    <li><a href="#shop">Shop</a></li>
+    <li><a href="https://www.profoundmobiletend.com/shop" target="_blank">Shop</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#hours">Hours</a></li>
     <li><a href="#booking">Book Now</a></li>
@@ -974,31 +777,6 @@ const now=new Date();
 let calY=now.getFullYear(),calM=now.getMonth();
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DNAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-
-/* ─── SHOP / SQUARE CHECKOUT LINKS ─── */
-/* Paste your Square Checkout URLs here (create in Square Dashboard → Online Checkout → Payment Links).
-   Leave blank "" to fall back to the booking form. */
-const SQUARE_LINKS={
-  'hand-wash':'',
-  'basic-wash':'',
-  'wash-wax':'',
-  'std-interior':'',
-  'full-interior':'',
-  'full-detail':''
-};
-document.addEventListener('DOMContentLoaded',()=>{
-  document.querySelectorAll('.buy-btn[data-product]').forEach(btn=>{
-    btn.addEventListener('click',(e)=>{
-      const pid=btn.dataset.product;
-      const url=SQUARE_LINKS[pid];
-      if(url){
-        window.open(url,'_blank');
-      }else{
-        scrollToBooking(pid);
-      }
-    });
-  });
-});
 
 /* ─── SCROLL TO BOOKING ─── */
 function scrollToBooking(svcId){
