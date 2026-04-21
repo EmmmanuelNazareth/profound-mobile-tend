@@ -176,6 +176,29 @@ h2 em{font-style:italic;color:var(--green);}
 .buy-btn:disabled{opacity:0.5;cursor:not-allowed;}
 .shop-note{margin-top:3rem;padding:1.2rem 1.5rem;background:rgba(60,142,57,0.06);border:1px solid rgba(60,142,57,0.18);border-left:3px solid var(--green);font-size:0.83rem;color:rgba(244,242,238,0.65);line-height:1.65;border-radius:2px;}
 .shop-note strong{color:var(--white);font-weight:500;}
+.freq-label{font-family:var(--serif);font-size:0.95rem;color:var(--white);margin:1.1rem 0 0.55rem;font-weight:500;}
+.freq-opts{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;}
+.freq-opt{display:flex;align-items:center;justify-content:space-between;gap:0.6rem;padding:0.7rem 0.85rem;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all 0.2s;}
+.freq-opt:hover{border-color:rgba(60,142,57,0.5);}
+.freq-opt input{accent-color:var(--green);margin:0;}
+.freq-opt.active{border-color:var(--green);background:rgba(60,142,57,0.08);}
+.freq-left{display:flex;align-items:center;gap:0.55rem;flex:1;}
+.freq-txt{display:flex;flex-direction:column;font-size:0.8rem;color:var(--white);font-weight:500;}
+.freq-txt small{font-size:0.7rem;color:var(--mid);font-weight:300;margin-top:0.1rem;}
+.freq-price{font-family:var(--serif);font-size:0.92rem;color:var(--green);font-weight:700;white-space:nowrap;}
+.freq-price .was{color:rgba(244,242,238,0.35);text-decoration:line-through;font-size:0.78rem;margin-left:0.35rem;font-weight:400;}
+.buy-row{display:flex;align-items:stretch;gap:0.7rem;margin-top:0.2rem;}
+.qty-box{display:flex;align-items:center;border:1px solid var(--border);border-radius:2px;background:rgba(255,255,255,0.02);}
+.qty-box button{background:none;border:none;color:var(--white);width:36px;height:42px;font-size:1.1rem;cursor:pointer;transition:color 0.2s;font-family:var(--sans);}
+.qty-box button:hover{color:var(--green-l);}
+.qty-box input{width:42px;border:none;background:none;color:var(--white);text-align:center;font-family:var(--serif);font-size:1rem;font-weight:600;-moz-appearance:textfield;}
+.qty-box input::-webkit-outer-spin-button,.qty-box input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+.buy-btn.wide{flex:1;padding:0.85rem 1.2rem;font-size:0.7rem;}
+.veh-group{margin-bottom:0.8rem;}
+.veh-group label{display:block;font-family:var(--serif);font-size:0.82rem;color:rgba(244,242,238,0.8);margin-bottom:0.35rem;font-weight:400;}
+.veh-group select{width:100%;padding:0.65rem 0.85rem;background:rgba(255,255,255,0.02);border:none;border-bottom:1px solid var(--border);color:var(--white);font-family:var(--sans);font-size:0.82rem;border-radius:0;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%23cfcfcf' d='M6 8L0 0h12z'/></svg>");background-repeat:no-repeat;background-position:right 0.8rem center;background-size:10px;padding-right:2rem;}
+.veh-group select:focus{outline:none;border-bottom-color:var(--green);}
+.veh-group select option{background:var(--card);color:var(--white);}
 
 /* ── REVIEWS ── */
 #reviews{background:var(--black);}
@@ -651,114 +674,186 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
   </div>
 
   <div class="shop-grid reveal">
-    <div class="product">
+    <!-- 1 -->
+    <div class="product" data-product="hand-wash" data-price="54.99" data-sub="49.49">
       <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/f3824aa0-5a5f-495c-804e-81f536d612fd/carwash.jpg')">
         <span class="product-tag">Entry</span>
       </div>
       <div class="product-body">
         <div class="product-name">Profound Tend Standard Hand Wash</div>
-        <p class="product-desc">Exterior hand wash &amp; rinse, Wheel &amp; tire clean, Window wipe-down, Door jambs cleaned.</p>
-        <div class="product-foot">
-          <div class="product-price">$54.99<small>45–60 min</small></div>
-          <button class="buy-btn" data-product="hand-wash" data-name="Standard Hand Wash">Buy Now</button>
+        <p class="product-desc">Exterior hand wash &amp; rinse, Wheel &amp; tire clean, Window wipe-down, Door jambs cleaned. <small style="display:block;color:var(--mid);margin-top:0.3rem;">45–60 min</small></p>
+        <div class="veh-group"><label>Sedans/Coupes:</label><select class="veh-sel"><option value="">Select Sedans/Coupes</option><option>Compact Sedan</option><option>Mid-Size Sedan</option><option>Full-Size Sedan</option><option>Coupe (2-door)</option><option>Sports Car</option></select></div>
+        <div class="veh-group"><label>Small-Sized SUV (2 rows):</label><select class="veh-sel"><option value="">Select Small-Sized SUV (2 rows)</option><option>Compact SUV</option><option>Mid-Size SUV (2 rows)</option><option>Crossover</option></select></div>
+        <div class="veh-group"><label>Large-Sized SUV (3 rows):</label><select class="veh-sel"><option value="">Select Large-Sized SUV (3 rows)</option><option>Mid-Size SUV (3 rows)</option><option>Full-Size SUV</option><option>Minivan</option><option>Truck</option></select></div>
+        <div class="freq-label">Frequency:</div>
+        <div class="freq-opts">
+          <label class="freq-opt active"><span class="freq-left"><input type="radio" name="f-hand-wash" value="one" checked><span class="freq-txt">One time purchase</span></span><span class="freq-price">from $54.99</span></label>
+          <label class="freq-opt"><span class="freq-left"><input type="radio" name="f-hand-wash" value="sub"><span class="freq-txt">Subscribe<small>Every 2 weeks</small></span></span><span class="freq-price">from $49.49<span class="was">$54.99</span></span></label>
+        </div>
+        <div class="buy-row">
+          <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
+          <button class="buy-btn wide" data-product="hand-wash" data-name="Standard Hand Wash">Book A Tend</button>
         </div>
       </div>
     </div>
 
-    <div class="product">
+    <!-- 2 -->
+    <div class="product" data-product="basic-wash" data-price="149.99" data-sub="134.99">
       <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/6f620eca-4854-47a3-9997-d8f6139c49c3/Screenshot+2026-03-10+at+07.29.33.png')">
         <span class="product-tag">Popular</span>
       </div>
       <div class="product-body">
         <div class="product-name">Profound Tend Basic Wash</div>
-        <p class="product-desc">Full exterior hand wash, Tire dressing applied, Interior vacuum, Dashboard wipe-down.</p>
-        <div class="product-foot">
-          <div class="product-price">$149.99<small>60–75 min</small></div>
-          <button class="buy-btn" data-product="basic-wash" data-name="Basic Wash">Buy Now</button>
+        <p class="product-desc">Full exterior hand wash, Tire dressing applied, Interior vacuum, Dashboard wipe-down. <small style="display:block;color:var(--mid);margin-top:0.3rem;">60–75 min</small></p>
+        <div class="veh-group"><label>Sedans/Coupes:</label><select class="veh-sel"><option value="">Select Sedans/Coupes</option><option>Compact Sedan</option><option>Mid-Size Sedan</option><option>Full-Size Sedan</option><option>Coupe (2-door)</option><option>Sports Car</option></select></div>
+        <div class="veh-group"><label>Small-Sized SUV (2 rows):</label><select class="veh-sel"><option value="">Select Small-Sized SUV (2 rows)</option><option>Compact SUV</option><option>Mid-Size SUV (2 rows)</option><option>Crossover</option></select></div>
+        <div class="veh-group"><label>Large-Sized SUV (3 rows):</label><select class="veh-sel"><option value="">Select Large-Sized SUV (3 rows)</option><option>Mid-Size SUV (3 rows)</option><option>Full-Size SUV</option><option>Minivan</option><option>Truck</option></select></div>
+        <div class="freq-label">Frequency:</div>
+        <div class="freq-opts">
+          <label class="freq-opt active"><span class="freq-left"><input type="radio" name="f-basic-wash" value="one" checked><span class="freq-txt">One time purchase</span></span><span class="freq-price">from $149.99</span></label>
+          <label class="freq-opt"><span class="freq-left"><input type="radio" name="f-basic-wash" value="sub"><span class="freq-txt">Subscribe<small>Every 2 weeks</small></span></span><span class="freq-price">from $134.99<span class="was">$149.99</span></span></label>
+        </div>
+        <div class="buy-row">
+          <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
+          <button class="buy-btn wide" data-product="basic-wash" data-name="Basic Wash">Book A Tend</button>
         </div>
       </div>
     </div>
 
-    <div class="product">
+    <!-- 3 -->
+    <div class="product" data-product="wash-wax" data-price="134.99" data-sub="121.49">
       <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/e10a9a57-60b5-46f5-9eb2-b83c578ab16e/wash+%26++Wax.jpg')">
         <span class="product-tag">Signature</span>
       </div>
       <div class="product-body">
         <div class="product-name">Profound Tend Wash &amp; Wax</div>
-        <p class="product-desc">Complete exterior hand wash, Hand wax, Streak-free window polish, Tire shine &amp; wheel detail, Trim dressed.</p>
-        <div class="product-foot">
-          <div class="product-price">$134.99<small>90–120 min</small></div>
-          <button class="buy-btn" data-product="wash-wax" data-name="Wash &amp; Wax">Buy Now</button>
+        <p class="product-desc">Complete exterior hand wash, Hand wax, Streak-free window polish, Tire shine &amp; wheel detail, Trim dressed. <small style="display:block;color:var(--mid);margin-top:0.3rem;">90–120 min</small></p>
+        <div class="veh-group"><label>Sedans/Coupes:</label><select class="veh-sel"><option value="">Select Sedans/Coupes</option><option>Compact Sedan</option><option>Mid-Size Sedan</option><option>Full-Size Sedan</option><option>Coupe (2-door)</option><option>Sports Car</option></select></div>
+        <div class="veh-group"><label>Small-Sized SUV (2 rows):</label><select class="veh-sel"><option value="">Select Small-Sized SUV (2 rows)</option><option>Compact SUV</option><option>Mid-Size SUV (2 rows)</option><option>Crossover</option></select></div>
+        <div class="veh-group"><label>Large-Sized SUV (3 rows):</label><select class="veh-sel"><option value="">Select Large-Sized SUV (3 rows)</option><option>Mid-Size SUV (3 rows)</option><option>Full-Size SUV</option><option>Minivan</option><option>Truck</option></select></div>
+        <div class="freq-label">Frequency:</div>
+        <div class="freq-opts">
+          <label class="freq-opt active"><span class="freq-left"><input type="radio" name="f-wash-wax" value="one" checked><span class="freq-txt">One time purchase</span></span><span class="freq-price">from $134.99</span></label>
+          <label class="freq-opt"><span class="freq-left"><input type="radio" name="f-wash-wax" value="sub"><span class="freq-txt">Subscribe<small>Every 2 weeks</small></span></span><span class="freq-price">from $121.49<span class="was">$134.99</span></span></label>
+        </div>
+        <div class="buy-row">
+          <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
+          <button class="buy-btn wide" data-product="wash-wax" data-name="Wash &amp; Wax">Book A Tend</button>
         </div>
       </div>
     </div>
 
-    <div class="product">
+    <!-- 4 -->
+    <div class="product" data-product="std-interior" data-price="144.90" data-sub="130.41">
       <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/faec1169-3d97-405b-96fc-49dbc62437a5/IMG_5811.jpeg')">
         <span class="product-tag">Essential</span>
       </div>
       <div class="product-body">
         <div class="product-name">Profound Tend Standard Interior Detail</div>
-        <p class="product-desc">Deep interior vacuum, Seat &amp; carpet shampoo, Dashboard &amp; console detail, Door panels, Interior windows.</p>
-        <div class="product-foot">
-          <div class="product-price">$144.90<small>2–3 hrs</small></div>
-          <button class="buy-btn" data-product="std-interior" data-name="Standard Interior Detail">Buy Now</button>
+        <p class="product-desc">Deep interior vacuum, Seat &amp; carpet shampoo, Dashboard &amp; console detail, Door panels, Interior windows. <small style="display:block;color:var(--mid);margin-top:0.3rem;">2–3 hrs</small></p>
+        <div class="veh-group"><label>Sedans/Coupes:</label><select class="veh-sel"><option value="">Select Sedans/Coupes</option><option>Compact Sedan</option><option>Mid-Size Sedan</option><option>Full-Size Sedan</option><option>Coupe (2-door)</option><option>Sports Car</option></select></div>
+        <div class="veh-group"><label>Small-Sized SUV (2 rows):</label><select class="veh-sel"><option value="">Select Small-Sized SUV (2 rows)</option><option>Compact SUV</option><option>Mid-Size SUV (2 rows)</option><option>Crossover</option></select></div>
+        <div class="veh-group"><label>Large-Sized SUV (3 rows):</label><select class="veh-sel"><option value="">Select Large-Sized SUV (3 rows)</option><option>Mid-Size SUV (3 rows)</option><option>Full-Size SUV</option><option>Minivan</option><option>Truck</option></select></div>
+        <div class="freq-label">Frequency:</div>
+        <div class="freq-opts">
+          <label class="freq-opt active"><span class="freq-left"><input type="radio" name="f-std-interior" value="one" checked><span class="freq-txt">One time purchase</span></span><span class="freq-price">from $144.90</span></label>
+          <label class="freq-opt"><span class="freq-left"><input type="radio" name="f-std-interior" value="sub"><span class="freq-txt">Subscribe<small>Every 2 weeks</small></span></span><span class="freq-price">from $130.41<span class="was">$144.90</span></span></label>
+        </div>
+        <div class="buy-row">
+          <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
+          <button class="buy-btn wide" data-product="std-interior" data-name="Standard Interior Detail">Book A Tend</button>
         </div>
       </div>
     </div>
 
-    <div class="product">
+    <!-- 5 -->
+    <div class="product" data-product="full-interior" data-price="209.99" data-sub="188.99">
       <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/36a2d9b7-86bb-4c1c-a778-b8bc7e52a849/interior-detail.jpeg')">
         <span class="product-tag">Premium</span>
       </div>
       <div class="product-body">
         <div class="product-name">Profound Tend Full Interior Detail</div>
-        <p class="product-desc">Full deep vacuum &amp; extraction, Steam clean all surfaces, Leather conditioning, Odor elimination, All vents detailed.</p>
-        <div class="product-foot">
-          <div class="product-price">$209.99<small>3–5 hrs</small></div>
-          <button class="buy-btn" data-product="full-interior" data-name="Full Interior Detail">Buy Now</button>
+        <p class="product-desc">Full deep vacuum &amp; extraction, Steam clean all surfaces, Leather conditioning, Odor elimination, All vents detailed. <small style="display:block;color:var(--mid);margin-top:0.3rem;">3–5 hrs</small></p>
+        <div class="veh-group"><label>Sedans/Coupes:</label><select class="veh-sel"><option value="">Select Sedans/Coupes</option><option>Compact Sedan</option><option>Mid-Size Sedan</option><option>Full-Size Sedan</option><option>Coupe (2-door)</option><option>Sports Car</option></select></div>
+        <div class="veh-group"><label>Small-Sized SUV (2 rows):</label><select class="veh-sel"><option value="">Select Small-Sized SUV (2 rows)</option><option>Compact SUV</option><option>Mid-Size SUV (2 rows)</option><option>Crossover</option></select></div>
+        <div class="veh-group"><label>Large-Sized SUV (3 rows):</label><select class="veh-sel"><option value="">Select Large-Sized SUV (3 rows)</option><option>Mid-Size SUV (3 rows)</option><option>Full-Size SUV</option><option>Minivan</option><option>Truck</option></select></div>
+        <div class="freq-label">Frequency:</div>
+        <div class="freq-opts">
+          <label class="freq-opt active"><span class="freq-left"><input type="radio" name="f-full-interior" value="one" checked><span class="freq-txt">One time purchase</span></span><span class="freq-price">from $209.99</span></label>
+          <label class="freq-opt"><span class="freq-left"><input type="radio" name="f-full-interior" value="sub"><span class="freq-txt">Subscribe<small>Every 2 weeks</small></span></span><span class="freq-price">from $188.99<span class="was">$209.99</span></span></label>
+        </div>
+        <div class="buy-row">
+          <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
+          <button class="buy-btn wide" data-product="full-interior" data-name="Full Interior Detail">Book A Tend</button>
         </div>
       </div>
     </div>
 
-    <div class="product">
+    <!-- 6 -->
+    <div class="product" data-product="headlight" data-price="39.99" data-sub="35.99">
       <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/2c468433-8619-412b-a8f9-69db08ea43eb/Untitled+design-5.png')">
         <span class="product-tag">Add-On</span>
       </div>
       <div class="product-body">
         <div class="product-name">Headlight Restoration</div>
-        <p class="product-desc">Restore foggy, oxidized headlights to crystal clarity. Improved visibility and a refreshed front-end look.</p>
-        <div class="product-foot">
-          <div class="product-price">$39.99<small>30–45 min</small></div>
-          <button class="buy-btn" data-product="headlight" data-name="Headlight Restoration">Buy Now</button>
+        <p class="product-desc">Restore foggy, oxidized headlights to crystal clarity. Improved visibility and a refreshed front-end look. <small style="display:block;color:var(--mid);margin-top:0.3rem;">30–45 min</small></p>
+        <div class="veh-group"><label>Sedans/Coupes:</label><select class="veh-sel"><option value="">Select Sedans/Coupes</option><option>Compact Sedan</option><option>Mid-Size Sedan</option><option>Full-Size Sedan</option><option>Coupe (2-door)</option><option>Sports Car</option></select></div>
+        <div class="veh-group"><label>Small-Sized SUV (2 rows):</label><select class="veh-sel"><option value="">Select Small-Sized SUV (2 rows)</option><option>Compact SUV</option><option>Mid-Size SUV (2 rows)</option><option>Crossover</option></select></div>
+        <div class="veh-group"><label>Large-Sized SUV (3 rows):</label><select class="veh-sel"><option value="">Select Large-Sized SUV (3 rows)</option><option>Mid-Size SUV (3 rows)</option><option>Full-Size SUV</option><option>Minivan</option><option>Truck</option></select></div>
+        <div class="freq-label">Frequency:</div>
+        <div class="freq-opts">
+          <label class="freq-opt active"><span class="freq-left"><input type="radio" name="f-headlight" value="one" checked><span class="freq-txt">One time purchase</span></span><span class="freq-price">from $39.99</span></label>
+          <label class="freq-opt"><span class="freq-left"><input type="radio" name="f-headlight" value="sub"><span class="freq-txt">Subscribe<small>Every 2 weeks</small></span></span><span class="freq-price">from $35.99<span class="was">$39.99</span></span></label>
+        </div>
+        <div class="buy-row">
+          <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
+          <button class="buy-btn wide" data-product="headlight" data-name="Headlight Restoration">Book A Tend</button>
         </div>
       </div>
     </div>
 
-    <div class="product">
+    <!-- 7 -->
+    <div class="product" data-product="leather-ceramic" data-price="89.99" data-sub="80.99">
       <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/5cccbdaa-836f-465c-bc93-da81980b2a17/interior-ceramic-coating-portland-pro-detail.jpg')">
         <span class="product-tag">Protection</span>
       </div>
       <div class="product-body">
         <div class="product-name">Profound Tend Leather Ceramic Coating</div>
-        <p class="product-desc">Ceramic protection for leather seats. Guards against spills, UV damage, and daily wear for long-lasting finish.</p>
-        <div class="product-foot">
-          <div class="product-price">$89.99<small>1–2 hrs</small></div>
-          <button class="buy-btn" data-product="leather-ceramic" data-name="Leather Ceramic Coating">Buy Now</button>
+        <p class="product-desc">Ceramic protection for leather seats. Guards against spills, UV damage, and daily wear for long-lasting finish. <small style="display:block;color:var(--mid);margin-top:0.3rem;">1–2 hrs</small></p>
+        <div class="veh-group"><label>Sedans/Coupes:</label><select class="veh-sel"><option value="">Select Sedans/Coupes</option><option>Compact Sedan</option><option>Mid-Size Sedan</option><option>Full-Size Sedan</option><option>Coupe (2-door)</option><option>Sports Car</option></select></div>
+        <div class="veh-group"><label>Small-Sized SUV (2 rows):</label><select class="veh-sel"><option value="">Select Small-Sized SUV (2 rows)</option><option>Compact SUV</option><option>Mid-Size SUV (2 rows)</option><option>Crossover</option></select></div>
+        <div class="veh-group"><label>Large-Sized SUV (3 rows):</label><select class="veh-sel"><option value="">Select Large-Sized SUV (3 rows)</option><option>Mid-Size SUV (3 rows)</option><option>Full-Size SUV</option><option>Minivan</option><option>Truck</option></select></div>
+        <div class="freq-label">Frequency:</div>
+        <div class="freq-opts">
+          <label class="freq-opt active"><span class="freq-left"><input type="radio" name="f-leather-ceramic" value="one" checked><span class="freq-txt">One time purchase</span></span><span class="freq-price">from $89.99</span></label>
+          <label class="freq-opt"><span class="freq-left"><input type="radio" name="f-leather-ceramic" value="sub"><span class="freq-txt">Subscribe<small>Every 2 weeks</small></span></span><span class="freq-price">from $80.99<span class="was">$89.99</span></span></label>
+        </div>
+        <div class="buy-row">
+          <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
+          <button class="buy-btn wide" data-product="leather-ceramic" data-name="Leather Ceramic Coating">Book A Tend</button>
         </div>
       </div>
     </div>
 
-    <div class="product">
+    <!-- 8 -->
+    <div class="product" data-product="engine-bay" data-price="49.99" data-sub="44.99">
       <div class="product-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/6e998c6a-9d85-4550-8211-82a63bdeaed5/Engine+Bay+Detail.jpg')">
         <span class="product-tag">Add-On</span>
       </div>
       <div class="product-body">
         <div class="product-name">Profound Tend Engine Bay Detail</div>
-        <p class="product-desc">Professional engine bay degreasing, cleaning, and dressing. Restore that showroom look under the hood.</p>
-        <div class="product-foot">
-          <div class="product-price">$49.99<small>45–60 min</small></div>
-          <button class="buy-btn" data-product="engine-bay" data-name="Engine Bay Detail">Buy Now</button>
+        <p class="product-desc">Professional engine bay degreasing, cleaning, and dressing. Restore that showroom look under the hood. <small style="display:block;color:var(--mid);margin-top:0.3rem;">45–60 min</small></p>
+        <div class="veh-group"><label>Sedans/Coupes:</label><select class="veh-sel"><option value="">Select Sedans/Coupes</option><option>Compact Sedan</option><option>Mid-Size Sedan</option><option>Full-Size Sedan</option><option>Coupe (2-door)</option><option>Sports Car</option></select></div>
+        <div class="veh-group"><label>Small-Sized SUV (2 rows):</label><select class="veh-sel"><option value="">Select Small-Sized SUV (2 rows)</option><option>Compact SUV</option><option>Mid-Size SUV (2 rows)</option><option>Crossover</option></select></div>
+        <div class="veh-group"><label>Large-Sized SUV (3 rows):</label><select class="veh-sel"><option value="">Select Large-Sized SUV (3 rows)</option><option>Mid-Size SUV (3 rows)</option><option>Full-Size SUV</option><option>Minivan</option><option>Truck</option></select></div>
+        <div class="freq-label">Frequency:</div>
+        <div class="freq-opts">
+          <label class="freq-opt active"><span class="freq-left"><input type="radio" name="f-engine-bay" value="one" checked><span class="freq-txt">One time purchase</span></span><span class="freq-price">from $49.99</span></label>
+          <label class="freq-opt"><span class="freq-left"><input type="radio" name="f-engine-bay" value="sub"><span class="freq-txt">Subscribe<small>Every 2 weeks</small></span></span><span class="freq-price">from $44.99<span class="was">$49.99</span></span></label>
+        </div>
+        <div class="buy-row">
+          <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
+          <button class="buy-btn wide" data-product="engine-bay" data-name="Engine Bay Detail">Book A Tend</button>
         </div>
       </div>
     </div>
