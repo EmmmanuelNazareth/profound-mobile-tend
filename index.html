@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Profound Mobile Tend | Faith Drives Clean</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --black:#080808;--dark:#111;--gray:#1a1a1a;--card:#161616;
+  --white:#f4f2ee;--green:#3C8E39;--green-l:#52b84f;--green-d:#2a6328;
+  --green-bg:rgba(60,142,57,0.08);--mid:#777;--border:rgba(255,255,255,0.08);
+  --serif:'Cormorant Garamond',serif;--sans:'Outfit',sans-serif;--nav-h:72px;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--white);font-family:var(--sans);overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.45;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 3rem;background:rgba(8,8,8,0.93);backdrop-filter:blur(20px);border-bottom:1px solid rgba(60,142,57,0.18);}
+.nav-logo img{height:42px;width:auto;display:block;}
+.nav-links{display:flex;align-items:center;gap:0;list-style:none;}
+.nav-links>li{position:relative;}
+.nav-links>li>a{display:block;padding:0 1.2rem;font-size:0.77rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:500;color:rgba(244,242,238,0.65);text-decoration:none;line-height:var(--nav-h);transition:color 0.2s;white-space:nowrap;}
+.nav-links>li>a:hover{color:var(--green);}
+.has-drop>a::after{content:' ▾';font-size:0.58rem;opacity:0.55;}
+.dropdown{position:absolute;top:calc(var(--nav-h) - 2px);left:50%;transform:translateX(-50%) translateY(-10px);background:rgba(10,10,10,0.98);border:1px solid rgba(60,142,57,0.22);border-top:2px solid var(--green);min-width:265px;opacity:0;visibility:hidden;transition:all 0.25s ease;backdrop-filter:blur(24px);}
+.has-drop:hover .dropdown{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);}
+.dd-group{padding:0.4rem 0;}
+.dd-label{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);padding:0.55rem 1.3rem 0.25rem;font-weight:700;}
+.dropdown a{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1.3rem;font-size:0.8rem;color:rgba(244,242,238,0.72);text-decoration:none;transition:all 0.18s;border-left:2px solid transparent;}
+.dropdown a:hover{color:var(--white);background:rgba(60,142,57,0.09);border-left-color:var(--green);}
+.dropdown a .dp{font-size:0.7rem;color:var(--green);font-weight:600;}
+.dd-div{height:1px;background:rgba(255,255,255,0.06);margin:0.25rem 0;}
+.nav-cta{margin-left:1.2rem;background:var(--green);color:var(--white)!important;padding:0.58rem 1.4rem!important;line-height:1!important;border-radius:2px;font-weight:700!important;transition:background 0.2s!important;cursor:pointer;}
+.nav-cta:hover{background:var(--green-l)!important;color:var(--black)!important;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{display:block;width:24px;height:2px;background:var(--white);border-radius:2px;transition:all 0.3s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mob-nav{display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:rgba(8,8,8,0.99);z-index:199;overflow-y:auto;padding:1.5rem 2rem 4rem;transform:translateX(100%);transition:transform 0.35s ease;}
+.mob-nav.open{transform:translateX(0);}
+.mob-nav a{display:block;padding:0.9rem 0;font-size:1rem;color:var(--white);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.07);transition:color 0.2s;}
+.mob-nav a:hover{color:var(--green);}
+.mob-label{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);margin:1.4rem 0 0.4rem;font-weight:700;}
+.mob-book{display:block;margin-top:1.8rem;background:var(--green);color:var(--white)!important;text-align:center;padding:1rem!important;border-radius:2px;font-weight:700!important;font-size:0.88rem!important;letter-spacing:0.08em;}
+
+/* ── HERO ── */
+#hero{position:relative;height:100vh;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;align-items:center;opacity:0;transition:opacity 1.3s ease;pointer-events:none;}
+.slide.active{opacity:1;pointer-events:auto;}
+.slide-bg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.07);transition:transform 8s ease;}
+.slide.active .slide-bg{transform:scale(1);}
+.slide-ov{position:absolute;inset:0;background:linear-gradient(115deg,rgba(8,8,8,0.9) 0%,rgba(8,8,8,0.55) 55%,rgba(8,8,8,0.15) 100%);}
+.slide-ov-b{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(0deg,var(--black),transparent);}
+.slide-content{position:relative;z-index:2;padding:0 5rem;max-width:660px;}
+.slide-tag{display:inline-flex;align-items:center;gap:0.6rem;font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:1.5rem;opacity:0;transform:translateY(16px);transition:all 0.6s 0.2s;}
+.slide.active .slide-tag{opacity:1;transform:translateY(0);}
+.slide-tag::before{content:'';width:26px;height:1px;background:var(--green);}
+.slide h1{font-family:var(--serif);font-size:clamp(3rem,6.5vw,5.8rem);font-weight:300;line-height:1.01;color:var(--white);margin-bottom:1.2rem;opacity:0;transform:translateY(24px);transition:all 0.75s 0.35s;}
+.slide.active h1{opacity:1;transform:translateY(0);}
+.slide h1 em{font-style:italic;color:var(--green);}
+.slide-sub{font-size:0.97rem;line-height:1.72;color:rgba(244,242,238,0.62);max-width:400px;margin-bottom:2.5rem;font-weight:300;opacity:0;transform:translateY(20px);transition:all 0.7s 0.5s;}
+.slide.active .slide-sub{opacity:1;transform:translateY(0);}
+.slide-btns{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;transform:translateY(18px);transition:all 0.7s 0.65s;}
+.slide.active .slide-btns{opacity:1;transform:translateY(0);}
+.hero-ctrl{position:absolute;bottom:2.8rem;left:5rem;display:flex;align-items:center;gap:1.2rem;z-index:10;}
+.dots{display:flex;gap:0.6rem;}
+.dot{width:28px;height:3px;border-radius:2px;background:rgba(244,242,238,0.22);cursor:pointer;transition:all 0.3s;border:none;}
+.dot.active{background:var(--green);width:46px;}
+.arrows{display:flex;gap:0.5rem;margin-left:0.8rem;}
+.arr{width:38px;height:38px;border:1px solid rgba(244,242,238,0.18);background:rgba(8,8,8,0.5);color:var(--white);border-radius:50%;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;backdrop-filter:blur(8px);}
+.arr:hover{border-color:var(--green);color:var(--green);}
+.faith-badge{position:absolute;right:4rem;bottom:5rem;z-index:10;width:108px;height:108px;border-radius:50%;border:1px solid rgba(60,142,57,0.3);background:rgba(8,8,8,0.72);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;animation:spinSlow 22s linear infinite;}
+.faith-badge-in{display:flex;flex-direction:column;align-items:center;animation:spinSlow 22s linear infinite reverse;}
+.faith-badge span{font-family:var(--serif);font-size:1.5rem;color:var(--green);}
+.faith-badge p{font-size:0.5rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mid);line-height:1.4;text-align:center;}
+@keyframes spinSlow{to{transform:rotate(360deg);}}
+
+/* ── BUTTONS ── */
+.btn-p{display:inline-flex;align-items:center;gap:0.5rem;background:var(--green);color:var(--white);padding:0.85rem 2rem;border-radius:2px;font-size:0.77rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;text-decoration:none;transition:all 0.25s;border:1px solid var(--green);cursor:pointer;font-family:var(--sans);}
+.btn-p:hover{background:var(--green-l);color:var(--black);transform:translateY(-2px);}
+.btn-p:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+.btn-g{display:inline-flex;align-items:center;gap:0.5rem;background:transparent;color:var(--white);padding:0.85rem 2rem;border-radius:2px;font-size:0.77rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:500;text-decoration:none;border:1px solid rgba(244,242,238,0.22);transition:all 0.25s;cursor:pointer;font-family:var(--sans);}
+.btn-g:hover{border-color:var(--green);color:var(--green);}
+
+/* ── STRIP ── */
+.strip{background:var(--gray);border-top:1px solid rgba(60,142,57,0.2);border-bottom:1px solid rgba(60,142,57,0.2);display:flex;justify-content:center;padding:2.2rem 3rem;gap:4rem;flex-wrap:wrap;}
+.stat-n{font-family:var(--serif);font-size:2.5rem;font-weight:700;color:var(--green);line-height:1;}
+.stat-l{font-size:0.63rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mid);margin-top:0.3rem;font-weight:500;text-align:center;}
+
+/* ── SECTIONS ── */
+section{padding:7rem 5rem;}
+.sec-tag{display:inline-flex;align-items:center;gap:0.6rem;font-size:0.63rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:1rem;}
+.sec-tag::before{content:'';width:22px;height:1px;background:var(--green);}
+h2{font-family:var(--serif);font-size:clamp(2rem,3.8vw,3.4rem);font-weight:300;line-height:1.1;letter-spacing:-0.01em;margin-bottom:1.4rem;}
+h2 em{font-style:italic;color:var(--green);}
+
+/* ── ABOUT ── */
+#about{background:var(--dark);display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0;min-height:500px;}
+.about-img{background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/7b28311d-d47f-4246-a657-e30cb382c478/Profound+Mobile+Tend');background-size:cover;background-position:center;position:relative;min-height:420px;}
+.about-img::after{content:'';position:absolute;right:0;top:0;bottom:0;width:130px;background:linear-gradient(90deg,transparent,var(--dark));}
+.about-text{padding:5rem 4rem;display:flex;flex-direction:column;justify-content:center;}
+.about-text p{font-size:0.97rem;line-height:1.85;color:rgba(244,242,238,0.62);font-weight:300;margin-bottom:1.5rem;}
+.about-text p strong{color:var(--white);font-weight:500;}
+.faith-pill{display:inline-flex;align-items:center;gap:0.7rem;border:1px solid rgba(60,142,57,0.3);padding:0.7rem 1.2rem;border-radius:2px;background:rgba(60,142,57,0.06);margin-bottom:1.8rem;}
+.faith-pill .cross{font-size:1rem;color:var(--green);}
+.faith-pill p{font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--white);margin:0;}
+
+/* ── SERVICES ── */
+#services{background:var(--black);}
+.svc-intro{max-width:520px;margin-bottom:3.5rem;}
+.svc-intro p{color:var(--mid);font-size:0.88rem;line-height:1.78;font-weight:300;}
+.tabs{display:flex;gap:0;margin-bottom:3rem;border-bottom:1px solid rgba(255,255,255,0.08);}
+.tab{padding:0.72rem 1.6rem;background:none;border:none;font-family:var(--sans);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:500;color:var(--mid);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;}
+.tab.active,.tab:hover{color:var(--green);border-bottom-color:var(--green);}
+.svc-panel{display:none;}
+.svc-panel.active{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.5px;background:rgba(60,142,57,0.12);border:1.5px solid rgba(60,142,57,0.12);}
+.sc{background:var(--black);padding:2.4rem 2.2rem;transition:background 0.3s;position:relative;overflow:hidden;}
+.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;}
+.sc:hover{background:#0e0e0e;}
+.sc:hover::after{transform:scaleX(1);}
+.sc-badge{display:inline-block;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;color:var(--green);border:1px solid rgba(60,142,57,0.35);padding:0.18rem 0.55rem;border-radius:1px;margin-bottom:0.9rem;}
+.sc-badge.hot{background:rgba(60,142,57,0.18);border-color:var(--green);}
+.sc-name{font-family:var(--serif);font-size:1.3rem;font-weight:600;margin-bottom:0.28rem;}
+.sc-sub{font-size:0.7rem;color:var(--mid);letter-spacing:0.05em;margin-bottom:0.8rem;}
+.sc-meta{display:flex;gap:1.5rem;margin-bottom:1.1rem;}
+.sc-mi{font-size:0.7rem;color:var(--mid);}
+.sc-mi strong{display:block;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(244,242,238,0.38);margin-bottom:0.12rem;font-weight:500;}
+.sc-list{list-style:none;margin-bottom:1.5rem;}
+.sc-list li{font-size:0.78rem;color:rgba(244,242,238,0.58);padding:0.32rem 0;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;gap:0.5rem;}
+.sc-list li::before{content:'—';color:var(--green);font-size:0.62rem;}
+.sc-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
+.sc-price{font-family:var(--serif);font-size:1.6rem;font-weight:700;color:var(--green);}
+.sc-price small{font-size:0.68rem;color:var(--mid);font-family:var(--sans);font-weight:300;display:block;letter-spacing:0.04em;}
+.sc-book{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);text-decoration:none;font-weight:600;border-bottom:1px solid rgba(60,142,57,0.4);padding-bottom:1px;transition:all 0.2s;cursor:pointer;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--sans);}
+.sc-book:hover{color:var(--green-l);}
+
+/* ── HOURS ── */
+#hours{background:var(--dark);display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;}
+.htbl{width:100%;border-collapse:collapse;margin-top:2rem;}
+.htbl tr{border-bottom:1px solid rgba(255,255,255,0.06);}
+.htbl tr:last-child{border-bottom:none;}
+.htbl td{padding:0.88rem 0;font-size:0.86rem;}
+.htbl td:first-child{color:rgba(244,242,238,0.52);font-weight:400;}
+.htbl td:last-child{color:var(--white);font-weight:500;text-align:right;}
+.htbl tr.today td{color:var(--green);}
+.htbl tr.today td:first-child::after{content:' ←';font-size:0.58rem;}
+.area-label{font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--mid);margin:2rem 0 0.7rem;font-weight:500;}
+.area-tags{display:flex;gap:0.45rem;flex-wrap:wrap;}
+.atag{background:rgba(60,142,57,0.08);border:1px solid rgba(60,142,57,0.2);color:var(--green-l);font-size:0.7rem;padding:0.28rem 0.72rem;border-radius:1px;letter-spacing:0.04em;}
+.h-right p{color:rgba(244,242,238,0.55);font-size:0.9rem;line-height:1.78;font-weight:300;margin-bottom:1.8rem;}
+.note-box{background:rgba(60,142,57,0.06);border:1px solid rgba(60,142,57,0.18);border-left:3px solid var(--green);padding:1.1rem 1.4rem;font-size:0.8rem;color:rgba(244,242,238,0.65);line-height:1.6;}
+
+/* ── REVIEWS ── */
+#reviews{background:var(--black);}
+.rev-hd{text-align:center;margin-bottom:4rem;}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1100px;margin:0 auto;}
+.rev{background:var(--gray);border:1px solid rgba(255,255,255,0.05);padding:2rem;border-radius:2px;position:relative;}
+.rev::before{content:'"';font-family:var(--serif);font-size:5rem;color:var(--green);opacity:0.14;position:absolute;top:0;left:1.1rem;line-height:1;}
+.stars{color:var(--green);font-size:0.7rem;letter-spacing:0.1em;margin-bottom:0.75rem;}
+.rev p{font-family:var(--serif);font-size:0.98rem;font-style:italic;line-height:1.65;color:rgba(244,242,238,0.78);margin-bottom:1.3rem;position:relative;z-index:1;}
+.reviewer{display:flex;align-items:center;gap:0.8rem;}
+.rv-av{width:33px;height:33px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;color:var(--white);}
+.rv-info strong{display:block;font-size:0.78rem;font-weight:600;}
+.rv-info span{font-size:0.68rem;color:var(--mid);}
+
+/* ══════════════════════════════════
+   BOOKING SECTION
+══════════════════════════════════ */
+#booking{background:#0c0c0c;padding:7rem 5rem;}
+.bk-header{text-align:center;margin-bottom:4rem;}
+.bk-header p{color:var(--mid);font-size:0.9rem;max-width:460px;margin:1rem auto 0;line-height:1.75;}
+
+/* Steps bar */
+.steps-bar{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:4rem;}
+.step-item{display:flex;align-items:center;gap:0.6rem;}
+.step-num{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:600;color:var(--mid);transition:all 0.3s;flex-shrink:0;}
+.step-lbl{font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--mid);font-weight:500;transition:all 0.3s;white-space:nowrap;}
+.step-item.active .step-num{background:var(--green);border-color:var(--green);color:var(--white);}
+.step-item.active .step-lbl{color:var(--white);}
+.step-item.done .step-num{background:var(--green-d);border-color:var(--green-d);color:var(--white);font-size:0.65rem;}
+.step-line{flex:1;height:1px;background:var(--border);margin:0 1rem;max-width:80px;}
+
+/* Panels */
+.bk-panel{display:none;animation:bkIn 0.4s ease;}
+.bk-panel.active{display:block;}
+@keyframes bkIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* Step 1 — Service Select */
+.bk-sec-title{font-family:var(--serif);font-size:1.9rem;font-weight:300;margin-bottom:0.5rem;text-align:center;}
+.bk-sec-title em{font-style:italic;color:var(--green);}
+.bk-sec-sub{font-size:0.84rem;color:var(--mid);text-align:center;margin-bottom:2.5rem;line-height:1.65;}
+.svc-sel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:1rem;max-width:1060px;margin:0 auto 2.5rem;}
+.svc-opt{border:1.5px solid var(--border);background:var(--card);padding:1.6rem;border-radius:3px;cursor:pointer;transition:all 0.25s;position:relative;}
+.svc-opt:hover{border-color:rgba(60,142,57,0.4);background:#1a1a1a;}
+.svc-opt.selected{border-color:var(--green);background:var(--green-bg);}
+.svc-opt.selected::after{content:'✓';position:absolute;top:0.75rem;right:0.75rem;width:22px;height:22px;border-radius:50%;background:var(--green);color:var(--white);font-size:0.65rem;display:flex;align-items:center;justify-content:center;font-weight:700;}
+.svo-badge{display:inline-block;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);border:1px solid rgba(60,142,57,0.3);padding:0.15rem 0.5rem;border-radius:1px;margin-bottom:0.65rem;font-weight:700;}
+.svo-name{font-family:var(--serif);font-size:1.15rem;font-weight:600;margin-bottom:0.2rem;}
+.svo-dur{font-size:0.72rem;color:var(--mid);margin-bottom:0.7rem;}
+.svo-price{font-family:var(--serif);font-size:1.35rem;font-weight:700;color:var(--green);}
+
+/* Step 2 — Calendar & Slots */
+.cal-layout{display:grid;grid-template-columns:1fr 320px;gap:2rem;max-width:900px;margin:0 auto 2.5rem;}
+.cal-wrap{background:var(--card);border:1px solid var(--border);border-radius:3px;overflow:hidden;}
+.cal-head{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.5rem;border-bottom:1px solid var(--border);}
+.cal-month-label{font-family:var(--serif);font-size:1.2rem;font-weight:600;}
+.cal-nav{display:flex;gap:0.4rem;}
+.cal-btn{width:30px;height:30px;border:1px solid var(--border);background:none;color:var(--white);border-radius:50%;cursor:pointer;font-size:0.8rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.cal-btn:hover{border-color:var(--green);color:var(--green);}
+.cal-body{padding:1rem 1.2rem 1.3rem;}
+.cal-wk{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:0.4rem;}
+.cal-wd{text-align:center;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);padding:0.35rem 0;font-weight:600;}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.cday{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:0.8rem;cursor:pointer;transition:all 0.2s;border:1.5px solid transparent;position:relative;}
+.cday:hover:not(.dis):not(.empty){background:rgba(60,142,57,0.15);border-color:rgba(60,142,57,0.3);}
+.cday.sel{background:var(--green);color:var(--white);border-color:var(--green);font-weight:700;}
+.cday.tod{border-color:rgba(60,142,57,0.5);color:var(--green);font-weight:700;}
+.cday.dis{color:rgba(255,255,255,0.18);cursor:not-allowed;}
+.cday.empty{cursor:default;}
+.cday.has-bk::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--green);opacity:0.7;}
+
+/* Time slots */
+.slots-wrap{background:var(--card);border:1px solid var(--border);border-radius:3px;padding:1.3rem;}
+.slots-title{font-family:var(--serif);font-size:1rem;font-weight:600;margin-bottom:0.3rem;}
+.slots-date{font-size:0.72rem;color:var(--green);margin-bottom:1.1rem;letter-spacing:0.04em;}
+.slots-list{display:flex;flex-direction:column;gap:0.45rem;max-height:420px;overflow-y:auto;padding-right:3px;}
+.slots-list::-webkit-scrollbar{width:3px;}
+.slots-list::-webkit-scrollbar-thumb{background:rgba(60,142,57,0.3);border-radius:2px;}
+.slot-row{display:flex;align-items:center;justify-content:space-between;padding:0.7rem 0.9rem;border:1.5px solid var(--border);border-radius:2px;cursor:pointer;transition:all 0.2s;}
+.slot-row:hover:not(.bkd){border-color:rgba(60,142,57,0.4);background:var(--green-bg);}
+.slot-row.picked{border-color:var(--green);background:var(--green-bg);}
+.slot-row.bkd{cursor:not-allowed;opacity:0.35;border-color:transparent;}
+.slot-time{font-size:0.83rem;font-weight:500;}
+.slot-tag{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.17rem 0.48rem;border-radius:1px;font-weight:700;}
+.slot-tag.open{color:var(--green);border:1px solid rgba(60,142,57,0.3);}
+.slot-tag.taken{color:var(--mid);border:1px solid var(--border);}
+.slot-tag.picked{color:var(--black);background:var(--green);border:1px solid var(--green);}
+.no-date-msg{text-align:center;padding:2rem 0;color:var(--mid);font-size:0.82rem;line-height:1.6;}
+
+/* Step 3 — Form */
+.bk-form-wrap{max-width:780px;margin:0 auto;}
+.bk-summary{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:3px;padding:1.5rem;margin-bottom:2rem;}
+.bk-sum-title{font-family:var(--serif);font-size:1rem;font-weight:600;margin-bottom:1.1rem;}
+.bk-sum-row{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.bk-sum-row:last-child{border-bottom:none;}
+.bk-sum-k{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--mid);font-weight:500;}
+.bk-sum-v{font-size:0.84rem;font-weight:500;text-align:right;}
+.bk-sum-v.price{color:var(--green);font-family:var(--serif);font-size:1.1rem;font-weight:700;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-bottom:1.5rem;}
+.form-group{display:flex;flex-direction:column;gap:0.38rem;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);font-weight:600;}
+input,select,textarea{background:var(--card);border:1.5px solid var(--border);color:var(--white);font-family:var(--sans);font-size:0.87rem;padding:0.72rem 0.95rem;border-radius:2px;outline:none;transition:border-color 0.2s;width:100%;}
+input:focus,select:focus,textarea:focus{border-color:var(--green);}
+select option{background:var(--dark);}
+textarea{resize:vertical;min-height:75px;}
+input::placeholder,textarea::placeholder{color:rgba(119,119,119,0.7);}
+
+/* Step 4 — Confirmed */
+.confirm-wrap{max-width:560px;margin:0 auto;text-align:center;padding:2rem 0;}
+.confirm-icon{width:70px;height:70px;border-radius:50%;background:rgba(60,142,57,0.12);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 1.8rem;font-size:1.7rem;}
+.confirm-title{font-family:var(--serif);font-size:2.2rem;font-weight:300;margin-bottom:0.8rem;}
+.confirm-title em{font-style:italic;color:var(--green);}
+.confirm-sub{color:var(--mid);font-size:0.88rem;line-height:1.72;margin-bottom:2rem;}
+.confirm-card{background:var(--card);border:1px solid var(--border);border-top:2px solid var(--green);border-radius:3px;padding:1.7rem;text-align:left;margin-bottom:1.8rem;}
+.confirm-id{font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--green);margin-bottom:1rem;font-weight:700;}
+.confirm-row{display:flex;justify-content:space-between;padding:0.48rem 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.83rem;}
+.confirm-row:last-child{border-bottom:none;}
+.confirm-row span:first-child{color:var(--mid);}
+.confirm-row span:last-child{font-weight:500;}
+.email-note{background:rgba(60,142,57,0.06);border:1px solid rgba(60,142,57,0.18);border-left:3px solid var(--green);padding:1rem 1.3rem;font-size:0.78rem;color:rgba(244,242,238,0.65);line-height:1.6;text-align:left;margin-bottom:1.8rem;border-radius:2px;}
+
+/* Btn row */
+.btn-row{display:flex;gap:1rem;justify-content:space-between;margin-top:2rem;max-width:780px;margin-left:auto;margin-right:auto;}
+.btn-row.center{justify-content:center;}
+
+/* ── CONTACT ── */
+#contact{background:var(--dark);padding:7rem 5rem;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;max-width:1000px;margin:0 auto;align-items:start;}
+.contact-info p{color:rgba(244,242,238,0.55);font-size:0.92rem;line-height:1.8;margin-bottom:2rem;font-weight:300;}
+.contact-item{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1.5rem;}
+.contact-icon{width:38px;height:38px;border:1px solid rgba(60,142,57,0.3);border-radius:2px;background:rgba(60,142,57,0.06);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;}
+.contact-item-text strong{display:block;font-size:0.78rem;font-weight:600;margin-bottom:0.2rem;}
+.contact-item-text span{font-size:0.83rem;color:var(--mid);}
+.contact-item-text a{color:var(--green);text-decoration:none;font-size:0.83rem;}
+.contact-item-text a:hover{color:var(--green-l);}
+.contact-form-wrap label{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);font-weight:600;}
+.contact-form-wrap .fg{display:flex;flex-direction:column;gap:0.38rem;margin-bottom:1rem;}
+.sending-msg{display:none;text-align:center;padding:1rem;font-size:0.82rem;color:var(--green);}
+
+/* ── CTA ── */
+#cta{background:linear-gradient(145deg,#0b160b 0%,var(--black) 50%,#101010 100%);text-align:center;padding:9rem 5rem;position:relative;overflow:hidden;}
+#cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(60,142,57,0.1) 0%,transparent 70%);}
+#cta .sec-tag{justify-content:center;}
+#cta h2{font-size:clamp(2.5rem,5vw,4.5rem);margin-bottom:1.2rem;position:relative;}
+#cta>p{color:var(--mid);font-size:0.93rem;max-width:390px;margin:0 auto 3rem;line-height:1.78;position:relative;}
+.cta-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;position:relative;}
+.ph-line{margin-top:1.8rem;font-size:0.78rem;color:var(--mid);}
+.ph-line a{color:var(--green);text-decoration:none;}
+.ph-line a:hover{color:var(--green-l);}
+
+/* ── FOOTER ── */
+footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem;}
+.f-brand img{height:36px;width:auto;}
+.f-tag{font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mid);margin-top:0.4rem;}
+.f-links{display:flex;gap:2rem;list-style:none;}
+.f-links a{font-size:0.73rem;color:var(--mid);text-decoration:none;transition:color 0.2s;letter-spacing:0.05em;}
+.f-links a:hover{color:var(--green);}
+.f-soc{display:flex;gap:0.8rem;}
+.soc-a{width:34px;height:34px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.68rem;color:var(--mid);text-decoration:none;transition:all 0.2s;}
+.soc-a:hover{border-color:var(--green);color:var(--green);}
+.f-copy{font-size:0.66rem;color:rgba(119,119,119,0.45);width:100%;text-align:center;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.04);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--green);color:var(--white);padding:1rem 1.4rem;border-radius:2px;font-size:0.82rem;font-weight:500;z-index:1000;transform:translateY(100px);opacity:0;transition:all 0.35s;max-width:300px;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.up{opacity:1;transform:translateY(0);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  section,#booking,#contact{padding:5rem 1.8rem;}
+  nav{padding:0 1.5rem;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .mob-nav{display:block;}
+  .slide-content{padding:0 2rem;}
+  .faith-badge{display:none;}
+  .hero-ctrl{left:2rem;bottom:2rem;}
+  #about{grid-template-columns:1fr;}
+  .about-img{min-height:280px;}
+  .about-img::after{display:none;}
+  .about-text{padding:3rem 1.8rem;}
+  #hours{grid-template-columns:1fr;gap:3rem;padding:4rem 1.8rem;}
+  .rev-grid{grid-template-columns:1fr;}
+  .svc-panel.active{grid-template-columns:1fr;}
+  .cal-layout{grid-template-columns:1fr;}
+  .form-grid{grid-template-columns:1fr;}
+  .steps-bar .step-lbl{display:none;}
+  .contact-grid{grid-template-columns:1fr;}
+  footer{padding:2.5rem 1.8rem;flex-direction:column;align-items:flex-start;}
+  #cta{padding:6rem 1.8rem;}
+  .btn-row{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a href="#hero"><img src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ee40734d-72a1-4ade-a155-3ba95b17888d/MY+LOGO.png?format=1500w" alt="Profound Mobile Tend"/></a>
+  <ul class="nav-links">
+    <li class="has-drop">
+      <a href="#services">Services</a>
+      <div class="dropdown">
+        <div class="dd-group">
+          <div class="dd-label">Wash Services</div>
+          <a href="#booking" onclick="scrollToBooking('hand-wash')">Standard Hand Wash<span class="dp">$54.99</span></a>
+          <a href="#booking" onclick="scrollToBooking('basic-wash')">Basic Wash<span class="dp">from $149.99</span></a>
+          <a href="#booking" onclick="scrollToBooking('wash-wax')">Wash &amp; Wax<span class="dp">$134.99</span></a>
+        </div>
+        <div class="dd-div"></div>
+        <div class="dd-group">
+          <div class="dd-label">Interior Services</div>
+          <a href="#booking" onclick="scrollToBooking('std-interior')">Standard Interior Detail<span class="dp">$144.99</span></a>
+          <a href="#booking" onclick="scrollToBooking('full-interior')">Full Interior Detail<span class="dp">$209.99</span></a>
+        </div>
+        <div class="dd-div"></div>
+        <div class="dd-group">
+          <div class="dd-label">Full Package</div>
+          <a href="#booking" onclick="scrollToBooking('full-detail')">Profound Full Detail<span class="dp">Get Quote</span></a>
+        </div>
+      </div>
+    </li>
+    <li><a href="https://www.profoundmobiletend.com/shop" target="_blank">Shop</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#booking" class="nav-cta">Book Now</a></li>
+  </ul>
+  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mob-nav" id="mobNav">
+  <div class="mob-label">Wash Services</div>
+  <a href="#booking" onclick="scrollToBooking('hand-wash')">Standard Hand Wash — $54.99</a>
+  <a href="#booking" onclick="scrollToBooking('basic-wash')">Basic Wash — from $149.99</a>
+  <a href="#booking" onclick="scrollToBooking('wash-wax')">Wash &amp; Wax — $134.99</a>
+  <div class="mob-label">Interior Services</div>
+  <a href="#booking" onclick="scrollToBooking('std-interior')">Standard Interior Detail — $144.99</a>
+  <a href="#booking" onclick="scrollToBooking('full-interior')">Full Interior Detail — $209.99</a>
+  <div class="mob-label">Full Package</div>
+  <a href="#booking" onclick="scrollToBooking('full-detail')">Profound Full Detail — Get Quote</a>
+  <div class="mob-label">Menu</div>
+  <a href="https://www.profoundmobiletend.com/shop" target="_blank">Shop</a>
+  <a href="#about">About</a>
+  <a href="#hours">Hours</a>
+  <a href="#contact">Contact</a>
+  <a href="#booking" class="mob-book">Book Now →</a>
+</div>
+
+<!-- ══ HERO SLIDER ══ -->
+<section id="hero">
+  <div class="slide active">
+    <div class="slide-bg" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ae1a7fa4-6346-44eb-9abf-e771da04ce77/profound+Mobile+Tend')"></div>
+    <div class="slide-ov"></div><div class="slide-ov-b"></div>
+    <div class="slide-content">
+      <div class="slide-tag">Baltimore &amp; DMV Area</div>
+      <h1><em>Faith</em><br/>Drives<br/>Clean.</h1>
+      <p class="slide-sub">Premium mobile detailing delivered to your door. Your expectations are our standard.</p>
+      <div class="slide-btns">
+        <a href="#booking" class="btn-p">Book a Detail →</a>
+        <a href="#services" class="btn-g">View Services</a>
+      </div>
+    </div>
+  </div>
+  <div class="slide">
+    <div class="slide-bg" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/7b28311d-d47f-4246-a657-e30cb382c478/Profound+Mobile+Tend')"></div>
+    <div class="slide-ov" style="background:linear-gradient(115deg,rgba(8,8,8,0.88) 0%,rgba(8,8,8,0.5) 60%,rgba(8,8,8,0.1) 100%);"></div><div class="slide-ov-b"></div>
+    <div class="slide-content">
+      <div class="slide-tag">Interior &amp; Exterior</div>
+      <h1>We Don't<br/>Just Detail.<br/>We <em>Honor.</em></h1>
+      <p class="slide-sub">From hand wash to full detail — every service performed with purpose and precision.</p>
+      <div class="slide-btns">
+        <a href="#services" class="btn-p">See Services →</a>
+        <a href="#about" class="btn-g">Our Story</a>
+      </div>
+    </div>
+  </div>
+  <div class="slide">
+    <div class="slide-bg" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ae1a7fa4-6346-44eb-9abf-e771da04ce77/profound+Mobile+Tend');background-position:65% center;"></div>
+    <div class="slide-ov" style="background:linear-gradient(115deg,rgba(8,8,8,0.92) 0%,rgba(8,8,8,0.6) 55%,rgba(8,8,8,0.18) 100%);"></div><div class="slide-ov-b"></div>
+    <div class="slide-content">
+      <div class="slide-tag">Excellence Without Exception</div>
+      <h1>Your Ride.<br/><em>Profound</em><br/>Results.</h1>
+      <p class="slide-sub">We come to you — Mon–Sat across Baltimore and the DMV. Book your slot today.</p>
+      <div class="slide-btns">
+        <a href="#booking" class="btn-p">Schedule Now →</a>
+        <a href="#hours" class="btn-g">View Hours</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-ctrl">
+    <div class="dots">
+      <button class="dot active" data-i="0"></button>
+      <button class="dot" data-i="1"></button>
+      <button class="dot" data-i="2"></button>
+    </div>
+    <div class="arrows">
+      <button class="arr" id="prev">&#8592;</button>
+      <button class="arr" id="next">&#8594;</button>
+    </div>
+  </div>
+  <div class="faith-badge"><div class="faith-badge-in"><span>✝</span><p>Faith<br/>Drives<br/>Clean</p></div></div>
+</section>
+
+<!-- STRIP -->
+<div class="strip reveal">
+  <div class="stat"><div class="stat-n" data-t="500" data-s="+">500+</div><div class="stat-l">Details Completed</div></div>
+  <div class="stat"><div class="stat-n" data-t="5" data-s="★">5★</div><div class="stat-l">Average Rating</div></div>
+  <div class="stat"><div class="stat-n" data-t="10" data-s="+">10+</div><div class="stat-l">Cities Served</div></div>
+  <div class="stat"><div class="stat-n" data-t="100" data-s="%">100%</div><div class="stat-l">Mobile — We Come to You</div></div>
+</div>
+
+<!-- ABOUT -->
+<div id="about">
+  <div class="about-img"></div>
+  <div class="about-text reveal">
+    <div class="sec-tag">Who We Are</div>
+    <h2>More Than a<br/>Detail Company.</h2>
+    <div class="faith-pill"><span class="cross">✝</span><p>"Faith Drives Clean"</p></div>
+    <p>At <strong>Profound Mobile Tend</strong>, we are more than a mobile detailing company — we are a commitment. A commitment to showing up, doing the work right, and leaving every vehicle looking better than we found it.</p>
+    <p>From the moment we pull up to your location, everything we do is driven by one standard: <strong>excellence without exception.</strong> We don't just detail your vehicle — we honor it.</p>
+    <a href="#booking" class="btn-p">Book a Detail →</a>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="svc-intro reveal">
+    <div class="sec-tag">What We Offer</div>
+    <h2>Premium <em>Services</em></h2>
+    <p>Every service is performed by hand with professional-grade products. No conveyor belts. No shortcuts. Just clean — delivered to your location across Baltimore and the DMV.</p>
+  </div>
+  <div class="tabs reveal">
+    <button class="tab active" data-tab="all">All Services</button>
+    <button class="tab" data-tab="wash">Wash</button>
+    <button class="tab" data-tab="interior">Interior</button>
+    <button class="tab" data-tab="full">Full Detail</button>
+  </div>
+  <div class="svc-panel active" id="p-all">
+    <div class="sc reveal"><div class="sc-badge">Entry</div><div class="sc-name">Standard Hand Wash</div><div class="sc-sub">Profound Tend Wash</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>45–60 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Exterior hand wash &amp; rinse</li><li>Wheel &amp; tire clean</li><li>Window wipe-down</li><li>Door jambs cleaned</li></ul><div class="sc-foot"><div class="sc-price">$54.99<small>Starting price</small></div><button class="sc-book" onclick="scrollToBooking('hand-wash')">Book Now →</button></div></div>
+    <div class="sc reveal"><div class="sc-badge hot">Popular</div><div class="sc-name">Basic Wash</div><div class="sc-sub">Profound Tend Wash</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>60–75 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Full exterior hand wash</li><li>Tire dressing applied</li><li>Interior vacuum</li><li>Dashboard wipe-down</li></ul><div class="sc-foot"><div class="sc-price">from $149.99<small>Starting price</small></div><button class="sc-book" onclick="scrollToBooking('basic-wash')">Book Now →</button></div></div>
+    <div class="sc reveal"><div class="sc-badge">Signature</div><div class="sc-name">Wash &amp; Wax</div><div class="sc-sub">Profound Tend Wash</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>90–120 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Complete exterior hand wash</li><li>Hand wax application</li><li>Streak-free window polish</li><li>Tire shine &amp; wheel detail</li><li>Exterior trim dressed</li></ul><div class="sc-foot"><div class="sc-price">$134.99<small>Starting price</small></div><button class="sc-book" onclick="scrollToBooking('wash-wax')">Book Now →</button></div></div>
+    <div class="sc reveal"><div class="sc-badge">Essential</div><div class="sc-name">Standard Interior Detail</div><div class="sc-sub">Profound Tend Interior Detail</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>2–3 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Deep interior vacuum</li><li>Seat &amp; carpet shampoo</li><li>Dashboard &amp; console detail</li><li>Door panel wipe-down</li><li>Interior windows cleaned</li></ul><div class="sc-foot"><div class="sc-price">$144.99<small>Starting price</small></div><button class="sc-book" onclick="scrollToBooking('std-interior')">Book Now →</button></div></div>
+    <div class="sc reveal"><div class="sc-badge">Premium</div><div class="sc-name">Full Interior Detail</div><div class="sc-sub">Profound Tend Interior Detail</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>3–5 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Full deep vacuum &amp; extraction</li><li>Steam clean all surfaces</li><li>Leather conditioning</li><li>Odor elimination treatment</li><li>All vents &amp; crevices detailed</li><li>Interior windows polished</li></ul><div class="sc-foot"><div class="sc-price">$209.99<small>Starting price</small></div><button class="sc-book" onclick="scrollToBooking('full-interior')">Book Now →</button></div></div>
+    <div class="sc reveal"><div class="sc-badge hot">Best Value</div><div class="sc-name">Profound Full Detail</div><div class="sc-sub">Interior + Exterior — Complete Service</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>4–6 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Complete interior deep clean</li><li>Full exterior hand wash &amp; wax</li><li>Paint decontamination</li><li>Leather &amp; upholstery condition</li><li>Wheel &amp; tire detail</li><li>Engine bay cleaning available</li><li>Odor removal treatment</li></ul><div class="sc-foot"><div class="sc-price" style="font-size:1.15rem">Contact for Quote<small>Custom pricing</small></div><button class="sc-book" onclick="scrollToBooking('full-detail')">Get a Quote →</button></div></div>
+  </div>
+  <div class="svc-panel" id="p-wash">
+    <div class="sc"><div class="sc-badge">Entry</div><div class="sc-name">Standard Hand Wash</div><div class="sc-sub">Profound Tend Wash</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>45–60 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Exterior hand wash &amp; rinse</li><li>Wheel &amp; tire clean</li><li>Window wipe-down</li><li>Door jambs cleaned</li></ul><div class="sc-foot"><div class="sc-price">$54.99<small>Starting price</small></div><button class="sc-book" onclick="scrollToBooking('hand-wash')">Book Now →</button></div></div>
+    <div class="sc"><div class="sc-badge hot">Popular</div><div class="sc-name">Basic Wash</div><div class="sc-sub">Profound Tend Wash</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>60–75 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Full exterior hand wash</li><li>Tire dressing applied</li><li>Interior vacuum</li><li>Dashboard wipe-down</li></ul><div class="sc-foot"><div class="sc-price">from $149.99<small>Starting price</small></div><button class="sc-book" onclick="scrollToBooking('basic-wash')">Book Now →</button></div></div>
+    <div class="sc"><div class="sc-badge">Signature</div><div class="sc-name">Wash &amp; Wax</div><div class="sc-sub">Profound Tend Wash</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>90–120 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Complete exterior hand wash</li><li>Hand wax application</li><li>Streak-free window polish</li><li>Tire shine &amp; wheel detail</li><li>Exterior trim dressed</li></ul><div class="sc-foot"><div class="sc-price">$134.99<small>Starting price</small></div><button class="sc-book" onclick="scrollToBooking('wash-wax')">Book Now →</button></div></div>
+  </div>
+  <div class="svc-panel" id="p-interior">
+    <div class="sc"><div class="sc-badge">Essential</div><div class="sc-name">Standard Interior Detail</div><div class="sc-sub">Profound Tend Interior Detail</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>2–3 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Deep interior vacuum</li><li>Seat &amp; carpet shampoo</li><li>Dashboard &amp; console detail</li><li>Door panel wipe-down</li><li>Interior windows cleaned</li></ul><div class="sc-foot"><div class="sc-price">$144.99<small>Starting price</small></div><button class="sc-book" onclick="scrollToBooking('std-interior')">Book Now →</button></div></div>
+    <div class="sc"><div class="sc-badge">Premium</div><div class="sc-name">Full Interior Detail</div><div class="sc-sub">Profound Tend Interior Detail</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>3–5 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Full deep vacuum &amp; extraction</li><li>Steam clean all surfaces</li><li>Leather conditioning</li><li>Odor elimination treatment</li><li>All vents &amp; crevices detailed</li><li>Interior windows polished</li></ul><div class="sc-foot"><div class="sc-price">$209.99<small>Starting price</small></div><button class="sc-book" onclick="scrollToBooking('full-interior')">Book Now →</button></div></div>
+  </div>
+  <div class="svc-panel" id="p-full">
+    <div class="sc"><div class="sc-badge hot">Best Value</div><div class="sc-name">Profound Full Detail</div><div class="sc-sub">Interior + Exterior — Complete Service</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>4–6 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Complete interior deep clean</li><li>Full exterior hand wash &amp; wax</li><li>Paint decontamination</li><li>Leather &amp; upholstery condition</li><li>Wheel &amp; tire detail</li><li>Engine bay cleaning available</li><li>Odor removal treatment</li></ul><div class="sc-foot"><div class="sc-price" style="font-size:1.15rem">Contact for Quote<small>Custom pricing</small></div><button class="sc-book" onclick="scrollToBooking('full-detail')">Get a Quote →</button></div></div>
+  </div>
+</section>
+
+<!-- HOURS -->
+<section id="hours">
+  <div class="reveal">
+    <div class="sec-tag">When We Work</div>
+    <h2>Operating<br/><em>Hours</em></h2>
+    <table class="htbl">
+      <tr><td>Monday</td><td>8 AM – 6 PM</td></tr>
+      <tr><td>Tuesday</td><td>8 AM – 6 PM</td></tr>
+      <tr><td>Wednesday</td><td>8 AM – 6 PM</td></tr>
+      <tr><td>Thursday</td><td>8 AM – 6 PM</td></tr>
+      <tr><td>Friday</td><td>8 AM – 7 PM</td></tr>
+      <tr><td>Saturday</td><td>7 AM – 5 PM</td></tr>
+      <tr><td>Sunday</td><td>By Appointment</td></tr>
+    </table>
+  </div>
+  <div class="h-right reveal">
+    <div class="sec-tag">Service Area</div>
+    <h2>We Come<br/>to <em>You</em></h2>
+    <p>No drop-off. No waiting room. We bring our full professional detail suite directly to your home, office, or wherever your vehicle is parked.</p>
+    <div class="note-box">📌 Booking required at least <strong>24 hours in advance.</strong> We serve Baltimore &amp; the entire DMV area.</div>
+    <div class="area-label">Areas We Cover</div>
+    <div class="area-tags">
+      <span class="atag">Baltimore</span><span class="atag">Towson</span><span class="atag">Columbia</span><span class="atag">Ellicott City</span><span class="atag">Annapolis</span><span class="atag">Bowie</span><span class="atag">Silver Spring</span><span class="atag">Washington DC</span><span class="atag">+ More</span>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="rev-hd reveal">
+    <div class="sec-tag" style="justify-content:center">Testimonials</div>
+    <h2>Real Rides.<br/><em>Real Results.</em></h2>
+  </div>
+  <div class="rev-grid">
+    <div class="rev reveal"><div class="stars">★★★★★</div><p>My truck hadn't been this clean since the day I drove it off the lot. They showed up on time, no shortcuts — just real detail work. Will be a repeat customer for sure.</p><div class="reviewer"><div class="rv-av">M</div><div class="rv-info"><strong>Marcus T.</strong><span>Baltimore, MD</span></div></div></div>
+    <div class="rev reveal"><div class="stars">★★★★★</div><p>Booked the full interior and exterior package. The team was professional, on time, and my car smelled incredible. Couldn't ask for better service.</p><div class="reviewer"><div class="rv-av">J</div><div class="rv-info"><strong>Janelle R.</strong><span>Towson, MD</span></div></div></div>
+    <div class="rev reveal"><div class="stars">★★★★★</div><p>The headlight restoration alone was worth it. Night and day difference — literally safer to drive now. Profound Mobile Tend is legit. Highly recommend.</p><div class="reviewer"><div class="rv-av">D</div><div class="rv-info"><strong>Devon W.</strong><span>Columbia, MD</span></div></div></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     BOOKING SECTION
+══════════════════════════════════════ -->
+<section id="booking">
+  <div class="bk-header reveal">
+    <div class="sec-tag" style="justify-content:center">Appointments</div>
+    <h2 style="text-align:center;">Book Your <em>Detail</em></h2>
+    <p>Choose your service, pick a date and time that works for you. We'll come to you — no drop-off needed.</p>
+  </div>
+
+  <!-- Steps -->
+  <div class="steps-bar">
+    <div class="step-item active" id="bks1"><div class="step-num">1</div><div class="step-lbl">Service</div></div>
+    <div class="step-line"></div>
+    <div class="step-item" id="bks2"><div class="step-num">2</div><div class="step-lbl">Date &amp; Time</div></div>
+    <div class="step-line"></div>
+    <div class="step-item" id="bks3"><div class="step-num">3</div><div class="step-lbl">Your Info</div></div>
+    <div class="step-line"></div>
+    <div class="step-item" id="bks4"><div class="step-num">4</div><div class="step-lbl">Confirmed</div></div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="bk-panel active" id="bkp1">
+    <div class="bk-sec-title">Choose Your <em>Service</em></div>
+    <p class="bk-sec-sub">Select the service you'd like to book. All services come to your location.</p>
+    <div class="svc-sel-grid" id="svcSelGrid"></div>
+    <div class="btn-row center">
+      <button class="btn-p" onclick="bkGoStep(2)" id="bkNext1" disabled>Next — Pick Date &amp; Time →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="bk-panel" id="bkp2">
+    <div class="bk-sec-title">Pick a <em>Date &amp; Time</em></div>
+    <p class="bk-sec-sub">We operate Mon–Sat · 8:00 AM – 7:00 PM · 45-minute appointment slots.</p>
+    <div class="cal-layout">
+      <div class="cal-wrap">
+        <div class="cal-head">
+          <button class="cal-btn" onclick="chMonth(-1)">&#8592;</button>
+          <div class="cal-month-label" id="calLbl"></div>
+          <button class="cal-btn" onclick="chMonth(1)">&#8594;</button>
+        </div>
+        <div class="cal-body">
+          <div class="cal-wk">
+            <div class="cal-wd">Su</div><div class="cal-wd">Mo</div><div class="cal-wd">Tu</div>
+            <div class="cal-wd">We</div><div class="cal-wd">Th</div><div class="cal-wd">Fr</div><div class="cal-wd">Sa</div>
+          </div>
+          <div class="cal-days" id="calDays"></div>
+        </div>
+      </div>
+      <div class="slots-wrap">
+        <div class="slots-title">Available Times</div>
+        <div class="slots-date" id="slotsDateLbl">← Select a date</div>
+        <div class="slots-list" id="slotsList"><div class="no-date-msg">Select a date on the calendar<br/>to see available time slots.</div></div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-g" onclick="bkGoStep(1)">← Back</button>
+      <button class="btn-p" onclick="bkGoStep(3)" id="bkNext2" disabled>Next — Your Info →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="bk-panel" id="bkp3">
+    <div class="bk-sec-title">Your <em>Information</em></div>
+    <p class="bk-sec-sub">We'll send a confirmation to sales@profoundmobiletend.com and reach out if anything changes.</p>
+    <div class="bk-form-wrap">
+      <div class="bk-summary" id="bkSummary"></div>
+      <div class="form-grid">
+        <div class="form-group"><label>First Name *</label><input type="text" id="f_fname" placeholder="Marcus"/></div>
+        <div class="form-group"><label>Last Name *</label><input type="text" id="f_lname" placeholder="Thompson"/></div>
+        <div class="form-group"><label>Phone Number *</label><input type="tel" id="f_phone" placeholder="(443) 000-0000"/></div>
+        <div class="form-group"><label>Email Address *</label><input type="email" id="f_email" placeholder="you@email.com"/></div>
+        <div class="form-group full"><label>Service Address *</label><input type="text" id="f_address" placeholder="Where should we come? (Street, City, State, ZIP)"/></div>
+        <div class="form-group full"><label>Vehicle (Year, Make, Model, Color) *</label><input type="text" id="f_vehicle" placeholder="e.g. 2021 Honda Accord Black"/></div>
+        <div class="form-group full"><label>Notes / Special Requests</label><textarea id="f_notes" placeholder="Tough stains, pet hair, special instructions…"></textarea></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-g" onclick="bkGoStep(2)">← Back</button>
+        <button class="btn-p" id="bkConfirmBtn" onclick="confirmBooking()">Confirm Booking →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="bk-panel" id="bkp4">
+    <div class="confirm-wrap">
+      <div class="confirm-icon">✓</div>
+      <div class="confirm-title">You're <em>Booked!</em></div>
+      <p class="confirm-sub">Your appointment is confirmed. A notification has been sent to Profound Mobile Tend. We'll be at your location ready to make your ride profound!</p>
+      <div class="confirm-card" id="confirmCard"></div>
+      <div class="email-note">✉ A booking notification has been sent to <strong>sales@profoundmobiletend.com</strong>. Please allow 24 hours advance notice for any cancellations or changes.</div>
+      <button class="btn-p" onclick="newBooking()">Book Another Detail →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <div class="sec-tag">Get in Touch</div>
+      <h2>Contact <em>Us</em></h2>
+      <p>Have a question before booking? Want a custom quote for the full detail package? Reach out — we respond fast.</p>
+      <div class="contact-item">
+        <div class="contact-icon">✉</div>
+        <div class="contact-item-text"><strong>Email</strong><a href="mailto:sales@profoundmobiletend.com">sales@profoundmobiletend.com</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div class="contact-item-text"><strong>Service Area</strong><span>Baltimore &amp; DMV — We come to you</span></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🕐</div>
+        <div class="contact-item-text"><strong>Hours</strong><span>Mon–Fri 8AM–6PM · Fri 8AM–7PM · Sat 7AM–5PM</span></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📱</div>
+        <div class="contact-item-text">
+          <strong>Social</strong>
+          <span><a href="https://www.facebook.com/share/1Cpu3KJzTh/" target="_blank">Facebook</a> · <a href="https://www.instagram.com/profoundmobiletend" target="_blank">Instagram</a> · <a href="https://www.threads.com/@profoundmobiletend" target="_blank">Threads</a></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact form — sends to sales@profoundmobiletend.com via Formspree -->
+    <div class="contact-form-wrap reveal">
+      <div class="sec-tag">Send a Message</div>
+      <h2 style="font-size:1.8rem;margin-bottom:1.5rem;">Quick <em>Message</em></h2>
+      <!-- 
+        TO ACTIVATE EMAIL: 
+        1. Go to formspree.io and create a free account
+        2. Create a new form and set email to sales@profoundmobiletend.com
+        3. Replace YOUR_FORM_ID below with your Formspree form ID
+      -->
+      <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <input type="hidden" name="_subject" value="New Contact from Profound Mobile Tend Website"/>
+        <input type="hidden" name="_replyto" id="cf_replyto"/>
+        <div class="fg"><label>Name *</label><input type="text" name="name" id="cf_name" placeholder="Your name" required/></div>
+        <div class="fg"><label>Email *</label><input type="email" name="email" id="cf_email" placeholder="your@email.com" required oninput="document.getElementById('cf_replyto').value=this.value"/></div>
+        <div class="fg"><label>Phone</label><input type="tel" name="phone" placeholder="(443) 000-0000"/></div>
+        <div class="fg"><label>Message *</label><textarea name="message" placeholder="Ask about a service, request a custom quote, or just say hello…" rows="5" required></textarea></div>
+        <button type="submit" class="btn-p" style="width:100%;justify-content:center;">Send Message →</button>
+        <div class="sending-msg" id="sendingMsg">✓ Message sent! We'll get back to you soon.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="sec-tag">Ready?</div>
+  <h2>Book Your <em>Detail</em><br/>Today</h2>
+  <p>Premium mobile detailing — your location, your schedule. Let us make your ride profound.</p>
+  <div class="cta-row">
+    <a href="#booking" class="btn-p">Schedule Online →</a>
+    <a href="#contact" class="btn-g">Contact Us</a>
+  </div>
+  <div class="ph-line">Follow us: <a href="https://www.facebook.com/share/1Cpu3KJzTh/" target="_blank">Facebook</a> · <a href="https://www.instagram.com/profoundmobiletend" target="_blank">Instagram</a> · <a href="https://www.threads.com/@profoundmobiletend" target="_blank">Threads</a></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-brand">
+    <img src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/8c0520dd-65b4-41f1-967c-53233512cd7d/MY+LOGO.png" alt="Profound Mobile Tend"/>
+    <div class="f-tag">Faith Drives Clean · Baltimore &amp; DMV</div>
+  </div>
+  <ul class="f-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="https://www.profoundmobiletend.com/shop" target="_blank">Shop</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#booking">Book Now</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="f-soc">
+    <a href="https://www.facebook.com/share/1Cpu3KJzTh/" class="soc-a" target="_blank">f</a>
+    <a href="https://www.instagram.com/profoundmobiletend" class="soc-a" target="_blank">ig</a>
+    <a href="https://www.threads.com/@profoundmobiletend" class="soc-a" target="_blank">th</a>
+  </div>
+  <div class="f-copy">© 2026 Profound Mobile Tend. All rights reserved. · profoundmobiletend.com</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ─── SERVICES DATA ─── */
+const SVCS=[
+  {id:'hand-wash',badge:'Entry',name:'Standard Hand Wash',sub:'Profound Tend Wash',dur:'45–60 min',price:'$54.99'},
+  {id:'basic-wash',badge:'Popular',name:'Basic Wash',sub:'Profound Tend Wash',dur:'60–75 min',price:'from $149.99'},
+  {id:'wash-wax',badge:'Signature',name:'Wash & Wax',sub:'Profound Tend Wash',dur:'90–120 min',price:'$134.99'},
+  {id:'std-interior',badge:'Essential',name:'Standard Interior Detail',sub:'Profound Tend Interior',dur:'2–3 hrs',price:'$144.99'},
+  {id:'full-interior',badge:'Premium',name:'Full Interior Detail',sub:'Profound Tend Interior',dur:'3–5 hrs',price:'$209.99'},
+  {id:'full-detail',badge:'Best Value',name:'Profound Full Detail',sub:'Interior + Exterior Complete',dur:'4–6 hrs',price:'Contact for Quote'}
+];
+
+/* ─── TIME SLOTS 8AM–7PM / 45min ─── */
+function genSlots(){
+  const s=[];let h=8,m=0;
+  while(true){
+    const ap=h<12?'AM':'PM';const dh=h>12?h-12:h===0?12:h;
+    s.push(`${dh}:${m===0?'00':m} ${ap}`);
+    m+=45;if(m>=60){m-=60;h++;}
+    if(h>19||(h===19&&m>0))break;
+  }
+  return s;
+}
+const ALL_SLOTS=genSlots();
+
+/* ─── STORAGE ─── */
+const SK='pmt_v3';
+function getBK(){try{return JSON.parse(localStorage.getItem(SK)||'[]');}catch{return[];}}
+function saveBK(b){localStorage.setItem(SK,JSON.stringify(b));}
+
+/* ─── STATE ─── */
+let selSvc=null,selDate=null,selSlot=null;
+const now=new Date();
+let calY=now.getFullYear(),calM=now.getMonth();
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DNAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+/* ─── SCROLL TO BOOKING ─── */
+function scrollToBooking(svcId){
+  document.getElementById('booking').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>{
+    if(svcId){
+      selSvc=SVCS.find(s=>s.id===svcId);
+      renderSvcGrid();
+      bkGoStep(1);
+      if(selSvc) document.getElementById('bkNext1').disabled=false;
+    }
+  },400);
+}
+
+/* ─── STEP NAVIGATION ─── */
+function bkGoStep(n){
+  document.querySelectorAll('.bk-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('bkp'+n).classList.add('active');
+  for(let i=1;i<=4;i++){
+    const el=document.getElementById('bks'+i);
+    el.classList.remove('active','done');
+    if(i<n){el.classList.add('done');el.querySelector('.step-num').textContent='✓';}
+    if(i===n){el.classList.add('active');if(i>1)el.querySelector('.step-num').textContent=i;}
+    if(i>n)el.querySelector('.step-num').textContent=i;
+  }
+  if(n===3)renderBkSummary();
+  document.getElementById('booking').scrollIntoView({behavior:'smooth'});
+}
+
+/* ─── STEP 1 ─── */
+function renderSvcGrid(){
+  document.getElementById('svcSelGrid').innerHTML=SVCS.map(s=>`
+    <div class="svc-opt${selSvc&&selSvc.id===s.id?' selected':''}" onclick="pickSvc('${s.id}')">
+      <div class="svo-badge">${s.badge}</div>
+      <div class="svo-name">${s.name}</div>
+      <div class="svo-dur">⏱ ${s.dur}</div>
+      <div class="svo-price">${s.price}</div>
+    </div>`).join('');
+}
+function pickSvc(id){
+  selSvc=SVCS.find(s=>s.id===id);
+  renderSvcGrid();
+  document.getElementById('bkNext1').disabled=false;
+}
+
+/* ─── STEP 2 — CALENDAR ─── */
+function renderCal(){
+  document.getElementById('calLbl').textContent=`${MONTHS[calM]} ${calY}`;
+  const fd=new Date(calY,calM,1).getDay();
+  const dim=new Date(calY,calM+1,0).getDate();
+  const bks=getBK();
+  let html='';
+  for(let i=0;i<fd;i++)html+='<div class="cday empty"></div>';
+  for(let d=1;d<=dim;d++){
+    const date=new Date(calY,calM,d);
+    const ds=fmtDate(calY,calM+1,d);
+    const isPast=date<new Date(now.getFullYear(),now.getMonth(),now.getDate());
+    const isSun=date.getDay()===0;
+    const isToday=date.toDateString()===now.toDateString();
+    const isSel=ds===selDate;
+    const hasBk=bks.some(b=>b.date===ds);
+    let cls='cday';
+    if(isPast||isSun)cls+=' dis';
+    if(isToday&&!isPast)cls+=' tod';
+    if(isSel)cls+=' sel';
+    if(hasBk&&!isPast)cls+=' has-bk';
+    const click=(!isPast&&!isSun)?`onclick="pickDate('${ds}')"` :'';
+    html+=`<div class="${cls}" ${click}>${d}</div>`;
+  }
+  document.getElementById('calDays').innerHTML=html;
+}
+function chMonth(d){calM+=d;if(calM>11){calM=0;calY++;}if(calM<0){calM=11;calY--;}renderCal();}
+function fmtDate(y,m,d){return`${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
+function fmtDisp(s){const[y,m,d]=s.split('-').map(Number);const dt=new Date(y,m-1,d);return`${DNAMES[dt.getDay()]}, ${MONTHS[m-1]} ${d}, ${y}`;}
+function pickDate(ds){selDate=ds;selSlot=null;document.getElementById('bkNext2').disabled=true;renderCal();renderSlots();}
+function renderSlots(){
+  const lbl=document.getElementById('slotsDateLbl');
+  const list=document.getElementById('slotsList');
+  if(!selDate){lbl.textContent='← Select a date';list.innerHTML='<div class="no-date-msg">Select a date on the calendar<br/>to see available time slots.</div>';return;}
+  lbl.textContent=fmtDisp(selDate);
+  const bkd=getBK().filter(b=>b.date===selDate).map(b=>b.time);
+  list.innerHTML=ALL_SLOTS.map(sl=>{
+    const isB=bkd.includes(sl);const isP=sl===selSlot;
+    return`<div class="slot-row${isB?' bkd':''}${isP?' picked':''}"${!isB?`onclick="pickSlot('${sl}')"`:''}><span class="slot-time">${sl}</span><span class="slot-tag${isB?' taken':isP?' picked':' open'}">${isB?'Booked':isP?'Selected':'Open'}</span></div>`;
+  }).join('');
+}
+function pickSlot(sl){selSlot=sl;document.getElementById('bkNext2').disabled=false;renderSlots();}
+
+/* ─── STEP 3 ─── */
+function renderBkSummary(){
+  document.getElementById('bkSummary').innerHTML=`
+    <div class="bk-sum-title">Booking Summary</div>
+    <div class="bk-sum-row"><span class="bk-sum-k">Service</span><span class="bk-sum-v">${selSvc.name}</span></div>
+    <div class="bk-sum-row"><span class="bk-sum-k">Date</span><span class="bk-sum-v">${fmtDisp(selDate)}</span></div>
+    <div class="bk-sum-row"><span class="bk-sum-k">Time</span><span class="bk-sum-v">${selSlot}</span></div>
+    <div class="bk-sum-row"><span class="bk-sum-k">Duration</span><span class="bk-sum-v">${selSvc.dur}</span></div>
+    <div class="bk-sum-row"><span class="bk-sum-k">Price</span><span class="bk-sum-v price">${selSvc.price}</span></div>`;
+}
+
+/* ─── CONFIRM & EMAIL ─── */
+async function confirmBooking(){
+  const fname=document.getElementById('f_fname').value.trim();
+  const lname=document.getElementById('f_lname').value.trim();
+  const phone=document.getElementById('f_phone').value.trim();
+  const email=document.getElementById('f_email').value.trim();
+  const address=document.getElementById('f_address').value.trim();
+  const vehicle=document.getElementById('f_vehicle').value.trim();
+  const notes=document.getElementById('f_notes').value.trim();
+  if(!fname||!lname||!phone||!email||!address||!vehicle){showToast('⚠ Please fill in all required fields.');return;}
+
+  const btn=document.getElementById('bkConfirmBtn');
+  btn.disabled=true;btn.textContent='Confirming…';
+
+  const bookingId='PMT-'+Date.now().toString(36).toUpperCase().slice(-6);
+  const booking={id:bookingId,name:fname+' '+lname,phone,email,address,vehicle,notes,
+    service:selSvc.name,serviceId:selSvc.id,price:selSvc.price,
+    date:selDate,time:selSlot,duration:selSvc.dur,status:'confirmed',created:new Date().toISOString()};
+
+  // Save locally
+  const bks=getBK();bks.push(booking);saveBK(bks);
+
+  // Send email via Formspree
+  const emailBody=`
+NEW BOOKING — Profound Mobile Tend
+
+Booking ID: ${bookingId}
+Customer: ${booking.name}
+Phone: ${phone}
+Email: ${email}
+
+Service: ${selSvc.name}
+Date: ${fmtDisp(selDate)}
+Time: ${selSlot}
+Duration: ${selSvc.dur}
+Price: ${selSvc.price}
+
+Service Address: ${address}
+Vehicle: ${vehicle}
+Notes: ${notes||'None'}
+
+Booked on: ${new Date().toLocaleString()}
+  `.trim();
+
+  try{
+    await fetch('https://formspree.io/f/YOUR_FORM_ID',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        _subject:`New Booking ${bookingId} — ${selSvc.name} on ${fmtDisp(selDate)} at ${selSlot}`,
+        name:booking.name,email:email,phone:phone,
+        service:selSvc.name,date:fmtDisp(selDate),time:selSlot,
+        address:address,vehicle:vehicle,notes:notes||'None',
+        booking_id:bookingId,price:selSvc.price,message:emailBody
+      })
+    });
+  }catch(e){console.log('Email note:',e);}
+
+  // Show confirmation
+  document.getElementById('confirmCard').innerHTML=`
+    <div class="confirm-id">Booking ID: ${bookingId}</div>
+    <div class="confirm-row"><span>Name</span><span>${booking.name}</span></div>
+    <div class="confirm-row"><span>Service</span><span>${booking.service}</span></div>
+    <div class="confirm-row"><span>Date</span><span>${fmtDisp(booking.date)}</span></div>
+    <div class="confirm-row"><span>Time</span><span>${booking.time}</span></div>
+    <div class="confirm-row"><span>Duration</span><span>${booking.duration}</span></div>
+    <div class="confirm-row"><span>Price</span><span style="color:var(--green);font-weight:700;">${booking.price}</span></div>
+    <div class="confirm-row"><span>Location</span><span>${booking.address}</span></div>
+    <div class="confirm-row"><span>Vehicle</span><span>${booking.vehicle}</span></div>`;
+
+  bkGoStep(4);
+  showToast('✓ Booking confirmed! See you soon.');
+  btn.disabled=false;btn.textContent='Confirm Booking →';
+}
+
+function newBooking(){
+  selSvc=null;selDate=null;selSlot=null;
+  ['f_fname','f_lname','f_phone','f_email','f_address','f_vehicle','f_notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('bkNext1').disabled=true;
+  document.getElementById('bkNext2').disabled=true;
+  renderSvcGrid();renderCal();renderSlots();bkGoStep(1);
+}
+
+/* ─── HERO SLIDER ─── */
+const slides=document.querySelectorAll('.slide');
+const dots=document.querySelectorAll('.dot');
+let cur=0,timer;
+function goTo(n){slides[cur].classList.remove('active');dots[cur].classList.remove('active');cur=(n+slides.length)%slides.length;slides[cur].classList.add('active');dots[cur].classList.add('active');}
+function play(){timer=setInterval(()=>goTo(cur+1),5500);}
+document.getElementById('next').onclick=()=>{clearInterval(timer);goTo(cur+1);play();};
+document.getElementById('prev').onclick=()=>{clearInterval(timer);goTo(cur-1);play();};
+dots.forEach(d=>d.onclick=()=>{clearInterval(timer);goTo(+d.dataset.i);play();});
+play();
+
+/* ─── HAMBURGER ─── */
+const ham=document.getElementById('ham');
+const mob=document.getElementById('mobNav');
+ham.onclick=()=>{ham.classList.toggle('open');mob.classList.toggle('open');};
+mob.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{ham.classList.remove('open');mob.classList.remove('open');}));
+
+/* ─── SERVICE TABS ─── */
+document.querySelectorAll('.tab').forEach(b=>{b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.svc-panel').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');document.getElementById('p-'+b.dataset.tab).classList.add('active');
+});});
+
+/* ─── REVEAL ─── */
+const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('up');}),{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ─── TODAY HIGHLIGHT ─── */
+const dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const todayName=dayNames[new Date().getDay()];
+document.querySelectorAll('.htbl tr').forEach(r=>{if(r.cells[0]&&r.cells[0].textContent.trim()===todayName)r.classList.add('today');});
+
+/* ─── COUNTERS ─── */
+const co=new IntersectionObserver(es=>{es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  e.target.querySelectorAll('.stat-n').forEach(el=>{
+    const t=+el.dataset.t,s=el.dataset.s;let st=null;
+    const step=ts=>{if(!st)st=ts;const p=Math.min((ts-st)/1600,1);el.textContent=Math.floor((1-Math.pow(1-p,3))*t)+s;if(p<1)requestAnimationFrame(step);};
+    requestAnimationFrame(step);
+  });co.unobserve(e.target);
+});},{threshold:0.5});
+const stripEl=document.querySelector('.strip');if(stripEl)co.observe(stripEl);
+
+/* ─── CONTACT FORM ─── */
+document.getElementById('contactForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  const btn=this.querySelector('button[type=submit]');
+  btn.disabled=true;btn.textContent='Sending…';
+  try{
+    const res=await fetch(this.action,{method:'POST',body:new FormData(this),headers:{Accept:'application/json'}});
+    if(res.ok){
+      document.getElementById('sendingMsg').style.display='block';
+      this.reset();showToast('✓ Message sent to Profound Mobile Tend!');
+    }else{showToast('⚠ Could not send. Email us directly.');}
+  }catch{showToast('⚠ Could not send. Email us directly.');}
+  btn.disabled=false;btn.textContent='Send Message →';
+});
+
+/* ─── TOAST ─── */
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+
+/* ─── INIT ─── */
+renderSvcGrid();renderCal();renderSlots();
+</script>
+</body>
+</html>
