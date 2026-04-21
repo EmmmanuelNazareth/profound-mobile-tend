@@ -349,6 +349,79 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
   #cta{padding:6rem 1.8rem;}
   .btn-row{flex-wrap:wrap;}
 }
+
+/* ── PHONE POLISH (≤ 640px) ── */
+@media(max-width:640px){
+  :root{--nav-h:62px;}
+  nav{padding:0 1.1rem;}
+  .nav-logo img,nav>a>img{height:34px;}
+  .nav-cta{display:none;}
+
+  /* Hero */
+  #hero{height:100svh;min-height:580px;}
+  .slide{align-items:flex-end;padding-bottom:9rem;}
+  .slide-content{padding:0 1.4rem;max-width:100%;}
+  .slide-tag{font-size:0.6rem;margin-bottom:1rem;letter-spacing:0.18em;}
+  .slide h1{font-size:clamp(2.4rem,11vw,3.4rem);line-height:1.02;margin-bottom:0.9rem;}
+  .slide-sub{font-size:0.88rem;line-height:1.6;margin-bottom:1.5rem;max-width:100%;}
+  .slide-btns{gap:0.6rem;width:100%;}
+  .slide-btns .btn-p,.slide-btns .btn-g{flex:1;justify-content:center;padding:0.9rem 1rem;font-size:0.72rem;}
+  .slide-ov{background:linear-gradient(180deg,rgba(8,8,8,0.55) 0%,rgba(8,8,8,0.35) 35%,rgba(8,8,8,0.92) 100%);}
+  .hero-ctrl{left:1.4rem;bottom:1.2rem;gap:0.8rem;}
+  .arr{width:34px;height:34px;font-size:0.8rem;}
+  .arrows{margin-left:0.4rem;}
+
+  /* Strip */
+  .strip{padding:1.8rem 1.2rem;gap:1.2rem;}
+  .stat{flex:1;min-width:90px;}
+  .stat-n{font-size:1.8rem;}
+  .stat-l{font-size:0.55rem;}
+
+  /* Sections */
+  section{padding:4rem 1.3rem;}
+  h2{font-size:2rem;}
+  .sec-tag{font-size:0.58rem;margin-bottom:0.7rem;}
+
+  /* About */
+  .about-img{min-height:230px;}
+  .about-text{padding:2.4rem 1.3rem;}
+  .about-text p{font-size:0.92rem;line-height:1.75;}
+
+  /* Services */
+  .svc-intro{margin-bottom:2.2rem;}
+  .tabs{gap:0;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;margin-bottom:2rem;}
+  .tab{padding:0.68rem 1.1rem;font-size:0.68rem;flex-shrink:0;}
+  .sc{padding:1.8rem 1.4rem;}
+  .sc-name{font-size:1.2rem;}
+  .sc-price{font-size:1.4rem;}
+
+  /* Hours */
+  #hours{padding:3.5rem 1.3rem;gap:2.2rem;}
+  .htbl td{padding:0.78rem 0;font-size:0.82rem;}
+
+  /* Reviews */
+  #reviews{padding:4rem 1.3rem;}
+
+  /* Booking */
+  #booking{padding:4rem 1.1rem;}
+
+  /* Contact */
+  #contact{padding:4rem 1.3rem;}
+
+  /* CTA */
+  #cta{padding:4.5rem 1.3rem;}
+
+  /* Footer */
+  footer{padding:2.2rem 1.3rem;gap:1.4rem;}
+
+  /* Mobile nav tweaks */
+  .mob-nav{padding:1.2rem 1.5rem 3rem;}
+  .mob-nav a{font-size:0.95rem;padding:0.8rem 0;}
+  .mob-book{font-size:0.82rem!important;padding:0.95rem!important;}
+
+  /* Toast */
+  .toast{bottom:1rem;right:1rem;left:1rem;max-width:none;font-size:0.78rem;}
+}
 </style>
 </head>
 <body>
