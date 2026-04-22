@@ -1099,39 +1099,72 @@ let calY=now.getFullYear(),calM=now.getMonth();
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DNAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
-/* ─── SHOP / SQUARE CHECKOUT LINKS ─── */
-/* Paste your Square Checkout URLs here (create in Square Dashboard → Online Checkout → Payment Links).
-   Leave blank "" to fall back to the booking form. */
+/* ─── SHOP — Real pricing from Squarespace ─── */
+/* "Book A Tend" opens the matching Squarespace product page,
+   which already has Square payment connected and handles checkout. */
 const SQUARE_LINKS={
-  'hand-wash':'',
-  'basic-wash':'',
-  'wash-wax':'',
-  'std-interior':'',
-  'full-interior':'',
-  'full-detail':'',
-  'headlight':'',
-  'leather-ceramic':'',
-  'engine-bay':''
+  'hand-wash':'https://tan-khaki-zwcd.squarespace.com/shop/p/profound-tend-standard-hand-wash',
+  'basic-wash':'https://tan-khaki-zwcd.squarespace.com/shop/p/product-6-yrdld-pcpw6-e46mt',
+  'wash-wax':'https://tan-khaki-zwcd.squarespace.com/shop/p/profound-tend-wash-wax',
+  'std-interior':'https://tan-khaki-zwcd.squarespace.com/shop/p/product-5-f98ry-4ll53-7s89w',
+  'full-interior':'https://tan-khaki-zwcd.squarespace.com/shop/p/product-1-ydar7-e8mlb-xmsgp',
+  'headlight':'https://tan-khaki-zwcd.squarespace.com/shop/p/product-2-5c6mb-j8mng-ym7jw',
+  'leather-ceramic':'https://tan-khaki-zwcd.squarespace.com/shop/p/product-3-szb2y-gzh2r-8sz4b',
+  'engine-bay':'https://tan-khaki-zwcd.squarespace.com/shop/p/product-4-9e76d-pr6ls-n245h'
 };
-/* Vehicle-size price modifiers — added to each product's base price */
-const VEHICLE_MOD={
-  'Compact Sedan':0, 'Mid-Size Sedan':10, 'Full-Size Sedan':20, 'Coupe (2-door)':0, 'Sports Car':10,
-  'Compact SUV':15, 'Mid-Size SUV (2 rows)':25, 'Crossover':20,
-  'Mid-Size SUV (3 rows)':35, 'Full-Size SUV':45, 'Minivan':40, 'Truck':45
+/* Real vehicle-tier pricing pulled directly from Squarespace.
+   Products not listed here use a single flat price (no tier). */
+const VEHICLE_PRICES={
+  'basic-wash':{'Sedans/Coupes':149.99,'Small-Sized SUV (2 rows)':169.99,'Large-Sized SUV (3 rows)':204.99},
+  'std-interior':{'Sedans/Coupes':144.99,'Small-Sized SUV (2 rows)':164.99,'Large-Sized SUV (3 rows)':204.99},
+  'full-interior':{'Sedans/Coupes':209.99,'Small-Sized SUV (2 rows)':254.99,'Large-Sized SUV (3 rows)':304.99}
+};
+/* Real subscription data per Squarespace. Omitted = no subscription. */
+const SUB_PLANS={
+  'hand-wash':{price:49.49,was:54.99,interval:'Every 2 weeks',note:'Save 10%'},
+  'wash-wax' :{price:121.49,was:134.99,interval:'Every 2 months',note:'Save 10%'},
+  'basic-wash':{priceRange:'$119.99–$163.99',interval:'Every 2 weeks',note:'Save 20%'}
 };
 document.addEventListener('DOMContentLoaded',()=>{
-  /* Inject per-vehicle prices into each dropdown option */
-  document.querySelectorAll('.product[data-price]').forEach(card=>{
+  /* Inject REAL per-vehicle prices into each dropdown option */
+  document.querySelectorAll('.product[data-product]').forEach(card=>{
+    const pid=card.dataset.product;
     const base=parseFloat(card.dataset.price);
-    card.querySelectorAll('.veh-sel option').forEach(opt=>{
-      if(!opt.value && !opt.textContent.startsWith('Select')){} // skip placeholder
-      const name=opt.textContent.trim();
-      if(VEHICLE_MOD.hasOwnProperty(name)){
-        const p=(base+VEHICLE_MOD[name]).toFixed(2);
-        opt.textContent=name+' — $'+p;
-        opt.value=name;
-      }
+    const tiers=VEHICLE_PRICES[pid];
+    card.querySelectorAll('.veh-group').forEach(grp=>{
+      const label=grp.querySelector('label').textContent.replace(':','').trim();
+      const sel=grp.querySelector('select');
+      const price = tiers && tiers[label] ? tiers[label] : base;
+      sel.innerHTML='<option value="">'+label+' — $'+price.toFixed(2)+'</option>';
+      if(!tiers) grp.style.display='none';
     });
+
+    /* Fix Frequency section: real sub prices, real intervals,
+       or hide entirely on products with no subscription. */
+    const sub=SUB_PLANS[pid];
+    const freqLabel=card.querySelector('.freq-label');
+    const freqOpts=card.querySelector('.freq-opts');
+    if(!sub){
+      if(freqLabel) freqLabel.style.display='none';
+      if(freqOpts) freqOpts.style.display='none';
+    }else{
+      const subOpt=card.querySelectorAll('.freq-opt')[1];
+      if(subOpt){
+        const txt=subOpt.querySelector('.freq-txt');
+        const price=subOpt.querySelector('.freq-price');
+        if(txt) txt.innerHTML='Subscribe<small>'+sub.interval+' · '+sub.note+'</small>';
+        if(price){
+          if(sub.priceRange){ price.innerHTML=sub.priceRange; }
+          else{ price.innerHTML='$'+sub.price.toFixed(2)+'<span class="was">$'+sub.was.toFixed(2)+'</span>'; }
+        }
+      }
+      /* Fix the "one time" row to read "from $X.XX" for tiered products */
+      const oneOpt=card.querySelectorAll('.freq-opt')[0];
+      if(oneOpt){
+        const op=oneOpt.querySelector('.freq-price');
+        if(op) op.textContent = tiers ? ('from $'+base.toFixed(2)) : ('$'+base.toFixed(2));
+      }
+    }
   });
 
   /* Frequency radio: toggle .active on selected freq-opt */
