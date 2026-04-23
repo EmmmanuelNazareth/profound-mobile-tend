@@ -1137,10 +1137,12 @@ const dots=document.querySelectorAll('.dot');
 let cur=0,timer;
 function goTo(n){slides[cur].classList.remove('active');dots[cur].classList.remove('active');cur=(n+slides.length)%slides.length;slides[cur].classList.add('active');dots[cur].classList.add('active');}
 function play(){timer=setInterval(()=>goTo(cur+1),5500);}
-document.getElementById('next').onclick=()=>{clearInterval(timer);goTo(cur+1);play();};
-document.getElementById('prev').onclick=()=>{clearInterval(timer);goTo(cur-1);play();};
-dots.forEach(d=>d.onclick=()=>{clearInterval(timer);goTo(+d.dataset.i);play();});
-play();
+if(slides.length>0){
+  const nb=document.getElementById('next'); if(nb) nb.onclick=()=>{clearInterval(timer);goTo(cur+1);play();};
+  const pb=document.getElementById('prev'); if(pb) pb.onclick=()=>{clearInterval(timer);goTo(cur-1);play();};
+  dots.forEach(d=>d.onclick=()=>{clearInterval(timer);goTo(+d.dataset.i);play();});
+  play();
+}
 
 /* ─── HAMBURGER ─── */
 const ham=document.getElementById('ham');
