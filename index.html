@@ -1128,7 +1128,7 @@ function newBooking(){
   ['f_fname','f_lname','f_phone','f_email','f_address','f_vehicle','f_notes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('bkNext1').disabled=true;
   document.getElementById('bkNext2').disabled=true;
-  renderSvcGrid();renderCal();renderSlots();bkGoStep(1);
+  try{renderSvcGrid();}catch(e){} try{renderCal();}catch(e){} try{renderSlots();}catch(e){}bkGoStep(1);
 }
 
 /* ─── HERO SLIDER ─── */
@@ -1194,7 +1194,7 @@ document.getElementById('contactForm').addEventListener('submit',async function(
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
 
 /* ─── INIT ─── */
-renderSvcGrid();renderCal();renderSlots();
+try{renderSvcGrid();}catch(e){} try{renderCal();}catch(e){} try{renderSlots();}catch(e){}
 </script>
 </body>
 </html>

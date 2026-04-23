@@ -487,20 +487,20 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
       <div class="dropdown">
         <div class="dd-group">
           <div class="dd-label">Wash Services</div>
-          <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'hand-wash\');location.href=\'/#booking\';return false;">Standard Hand Wash<span class="dp">$54.99</span></a>
-          <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'basic-wash\');location.href=\'/#booking\';return false;">Basic Wash<span class="dp">from $149.99</span></a>
-          <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'wash-wax\');location.href=\'/#booking\';return false;">Wash &amp; Wax<span class="dp">$134.99</span></a>
+          <a href="/#booking" onclick="sessionStorage.setItem('svc','hand-wash');location.href='/#booking';return false;">Standard Hand Wash<span class="dp">$54.99</span></a>
+          <a href="/#booking" onclick="sessionStorage.setItem('svc','basic-wash');location.href='/#booking';return false;">Basic Wash<span class="dp">from $149.99</span></a>
+          <a href="/#booking" onclick="sessionStorage.setItem('svc','wash-wax');location.href='/#booking';return false;">Wash &amp; Wax<span class="dp">$134.99</span></a>
         </div>
         <div class="dd-div"></div>
         <div class="dd-group">
           <div class="dd-label">Interior Services</div>
-          <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'std-interior\');location.href=\'/#booking\';return false;">Standard Interior Detail<span class="dp">$144.99</span></a>
-          <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'full-interior\');location.href=\'/#booking\';return false;">Full Interior Detail<span class="dp">$209.99</span></a>
+          <a href="/#booking" onclick="sessionStorage.setItem('svc','std-interior');location.href='/#booking';return false;">Standard Interior Detail<span class="dp">$144.99</span></a>
+          <a href="/#booking" onclick="sessionStorage.setItem('svc','full-interior');location.href='/#booking';return false;">Full Interior Detail<span class="dp">$209.99</span></a>
         </div>
         <div class="dd-div"></div>
         <div class="dd-group">
           <div class="dd-label">Full Package</div>
-          <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'full-detail\');location.href=\'/#booking\';return false;">Profound Full Detail<span class="dp">Get Quote</span></a>
+          <a href="/#booking" onclick="sessionStorage.setItem('svc','full-detail');location.href='/#booking';return false;">Profound Full Detail<span class="dp">Get Quote</span></a>
         </div>
       </div>
     </li>
@@ -516,14 +516,14 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
 <!-- MOBILE NAV -->
 <div class="mob-nav" id="mobNav">
   <div class="mob-label">Wash Services</div>
-  <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'hand-wash\');location.href=\'/#booking\';return false;">Standard Hand Wash — $54.99</a>
-  <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'basic-wash\');location.href=\'/#booking\';return false;">Basic Wash — from $149.99</a>
-  <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'wash-wax\');location.href=\'/#booking\';return false;">Wash &amp; Wax — $134.99</a>
+  <a href="/#booking" onclick="sessionStorage.setItem('svc','hand-wash');location.href='/#booking';return false;">Standard Hand Wash — $54.99</a>
+  <a href="/#booking" onclick="sessionStorage.setItem('svc','basic-wash');location.href='/#booking';return false;">Basic Wash — from $149.99</a>
+  <a href="/#booking" onclick="sessionStorage.setItem('svc','wash-wax');location.href='/#booking';return false;">Wash &amp; Wax — $134.99</a>
   <div class="mob-label">Interior Services</div>
-  <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'std-interior\');location.href=\'/#booking\';return false;">Standard Interior Detail — $144.99</a>
-  <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'full-interior\');location.href=\'/#booking\';return false;">Full Interior Detail — $209.99</a>
+  <a href="/#booking" onclick="sessionStorage.setItem('svc','std-interior');location.href='/#booking';return false;">Standard Interior Detail — $144.99</a>
+  <a href="/#booking" onclick="sessionStorage.setItem('svc','full-interior');location.href='/#booking';return false;">Full Interior Detail — $209.99</a>
   <div class="mob-label">Full Package</div>
-  <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'full-detail\');location.href=\'/#booking\';return false;">Profound Full Detail — Get Quote</a>
+  <a href="/#booking" onclick="sessionStorage.setItem('svc','full-detail');location.href='/#booking';return false;">Profound Full Detail — Get Quote</a>
   <div class="mob-label">Menu</div>
   <a href="/shop">Shop</a>
   <a href="/about">About</a>
@@ -916,7 +916,7 @@ function newBooking(){
   ['f_fname','f_lname','f_phone','f_email','f_address','f_vehicle','f_notes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('bkNext1').disabled=true;
   document.getElementById('bkNext2').disabled=true;
-  renderSvcGrid();renderCal();renderSlots();bkGoStep(1);
+  try{renderSvcGrid();}catch(e){} try{renderCal();}catch(e){} try{renderSlots();}catch(e){}bkGoStep(1);
 }
 
 /* ─── HERO SLIDER ─── */
@@ -982,7 +982,7 @@ document.getElementById('contactForm').addEventListener('submit',async function(
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
 
 /* ─── INIT ─── */
-renderSvcGrid();renderCal();renderSlots();
+try{renderSvcGrid();}catch(e){} try{renderCal();}catch(e){} try{renderSlots();}catch(e){}
 </script>
 </body>
 </html>
