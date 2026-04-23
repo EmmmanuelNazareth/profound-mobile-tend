@@ -480,35 +480,35 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
 
 <!-- ══ NAV ══ -->
 <nav>
-  <a href="#hero"><img src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ee40734d-72a1-4ade-a155-3ba95b17888d/MY+LOGO.png?format=1500w" alt="Profound Mobile Tend"/></a>
+  <a href="/"><img src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ee40734d-72a1-4ade-a155-3ba95b17888d/MY+LOGO.png?format=1500w" alt="Profound Mobile Tend"/></a>
   <ul class="nav-links">
     <li class="has-drop">
       <a href="/services">Services</a>
       <div class="dropdown">
         <div class="dd-group">
           <div class="dd-label">Wash Services</div>
-          <a href="#booking" onclick="scrollToBooking('hand-wash')">Standard Hand Wash<span class="dp">$54.99</span></a>
-          <a href="#booking" onclick="scrollToBooking('basic-wash')">Basic Wash<span class="dp">from $149.99</span></a>
-          <a href="#booking" onclick="scrollToBooking('wash-wax')">Wash &amp; Wax<span class="dp">$134.99</span></a>
+          <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'hand-wash\');location.href=\'/#booking\';return false;">Standard Hand Wash<span class="dp">$54.99</span></a>
+          <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'basic-wash\');location.href=\'/#booking\';return false;">Basic Wash<span class="dp">from $149.99</span></a>
+          <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'wash-wax\');location.href=\'/#booking\';return false;">Wash &amp; Wax<span class="dp">$134.99</span></a>
         </div>
         <div class="dd-div"></div>
         <div class="dd-group">
           <div class="dd-label">Interior Services</div>
-          <a href="#booking" onclick="scrollToBooking('std-interior')">Standard Interior Detail<span class="dp">$144.99</span></a>
-          <a href="#booking" onclick="scrollToBooking('full-interior')">Full Interior Detail<span class="dp">$209.99</span></a>
+          <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'std-interior\');location.href=\'/#booking\';return false;">Standard Interior Detail<span class="dp">$144.99</span></a>
+          <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'full-interior\');location.href=\'/#booking\';return false;">Full Interior Detail<span class="dp">$209.99</span></a>
         </div>
         <div class="dd-div"></div>
         <div class="dd-group">
           <div class="dd-label">Full Package</div>
-          <a href="#booking" onclick="scrollToBooking('full-detail')">Profound Full Detail<span class="dp">Get Quote</span></a>
+          <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'full-detail\');location.href=\'/#booking\';return false;">Profound Full Detail<span class="dp">Get Quote</span></a>
         </div>
       </div>
     </li>
     <li><a href="/shop">Shop</a></li>
     <li><a href="/about">About</a></li>
-    <li><a href="#hours">Hours</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#booking" class="nav-cta">Book Now</a></li>
+    <li><a href="/#hours">Hours</a></li>
+    <li><a href="/#contact">Contact</a></li>
+    <li><a href="/#booking" class="nav-cta">Book Now</a></li>
   </ul>
   <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
 </nav>
@@ -516,253 +516,52 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
 <!-- MOBILE NAV -->
 <div class="mob-nav" id="mobNav">
   <div class="mob-label">Wash Services</div>
-  <a href="#booking" onclick="scrollToBooking('hand-wash')">Standard Hand Wash — $54.99</a>
-  <a href="#booking" onclick="scrollToBooking('basic-wash')">Basic Wash — from $149.99</a>
-  <a href="#booking" onclick="scrollToBooking('wash-wax')">Wash &amp; Wax — $134.99</a>
+  <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'hand-wash\');location.href=\'/#booking\';return false;">Standard Hand Wash — $54.99</a>
+  <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'basic-wash\');location.href=\'/#booking\';return false;">Basic Wash — from $149.99</a>
+  <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'wash-wax\');location.href=\'/#booking\';return false;">Wash &amp; Wax — $134.99</a>
   <div class="mob-label">Interior Services</div>
-  <a href="#booking" onclick="scrollToBooking('std-interior')">Standard Interior Detail — $144.99</a>
-  <a href="#booking" onclick="scrollToBooking('full-interior')">Full Interior Detail — $209.99</a>
+  <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'std-interior\');location.href=\'/#booking\';return false;">Standard Interior Detail — $144.99</a>
+  <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'full-interior\');location.href=\'/#booking\';return false;">Full Interior Detail — $209.99</a>
   <div class="mob-label">Full Package</div>
-  <a href="#booking" onclick="scrollToBooking('full-detail')">Profound Full Detail — Get Quote</a>
+  <a href="/#booking" onclick="sessionStorage.setItem(\'svc\',\'full-detail\');location.href=\'/#booking\';return false;">Profound Full Detail — Get Quote</a>
   <div class="mob-label">Menu</div>
   <a href="/shop">Shop</a>
   <a href="/about">About</a>
-  <a href="#hours">Hours</a>
-  <a href="#contact">Contact</a>
-  <a href="#booking" class="mob-book">Book Now →</a>
+  <a href="/#hours">Hours</a>
+  <a href="/#contact">Contact</a>
+  <a href="/#booking" class="mob-book">Book Now →</a>
 </div>
 
-<section id="hero">
-  <div class="slide active">
-    <div class="slide-bg" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ae1a7fa4-6346-44eb-9abf-e771da04ce77/profound+Mobile+Tend')"></div>
-    <div class="slide-ov"></div><div class="slide-ov-b"></div>
-    <div class="slide-content">
-      <div class="slide-tag">Baltimore &amp; DMV Area</div>
-      <h1><em>Faith</em><br/>Drives<br/>Clean.</h1>
-      <p class="slide-sub">Premium mobile detailing delivered to your door. Your expectations are our standard.</p>
-      <div class="slide-btns">
-        <a href="#booking" class="btn-p">Book a Detail →</a>
-        <a href="#services" class="btn-g">View Services</a>
-      </div>
-    </div>
+
+<section class="page-head">
+  <div class="ph-inner reveal">
+    <div class="sec-tag">Who We Are</div>
+    <h1><em>About</em> Profound Mobile Tend</h1>
+    <p>More than a mobile detailing company — a commitment to excellence, delivered to your door.</p>
   </div>
-  <div class="slide">
-    <div class="slide-bg" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/7b28311d-d47f-4246-a657-e30cb382c478/Profound+Mobile+Tend')"></div>
-    <div class="slide-ov" style="background:linear-gradient(115deg,rgba(8,8,8,0.88) 0%,rgba(8,8,8,0.5) 60%,rgba(8,8,8,0.1) 100%);"></div><div class="slide-ov-b"></div>
-    <div class="slide-content">
-      <div class="slide-tag">Interior &amp; Exterior</div>
-      <h1>We Don't<br/>Just Detail.<br/>We <em>Honor.</em></h1>
-      <p class="slide-sub">From hand wash to full detail — every service performed with purpose and precision.</p>
-      <div class="slide-btns">
-        <a href="#services" class="btn-p">See Services →</a>
-        <a href="#about" class="btn-g">Our Story</a>
-      </div>
-    </div>
-  </div>
-  <div class="slide">
-    <div class="slide-bg" style="background-image:url('https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ae1a7fa4-6346-44eb-9abf-e771da04ce77/profound+Mobile+Tend');background-position:65% center;"></div>
-    <div class="slide-ov" style="background:linear-gradient(115deg,rgba(8,8,8,0.92) 0%,rgba(8,8,8,0.6) 55%,rgba(8,8,8,0.18) 100%);"></div><div class="slide-ov-b"></div>
-    <div class="slide-content">
-      <div class="slide-tag">Excellence Without Exception</div>
-      <h1>Your Ride.<br/><em>Profound</em><br/>Results.</h1>
-      <p class="slide-sub">We come to you — Mon–Sat across Baltimore and the DMV. Book your slot today.</p>
-      <div class="slide-btns">
-        <a href="#booking" class="btn-p">Schedule Now →</a>
-        <a href="#hours" class="btn-g">View Hours</a>
-      </div>
-    </div>
-  </div>
-  <div class="hero-ctrl">
-    <div class="dots">
-      <button class="dot active" data-i="0"></button>
-      <button class="dot" data-i="1"></button>
-      <button class="dot" data-i="2"></button>
-    </div>
-    <div class="arrows">
-      <button class="arr" id="prev">&#8592;</button>
-      <button class="arr" id="next">&#8594;</button>
-    </div>
-  </div>
-  <div class="faith-badge"><div class="faith-badge-in"><span>✝</span><p>Faith<br/>Drives<br/>Clean</p></div></div>
 </section>
-<!-- STRIP -->
-<div class="strip reveal">
-  <div class="stat"><div class="stat-n" data-t="500" data-s="+">500+</div><div class="stat-l">Details Completed</div></div>
-  <div class="stat"><div class="stat-n" data-t="5" data-s="★">5★</div><div class="stat-l">Average Rating</div></div>
-  <div class="stat"><div class="stat-n" data-t="10" data-s="+">10+</div><div class="stat-l">Cities Served</div></div>
-  <div class="stat"><div class="stat-n" data-t="100" data-s="%">100%</div><div class="stat-l">Mobile — We Come to You</div></div>
+<!-- ABOUT -->
+<div id="about">
+  <div class="about-img"></div>
+  <div class="about-text reveal">
+    <div class="sec-tag">Who We Are</div>
+    <h2>More Than a<br/>Detail Company.</h2>
+    <div class="faith-pill"><span class="cross">✝</span><p>"Faith Drives Clean"</p></div>
+    <p>At <strong>Profound Mobile Tend</strong>, we are more than a mobile detailing company — we are a commitment. A commitment to showing up, doing the work right, and leaving every vehicle looking better than we found it.</p>
+    <p>From the moment we pull up to your location, everything we do is driven by one standard: <strong>excellence without exception.</strong> We don't just detail your vehicle — we honor it.</p>
+    <a href="/#booking" class="btn-p">Book a Detail →</a>
+  </div>
 </div>
-<!-- HOURS -->
-<section id="hours">
-  <div class="reveal">
-    <div class="sec-tag">When We Work</div>
-    <h2>Operating<br/><em>Hours</em></h2>
-    <table class="htbl">
-      <tr><td>Monday</td><td>8 AM – 6 PM</td></tr>
-      <tr><td>Tuesday</td><td>8 AM – 6 PM</td></tr>
-      <tr><td>Wednesday</td><td>8 AM – 6 PM</td></tr>
-      <tr><td>Thursday</td><td>8 AM – 6 PM</td></tr>
-      <tr><td>Friday</td><td>8 AM – 7 PM</td></tr>
-      <tr><td>Saturday</td><td>7 AM – 5 PM</td></tr>
-      <tr><td>Sunday</td><td>By Appointment</td></tr>
-    </table>
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="rev-hd reveal">
+    <div class="sec-tag" style="justify-content:center">Testimonials</div>
+    <h2>Real Rides.<br/><em>Real Results.</em></h2>
   </div>
-  <div class="h-right reveal">
-    <div class="sec-tag">Service Area</div>
-    <h2>We Come<br/>to <em>You</em></h2>
-    <p>No drop-off. No waiting room. We bring our full professional detail suite directly to your home, office, or wherever your vehicle is parked.</p>
-    <div class="note-box">📌 Booking required at least <strong>24 hours in advance.</strong> We serve Baltimore &amp; the entire DMV area.</div>
-    <div class="area-label">Areas We Cover</div>
-    <div class="area-tags">
-      <span class="atag">Baltimore</span><span class="atag">Towson</span><span class="atag">Columbia</span><span class="atag">Ellicott City</span><span class="atag">Annapolis</span><span class="atag">Bowie</span><span class="atag">Silver Spring</span><span class="atag">Washington DC</span><span class="atag">+ More</span>
-    </div>
-  </div>
-</section>
-<!-- ══════════════════════════════════════
-     BOOKING SECTION
-══════════════════════════════════════ -->
-<section id="booking">
-  <div class="bk-header reveal">
-    <div class="sec-tag" style="justify-content:center">Appointments</div>
-    <h2 style="text-align:center;">Book Your <em>Detail</em></h2>
-    <p>Choose your service, pick a date and time that works for you. We'll come to you — no drop-off needed.</p>
-  </div>
-
-  <!-- Steps -->
-  <div class="steps-bar">
-    <div class="step-item active" id="bks1"><div class="step-num">1</div><div class="step-lbl">Service</div></div>
-    <div class="step-line"></div>
-    <div class="step-item" id="bks2"><div class="step-num">2</div><div class="step-lbl">Date &amp; Time</div></div>
-    <div class="step-line"></div>
-    <div class="step-item" id="bks3"><div class="step-num">3</div><div class="step-lbl">Your Info</div></div>
-    <div class="step-line"></div>
-    <div class="step-item" id="bks4"><div class="step-num">4</div><div class="step-lbl">Confirmed</div></div>
-  </div>
-
-  <!-- STEP 1 -->
-  <div class="bk-panel active" id="bkp1">
-    <div class="bk-sec-title">Choose Your <em>Service</em></div>
-    <p class="bk-sec-sub">Select the service you'd like to book. All services come to your location.</p>
-    <div class="svc-sel-grid" id="svcSelGrid"></div>
-    <div class="btn-row center">
-      <button class="btn-p" onclick="bkGoStep(2)" id="bkNext1" disabled>Next — Pick Date &amp; Time →</button>
-    </div>
-  </div>
-
-  <!-- STEP 2 -->
-  <div class="bk-panel" id="bkp2">
-    <div class="bk-sec-title">Pick a <em>Date &amp; Time</em></div>
-    <p class="bk-sec-sub">We operate Mon–Sat · 8:00 AM – 7:00 PM · 45-minute appointment slots.</p>
-    <div class="cal-layout">
-      <div class="cal-wrap">
-        <div class="cal-head">
-          <button class="cal-btn" onclick="chMonth(-1)">&#8592;</button>
-          <div class="cal-month-label" id="calLbl"></div>
-          <button class="cal-btn" onclick="chMonth(1)">&#8594;</button>
-        </div>
-        <div class="cal-body">
-          <div class="cal-wk">
-            <div class="cal-wd">Su</div><div class="cal-wd">Mo</div><div class="cal-wd">Tu</div>
-            <div class="cal-wd">We</div><div class="cal-wd">Th</div><div class="cal-wd">Fr</div><div class="cal-wd">Sa</div>
-          </div>
-          <div class="cal-days" id="calDays"></div>
-        </div>
-      </div>
-      <div class="slots-wrap">
-        <div class="slots-title">Available Times</div>
-        <div class="slots-date" id="slotsDateLbl">← Select a date</div>
-        <div class="slots-list" id="slotsList"><div class="no-date-msg">Select a date on the calendar<br/>to see available time slots.</div></div>
-      </div>
-    </div>
-    <div class="btn-row">
-      <button class="btn-g" onclick="bkGoStep(1)">← Back</button>
-      <button class="btn-p" onclick="bkGoStep(3)" id="bkNext2" disabled>Next — Your Info →</button>
-    </div>
-  </div>
-
-  <!-- STEP 3 -->
-  <div class="bk-panel" id="bkp3">
-    <div class="bk-sec-title">Your <em>Information</em></div>
-    <p class="bk-sec-sub">We'll send a confirmation to sales@profoundmobiletend.com and reach out if anything changes.</p>
-    <div class="bk-form-wrap">
-      <div class="bk-summary" id="bkSummary"></div>
-      <div class="form-grid">
-        <div class="form-group"><label>First Name *</label><input type="text" id="f_fname" placeholder="Marcus"/></div>
-        <div class="form-group"><label>Last Name *</label><input type="text" id="f_lname" placeholder="Thompson"/></div>
-        <div class="form-group"><label>Phone Number *</label><input type="tel" id="f_phone" placeholder="(443) 000-0000"/></div>
-        <div class="form-group"><label>Email Address *</label><input type="email" id="f_email" placeholder="you@email.com"/></div>
-        <div class="form-group full"><label>Service Address *</label><input type="text" id="f_address" placeholder="Where should we come? (Street, City, State, ZIP)"/></div>
-        <div class="form-group full"><label>Vehicle (Year, Make, Model, Color) *</label><input type="text" id="f_vehicle" placeholder="e.g. 2021 Honda Accord Black"/></div>
-        <div class="form-group full"><label>Notes / Special Requests</label><textarea id="f_notes" placeholder="Tough stains, pet hair, special instructions…"></textarea></div>
-      </div>
-      <div class="btn-row">
-        <button class="btn-g" onclick="bkGoStep(2)">← Back</button>
-        <button class="btn-p" id="bkConfirmBtn" onclick="confirmBooking()">Confirm Booking →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- STEP 4 -->
-  <div class="bk-panel" id="bkp4">
-    <div class="confirm-wrap">
-      <div class="confirm-icon">✓</div>
-      <div class="confirm-title">You're <em>Booked!</em></div>
-      <p class="confirm-sub">Your appointment is confirmed. A notification has been sent to Profound Mobile Tend. We'll be at your location ready to make your ride profound!</p>
-      <div class="confirm-card" id="confirmCard"></div>
-      <div class="email-note">✉ A booking notification has been sent to <strong>sales@profoundmobiletend.com</strong>. Please allow 24 hours advance notice for any cancellations or changes.</div>
-      <button class="btn-p" onclick="newBooking()">Book Another Detail →</button>
-    </div>
-  </div>
-</section>
-<!-- ══ CONTACT ══ -->
-<section id="contact">
-  <div class="contact-grid">
-    <div class="contact-info reveal">
-      <div class="sec-tag">Get in Touch</div>
-      <h2>Contact <em>Us</em></h2>
-      <p>Have a question before booking? Want a custom quote for the full detail package? Reach out — we respond fast.</p>
-      <div class="contact-item">
-        <div class="contact-icon">✉</div>
-        <div class="contact-item-text"><strong>Email</strong><a href="mailto:sales@profoundmobiletend.com">sales@profoundmobiletend.com</a></div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon">📍</div>
-        <div class="contact-item-text"><strong>Service Area</strong><span>Baltimore &amp; DMV — We come to you</span></div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon">🕐</div>
-        <div class="contact-item-text"><strong>Hours</strong><span>Mon–Fri 8AM–6PM · Fri 8AM–7PM · Sat 7AM–5PM</span></div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon">📱</div>
-        <div class="contact-item-text">
-          <strong>Social</strong>
-          <span><a href="https://www.facebook.com/share/1Cpu3KJzTh/" target="_blank">Facebook</a> · <a href="https://www.instagram.com/profoundmobiletend" target="_blank">Instagram</a> · <a href="https://www.threads.com/@profoundmobiletend" target="_blank">Threads</a></span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Contact form — sends to sales@profoundmobiletend.com via Formspree -->
-    <div class="contact-form-wrap reveal">
-      <div class="sec-tag">Send a Message</div>
-      <h2 style="font-size:1.8rem;margin-bottom:1.5rem;">Quick <em>Message</em></h2>
-      <!-- 
-        TO ACTIVATE EMAIL: 
-        1. Go to formspree.io and create a free account
-        2. Create a new form and set email to sales@profoundmobiletend.com
-        3. Replace YOUR_FORM_ID below with your Formspree form ID
-      -->
-      <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-        <input type="hidden" name="_subject" value="New Contact from Profound Mobile Tend Website"/>
-        <input type="hidden" name="_replyto" id="cf_replyto"/>
-        <div class="fg"><label>Name *</label><input type="text" name="name" id="cf_name" placeholder="Your name" required/></div>
-        <div class="fg"><label>Email *</label><input type="email" name="email" id="cf_email" placeholder="your@email.com" required oninput="document.getElementById('cf_replyto').value=this.value"/></div>
-        <div class="fg"><label>Phone</label><input type="tel" name="phone" placeholder="(443) 000-0000"/></div>
-        <div class="fg"><label>Message *</label><textarea name="message" placeholder="Ask about a service, request a custom quote, or just say hello…" rows="5" required></textarea></div>
-        <button type="submit" class="btn-p" style="width:100%;justify-content:center;">Send Message →</button>
-        <div class="sending-msg" id="sendingMsg">✓ Message sent! We'll get back to you soon.</div>
-      </form>
-    </div>
+  <div class="rev-grid">
+    <div class="rev reveal"><div class="stars">★★★★★</div><p>My truck hadn't been this clean since the day I drove it off the lot. They showed up on time, no shortcuts — just real detail work. Will be a repeat customer for sure.</p><div class="reviewer"><div class="rv-av">M</div><div class="rv-info"><strong>Marcus T.</strong><span>Baltimore, MD</span></div></div></div>
+    <div class="rev reveal"><div class="stars">★★★★★</div><p>Booked the full interior and exterior package. The team was professional, on time, and my car smelled incredible. Couldn't ask for better service.</p><div class="reviewer"><div class="rv-av">J</div><div class="rv-info"><strong>Janelle R.</strong><span>Towson, MD</span></div></div></div>
+    <div class="rev reveal"><div class="stars">★★★★★</div><p>The headlight restoration alone was worth it. Night and day difference — literally safer to drive now. Profound Mobile Tend is legit. Highly recommend.</p><div class="reviewer"><div class="rv-av">D</div><div class="rv-info"><strong>Devon W.</strong><span>Columbia, MD</span></div></div></div>
   </div>
 </section>
 <!-- CTA -->
@@ -771,8 +570,8 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
   <h2>Book Your <em>Detail</em><br/>Today</h2>
   <p>Premium mobile detailing — your location, your schedule. Let us make your ride profound.</p>
   <div class="cta-row">
-    <a href="#booking" class="btn-p">Schedule Online →</a>
-    <a href="#contact" class="btn-g">Contact Us</a>
+    <a href="/#booking" class="btn-p">Schedule Online →</a>
+    <a href="/#contact" class="btn-g">Contact Us</a>
   </div>
   <div class="ph-line">Follow us: <a href="https://www.facebook.com/share/1Cpu3KJzTh/" target="_blank">Facebook</a> · <a href="https://www.instagram.com/profoundmobiletend" target="_blank">Instagram</a> · <a href="https://www.threads.com/@profoundmobiletend" target="_blank">Threads</a></div>
 </section>
@@ -786,9 +585,9 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
     <li><a href="#services">Services</a></li>
     <li><a href="#shop">Shop</a></li>
     <li><a href="#about">About</a></li>
-    <li><a href="#hours">Hours</a></li>
-    <li><a href="#booking">Book Now</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="/#hours">Hours</a></li>
+    <li><a href="/#booking">Book Now</a></li>
+    <li><a href="/#contact">Contact</a></li>
   </ul>
   <div class="f-soc">
     <a href="https://www.facebook.com/share/1Cpu3KJzTh/" class="soc-a" target="_blank">f</a>
@@ -940,17 +739,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 /* ─── SCROLL TO BOOKING ─── */
-/* Pick up service set from another page (via sessionStorage.svc) */
-window.addEventListener('DOMContentLoaded',()=>{
-  const svc=sessionStorage.getItem('svc');
-  if(svc){
-    sessionStorage.removeItem('svc');
-    if(document.getElementById('booking')){
-      setTimeout(()=>scrollToBooking(svc),60);
-    }
-  }
-});
-
 function scrollToBooking(svcId){
   document.getElementById('booking').scrollIntoView({behavior:'smooth'});
   setTimeout(()=>{
