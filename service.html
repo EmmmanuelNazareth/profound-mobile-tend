@@ -512,6 +512,16 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
 .sd-list li{font-size:0.9rem;color:rgba(244,242,238,0.72);line-height:1.5;padding:0.68rem 0;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:flex-start;gap:0.7rem;}
 .sd-list li::before{content:'✓';color:var(--green);font-size:0.9rem;font-weight:700;flex-shrink:0;margin-top:2px;}
 @media(max-width:840px){.sd-grid{grid-template-columns:1fr;gap:1.8rem;}.svc-detail{padding:calc(var(--nav-h) + 1.2rem) 1.3rem 3rem;}.sd-meta{gap:1.2rem;}}
+
+/* ── SMART NAV: auto-hide on scroll-down, reveal on scroll-up ── */
+nav{transition:transform 0.45s cubic-bezier(.4,.0,.2,1), background 0.3s, backdrop-filter 0.3s, box-shadow 0.3s, height 0.3s;will-change:transform;}
+nav.nav-hidden{transform:translateY(-100%);}
+nav.nav-scrolled{background:rgba(8,8,8,0.78);backdrop-filter:blur(26px) saturate(140%);box-shadow:0 8px 30px rgba(0,0,0,0.45);border-bottom-color:rgba(60,142,57,0.28);}
+nav.nav-scrolled .nav-logo img{height:34px;transition:height 0.3s;}
+.nav-logo img{transition:height 0.3s;}
+/* when the mobile menu is open, keep nav visible */
+nav.nav-menu-open{transform:translateY(0)!important;}
+
 </style>
 </head>
 <body>
@@ -644,6 +654,41 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
   // Hamburger
   const ham=document.getElementById('ham');const mn=document.getElementById('mobNav');
   if(ham&&mn){ham.addEventListener('click',()=>{ham.classList.toggle('open');mn.classList.toggle('open');document.body.style.overflow=mn.classList.contains('open')?'hidden':'';});}
+})();
+</script>
+<script>
+/* ── SMART NAV scroll behavior ── */
+(function(){
+  const n=document.querySelector('nav');if(!n)return;
+  let lastY=window.scrollY, ticking=false;
+  const THRESH=6;       // min scroll distance before reacting (avoids jitter)
+  const SHOW_AFTER=80;  // px of scroll before auto-hide kicks in
+  function upd(){
+    const y=window.scrollY;
+    if(y>12)n.classList.add('nav-scrolled');else n.classList.remove('nav-scrolled');
+    const dy=y-lastY;
+    if(Math.abs(dy)>THRESH){
+      const menuOpen=document.getElementById('mobNav')&&document.getElementById('mobNav').classList.contains('open');
+      if(!menuOpen){
+        if(dy>0 && y>SHOW_AFTER) n.classList.add('nav-hidden');
+        else if(dy<0) n.classList.remove('nav-hidden');
+      }
+      lastY=y;
+    }
+    ticking=false;
+  }
+  window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(upd);ticking=true;}},{passive:true});
+  // Never hide at top
+  window.addEventListener('load',()=>{n.classList.remove('nav-hidden');});
+  // Sync with mobile menu open state
+  const ham=document.getElementById('ham');
+  if(ham){ham.addEventListener('click',()=>{
+    setTimeout(()=>{
+      const mn=document.getElementById('mobNav');
+      if(mn&&mn.classList.contains('open'))n.classList.add('nav-menu-open');
+      else n.classList.remove('nav-menu-open');
+    },10);
+  });}
 })();
 </script>
 </body>
