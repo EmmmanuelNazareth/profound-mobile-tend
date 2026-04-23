@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Profound Mobile Tend | Faith Drives Clean</title>
+<title>Service Details | Profound Mobile Tend</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -138,29 +138,6 @@ h2 em{font-style:italic;color:var(--green);}
 .sc-price small{font-size:0.68rem;color:var(--mid);font-family:var(--sans);font-weight:300;display:block;letter-spacing:0.04em;}
 .sc-book{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);text-decoration:none;font-weight:600;border-bottom:1px solid rgba(60,142,57,0.4);padding-bottom:1px;transition:all 0.2s;cursor:pointer;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--sans);}
 .sc-book:hover{color:var(--green-l);}
-
-
-/* ── COMPACT SERVICE CARDS (clean grid, details on dedicated page) ── */
-.svc-panel.active{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5px;background:rgba(60,142,57,0.12);border:1.5px solid rgba(60,142,57,0.12);}
-.sc{background:var(--black);padding:0;transition:background 0.3s;position:relative;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit;cursor:pointer;}
-.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;}
-.sc:hover{background:#0e0e0e;}
-.sc:hover::after{transform:scaleX(1);}
-.sc:hover .sc-img{transform:scale(1.04);}
-.sc-imgwrap{overflow:hidden;aspect-ratio:4/3;background:#111;border-bottom:1px solid rgba(255,255,255,0.06);position:relative;}
-.sc-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s ease;}
-.sc-tag{position:absolute;top:0.9rem;left:0.9rem;background:rgba(60,142,57,0.92);color:var(--black);font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;padding:0.3rem 0.65rem;border-radius:1px;}
-.sc-body{padding:1.2rem 1.3rem 1.4rem;display:flex;flex-direction:column;gap:0.35rem;}
-.sc-cat{font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);font-weight:600;}
-.sc-name{font-family:var(--serif);font-size:1.15rem;font-weight:600;line-height:1.25;}
-.sc-foot{display:flex;align-items:center;justify-content:space-between;margin-top:0.6rem;gap:0.8rem;}
-.sc-price{font-family:var(--serif);font-size:1.25rem;font-weight:700;color:var(--green);line-height:1.1;}
-.sc-price small{font-size:0.6rem;color:var(--mid);font-family:var(--sans);font-weight:300;display:block;letter-spacing:0.04em;margin-top:0.1rem;}
-.sc-view{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);font-weight:600;}
-@media(max-width:640px){.svc-panel.active{grid-template-columns:1fr 1fr;gap:1px;}.sc-body{padding:0.9rem 0.95rem 1.1rem;}.sc-name{font-size:0.92rem;}.sc-price{font-size:1rem;}.sc-cat{font-size:0.52rem;}.sc-view{display:none;}}
-@media(max-width:380px){.svc-panel.active{grid-template-columns:1fr;}}
-/* ─────────────────────────────── */
-
 
 /* ── HOURS ── */
 #hours{background:var(--dark);display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;}
@@ -499,6 +476,42 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
 }
 </style>
 </head>
+<style>
+.svc-detail{padding:calc(var(--nav-h) + 2rem) 5vw 4rem;max-width:1180px;margin:0 auto;}
+.sd-back{display:inline-flex;align-items:center;gap:0.45rem;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);text-decoration:none;margin-bottom:1.8rem;transition:color 0.2s;}
+.sd-back:hover{color:var(--green);}
+.sd-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+.sd-img{width:100%;aspect-ratio:4/3;object-fit:cover;background:#111;border:1px solid var(--border);}
+.sd-cat{font-size:0.62rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:0.8rem;}
+.sd-name{font-family:var(--serif);font-size:clamp(1.8rem,3.8vw,2.7rem);font-weight:600;line-height:1.15;margin-bottom:1rem;letter-spacing:-0.01em;}
+.sd-name em{color:var(--green);font-style:italic;}
+.sd-desc{font-size:0.95rem;line-height:1.8;color:rgba(244,242,238,0.7);font-weight:300;margin-bottom:1.8rem;}
+.sd-price{font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--green);line-height:1;margin-bottom:0.4rem;}
+.sd-price small{font-size:0.75rem;color:var(--mid);font-family:var(--sans);font-weight:300;letter-spacing:0.04em;margin-left:0.5rem;}
+.sd-meta{display:flex;gap:2rem;margin:1.5rem 0;padding:1rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.sd-mi strong{display:block;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(244,242,238,0.45);margin-bottom:0.2rem;font-weight:600;}
+.sd-mi span{font-size:0.88rem;color:var(--white);}
+.sd-pricetbl{border:1px solid var(--border);margin-bottom:1.2rem;}
+.sd-pricetbl .row{display:flex;justify-content:space-between;padding:0.8rem 1.1rem;font-size:0.88rem;border-bottom:1px solid rgba(255,255,255,0.05);}
+.sd-pricetbl .row:last-child{border-bottom:none;}
+.sd-pricetbl .row span:first-child{color:rgba(244,242,238,0.68);}
+.sd-pricetbl .row span:last-child{color:var(--green-l);font-weight:600;font-family:var(--serif);font-size:1rem;}
+.sd-pricetbl .rowh{background:rgba(60,142,57,0.08);font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);font-weight:700;padding:0.55rem 1.1rem;}
+.sd-sub{background:rgba(60,142,57,0.07);border-left:3px solid var(--green);padding:0.9rem 1.1rem;font-size:0.82rem;color:rgba(244,242,238,0.75);line-height:1.55;margin-bottom:1.5rem;}
+.sd-cta{display:flex;gap:0.8rem;margin-bottom:2.5rem;flex-wrap:wrap;}
+.sd-book{background:var(--green);color:var(--white);border:none;padding:1rem 2rem;font-family:var(--sans);font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;cursor:pointer;border-radius:2px;transition:background 0.2s;}
+.sd-book:hover{background:var(--green-l);color:var(--black);}
+.sd-alt{background:transparent;color:var(--white);border:1px solid var(--border);padding:1rem 2rem;font-family:var(--sans);font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:2px;text-decoration:none;display:inline-block;}
+.sd-alt:hover{border-color:var(--green);color:var(--green);}
+.sd-section-h{font-size:0.7rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:1rem;padding-top:1rem;}
+.sd-included{grid-column:1/-1;margin-top:1.5rem;padding-top:2.5rem;border-top:1px solid var(--border);}
+.sd-included h3{font-family:var(--serif);font-size:1.7rem;font-weight:600;margin-bottom:1.3rem;}
+.sd-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0.6rem 1.8rem;}
+.sd-list li{font-size:0.9rem;color:rgba(244,242,238,0.7);line-height:1.5;padding:0.55rem 0;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:flex-start;gap:0.7rem;}
+.sd-list li::before{content:'✓';color:var(--green);font-size:0.9rem;font-weight:700;flex-shrink:0;margin-top:1px;}
+@media(max-width:840px){.sd-grid{grid-template-columns:1fr;gap:2rem;}.svc-detail{padding:calc(var(--nav-h) + 1.2rem) 1.3rem 3rem;}.sd-meta{flex-direction:column;gap:0.9rem;}}
+</style>
+</head>
 <body>
 
 <!-- ══ NAV ══ -->
@@ -554,135 +567,15 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
   <a href="/#contact">Contact</a>
   <a href="/#booking" class="mob-book">Book Now →</a>
 </div>
-<!-- SERVICES -->
-<section id="services">
-  <div class="svc-intro reveal">
-    <div class="sec-tag">What We Offer</div>
-    <h2>Premium <em>Services</em></h2>
-    <p>Every service is performed by hand with professional-grade products. No conveyor belts. No shortcuts. Just clean — delivered to your location across Baltimore and the DMV.</p>
+
+
+<main>
+  <div class="svc-detail">
+    <a href="/services" class="sd-back">← Back to All Services</a>
+    <div id="sd-root"></div>
   </div>
-  <div class="tabs reveal">
-    <button class="tab active" data-tab="all">All Services</button>
-    <button class="tab" data-tab="wash">Wash</button>
-    <button class="tab" data-tab="interior">Interior</button>
-    <button class="tab" data-tab="full">Full Detail</button>
-  </div>
-  <div class="svc-panel active" id="p-all">
-    <a class="sc reveal" href="/service?id=hand-wash">
-      <div class="sc-imgwrap"><img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ee35151a-7183-4309-92b5-73a1e9bcbb77/carwash.jpg?format=1000w" alt="Profound Tend Standard Hand Wash" loading="lazy"/></div>
-      <div class="sc-body">
-        <div class="sc-cat">Profound Tend Wash</div>
-        <div class="sc-name">Profound Tend Standard Hand Wash</div>
-        <div class="sc-foot"><div class="sc-price">$54.99<small>Flat rate</small></div><span class="sc-view">View →</span></div>
-      </div>
-    </a>
-    <a class="sc reveal" href="/service?id=basic-wash">
-      <div class="sc-imgwrap"><div class="sc-tag">Popular</div><img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/aaa0b6aa-d00f-4183-b788-bbdaa2504cf6/Screenshot+2026-03-10+at+07.30.31.png?format=1000w" alt="Profound Tend Basic Wash" loading="lazy"/></div>
-      <div class="sc-body">
-        <div class="sc-cat">Profound Tend Wash</div>
-        <div class="sc-name">Profound Tend Basic Wash</div>
-        <div class="sc-foot"><div class="sc-price">from $149.99<small>By vehicle size</small></div><span class="sc-view">View →</span></div>
-      </div>
-    </a>
-    <a class="sc reveal" href="/service?id=wash-wax">
-      <div class="sc-imgwrap"><img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/01f33914-1fed-490b-a8de-3bc46592a0c5/wash+%26++Wax.jpg?format=1000w" alt="Profound Tend Wash & Wax" loading="lazy"/></div>
-      <div class="sc-body">
-        <div class="sc-cat">Profound Tend Wash</div>
-        <div class="sc-name">Profound Tend Wash &amp; Wax</div>
-        <div class="sc-foot"><div class="sc-price">$134.99<small>Flat rate</small></div><span class="sc-view">View →</span></div>
-      </div>
-    </a>
-    <a class="sc reveal" href="/service?id=std-interior">
-      <div class="sc-imgwrap"><img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/fc98d621-c608-44b5-9869-b46381fce430/IMG_5811.jpeg?format=1000w" alt="Profound Tend Standard Interior Detail" loading="lazy"/></div>
-      <div class="sc-body">
-        <div class="sc-cat">Interior Detail</div>
-        <div class="sc-name">Profound Tend Standard Interior Detail</div>
-        <div class="sc-foot"><div class="sc-price">from $144.99<small>By vehicle size</small></div><span class="sc-view">View →</span></div>
-      </div>
-    </a>
-    <a class="sc reveal" href="/service?id=full-interior">
-      <div class="sc-imgwrap"><img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/fc98d621-c608-44b5-9869-b46381fce430/IMG_5811.jpeg?format=1000w" alt="Profound Tend Full Interior Detail" loading="lazy"/></div>
-      <div class="sc-body">
-        <div class="sc-cat">Interior Detail</div>
-        <div class="sc-name">Profound Tend Full Interior Detail</div>
-        <div class="sc-foot"><div class="sc-price">from $209.99<small>By vehicle size</small></div><span class="sc-view">View →</span></div>
-      </div>
-    </a>
-    <a class="sc reveal" href="/service?id=full-detail">
-      <div class="sc-imgwrap"><div class="sc-tag">Best Value</div><img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/01f33914-1fed-490b-a8de-3bc46592a0c5/wash+%26++Wax.jpg?format=1000w" alt="Profound Full Detail" loading="lazy"/></div>
-      <div class="sc-body">
-        <div class="sc-cat">Full Detail</div>
-        <div class="sc-name">Profound Full Detail</div>
-        <div class="sc-foot"><div class="sc-price">Get Quote<small>Custom pricing</small></div><span class="sc-view">View →</span></div>
-      </div>
-    </a>
-  </div>
-  <div class="svc-panel" id="p-wash">
-    <a class="sc reveal" href="/service?id=hand-wash">
-      <div class="sc-imgwrap"><img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ee35151a-7183-4309-92b5-73a1e9bcbb77/carwash.jpg?format=1000w" alt="Profound Tend Standard Hand Wash" loading="lazy"/></div>
-      <div class="sc-body">
-        <div class="sc-cat">Profound Tend Wash</div>
-        <div class="sc-name">Profound Tend Standard Hand Wash</div>
-        <div class="sc-foot"><div class="sc-price">$54.99<small>Flat rate</small></div><span class="sc-view">View →</span></div>
-      </div>
-    </a>
-    <a class="sc reveal" href="/service?id=basic-wash">
-      <div class="sc-imgwrap"><div class="sc-tag">Popular</div><img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/aaa0b6aa-d00f-4183-b788-bbdaa2504cf6/Screenshot+2026-03-10+at+07.30.31.png?format=1000w" alt="Profound Tend Basic Wash" loading="lazy"/></div>
-      <div class="sc-body">
-        <div class="sc-cat">Profound Tend Wash</div>
-        <div class="sc-name">Profound Tend Basic Wash</div>
-        <div class="sc-foot"><div class="sc-price">from $149.99<small>By vehicle size</small></div><span class="sc-view">View →</span></div>
-      </div>
-    </a>
-    <a class="sc reveal" href="/service?id=wash-wax">
-      <div class="sc-imgwrap"><img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/01f33914-1fed-490b-a8de-3bc46592a0c5/wash+%26++Wax.jpg?format=1000w" alt="Profound Tend Wash & Wax" loading="lazy"/></div>
-      <div class="sc-body">
-        <div class="sc-cat">Profound Tend Wash</div>
-        <div class="sc-name">Profound Tend Wash &amp; Wax</div>
-        <div class="sc-foot"><div class="sc-price">$134.99<small>Flat rate</small></div><span class="sc-view">View →</span></div>
-      </div>
-    </a>
-  </div>
-  <div class="svc-panel" id="p-interior">
-    <a class="sc reveal" href="/service?id=std-interior">
-      <div class="sc-imgwrap"><img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/fc98d621-c608-44b5-9869-b46381fce430/IMG_5811.jpeg?format=1000w" alt="Profound Tend Standard Interior Detail" loading="lazy"/></div>
-      <div class="sc-body">
-        <div class="sc-cat">Interior Detail</div>
-        <div class="sc-name">Profound Tend Standard Interior Detail</div>
-        <div class="sc-foot"><div class="sc-price">from $144.99<small>By vehicle size</small></div><span class="sc-view">View →</span></div>
-      </div>
-    </a>
-    <a class="sc reveal" href="/service?id=full-interior">
-      <div class="sc-imgwrap"><img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/fc98d621-c608-44b5-9869-b46381fce430/IMG_5811.jpeg?format=1000w" alt="Profound Tend Full Interior Detail" loading="lazy"/></div>
-      <div class="sc-body">
-        <div class="sc-cat">Interior Detail</div>
-        <div class="sc-name">Profound Tend Full Interior Detail</div>
-        <div class="sc-foot"><div class="sc-price">from $209.99<small>By vehicle size</small></div><span class="sc-view">View →</span></div>
-      </div>
-    </a>
-  </div>
-  <div class="svc-panel" id="p-full">
-    <a class="sc reveal" href="/service?id=full-detail">
-      <div class="sc-imgwrap"><div class="sc-tag">Best Value</div><img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/01f33914-1fed-490b-a8de-3bc46592a0c5/wash+%26++Wax.jpg?format=1000w" alt="Profound Full Detail" loading="lazy"/></div>
-      <div class="sc-body">
-        <div class="sc-cat">Full Detail</div>
-        <div class="sc-name">Profound Full Detail</div>
-        <div class="sc-foot"><div class="sc-price">Get Quote<small>Custom pricing</small></div><span class="sc-view">View →</span></div>
-      </div>
-    </a>
-  </div>
-</section>
-<!-- CTA -->
-<section id="cta">
-  <div class="sec-tag">Ready?</div>
-  <h2>Book Your <em>Detail</em><br/>Today</h2>
-  <p>Premium mobile detailing — your location, your schedule. Let us make your ride profound.</p>
-  <div class="cta-row">
-    <a href="/#booking" class="btn-p">Schedule Online →</a>
-    <a href="/#contact" class="btn-g">Contact Us</a>
-  </div>
-  <div class="ph-line">Follow us: <a href="https://www.facebook.com/share/1Cpu3KJzTh/" target="_blank">Facebook</a> · <a href="https://www.instagram.com/profoundmobiletend" target="_blank">Instagram</a> · <a href="https://www.threads.com/@profoundmobiletend" target="_blank">Threads</a></div>
-</section>
+</main>
+
 <!-- FOOTER -->
 <footer>
   <div class="f-brand">
@@ -746,14 +639,8 @@ const DNAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Satur
 /* "Book A Tend" opens the matching Squarespace product page,
    which already has Square payment connected and handles checkout. */
 const SQUARE_LINKS={
-  'hand-wash':'https://tan-khaki-zwcd.squarespace.com/shop/p/profound-tend-standard-hand-wash',
-  'basic-wash':'https://tan-khaki-zwcd.squarespace.com/shop/p/product-6-yrdld-pcpw6-e46mt',
-  'wash-wax':'https://tan-khaki-zwcd.squarespace.com/shop/p/profound-tend-wash-wax',
-  'std-interior':'https://tan-khaki-zwcd.squarespace.com/shop/p/product-5-f98ry-4ll53-7s89w',
-  'full-interior':'https://tan-khaki-zwcd.squarespace.com/shop/p/product-1-ydar7-e8mlb-xmsgp',
-  'headlight':'https://tan-khaki-zwcd.squarespace.com/shop/p/product-2-5c6mb-j8mng-ym7jw',
-  'leather-ceramic':'https://tan-khaki-zwcd.squarespace.com/shop/p/product-3-szb2y-gzh2r-8sz4b',
-  'engine-bay':'https://tan-khaki-zwcd.squarespace.com/shop/p/product-4-9e76d-pr6ls-n245h'
+  'hand-wash':'','basic-wash':'','wash-wax':'','std-interior':'',
+  'full-interior':'','headlight':'','leather-ceramic':'','engine-bay':''
 };
 /* Real vehicle-tier pricing pulled directly from Squarespace.
    Products not listed here use a single flat price (no tier). */
@@ -1095,4 +982,53 @@ function showToast(msg){const t=document.getElementById('toast');t.textContent=m
 try{renderSvcGrid();}catch(e){} try{renderCal();}catch(e){} try{renderSlots();}catch(e){}
 </script>
 </body>
+
+<script>
+const SERVICES=[{"id": "hand-wash", "cat": "Profound Tend Wash", "name": "Profound Tend Standard Hand Wash", "img": "https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ee35151a-7183-4309-92b5-73a1e9bcbb77/carwash.jpg?format=1000w", "price": "$54.99", "priceSmall": "Flat rate", "tabs": ["all", "wash"], "badge": "", "desc": "Our entry-level professional hand wash brings showroom-quality care to your driveway. Every vehicle gets the same hand-finished attention as our signature services.", "duration": "45\u201360 min", "pricing": [], "sub": "", "features": ["Exterior hand wash & rinse", "Wheel & tire clean", "Exterior window wipe-down", "Door jambs cleaned", "Microfiber hand-dry"]}, {"id": "basic-wash", "cat": "Profound Tend Wash", "name": "Profound Tend Basic Wash", "img": "https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/aaa0b6aa-d00f-4183-b788-bbdaa2504cf6/Screenshot+2026-03-10+at+07.30.31.png?format=1000w", "price": "from $149.99", "priceSmall": "By vehicle size", "tabs": ["all", "wash"], "badge": "Popular", "desc": "Our signature basic wash brings professional-grade cleaning directly to your driveway, office, or hangar.", "duration": "2\u20133 hrs", "pricing": [["Sedans/Coupes", 149.99], ["Small-Sized SUV (2 rows)", 169.99], ["Large-Sized SUV (3 rows)", 204.99]], "sub": "Subscribe & Save 20% \u2014 every 2 weeks. From $119.99 depending on vehicle size.", "features": ["Hand wash with pH-balanced soap", "Filtered water rinse to prevent spotting", "Wheel/tire cleaning with specialized brushes", "Window/mirror cleaning (exterior)", "Door jamb wipe-down", "Microfiber towel hand-dry", "Tire shine application", "Complete interior vacuum", "Dashboard & console wipe-down", "Cup holders and storage cleaning", "Interior window/mirror cleaning", "Door panel dusting", "Air vent cleaning"]}, {"id": "wash-wax", "cat": "Profound Tend Wash", "name": "Profound Tend Wash & Wax", "img": "https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/01f33914-1fed-490b-a8de-3bc46592a0c5/wash+%26++Wax.jpg?format=1000w", "price": "$134.99", "priceSmall": "Flat rate", "tabs": ["all", "wash"], "badge": "", "desc": "Transform your car into a showroom masterpiece with the Profound Tend Wash & Wax \u2014 our elevated exterior experience that combines the care of a meticulous hand wash with the lasting protection of a professional wax.", "duration": "90\u2013120 min", "pricing": [], "sub": "Subscribe & Save 10% \u2014 $121.49 every 2 months.", "features": ["Thorough pre-rinse to remove surface dirt and debris", "Premium EcoFoam hand wash (biodegradable, safe for all finishes)", "Wheel, tire, and wheel well scrubbing", "Door jamb cleaning", "Hand-dried with microfiber towels", "Professional-grade wax hand-applied", "Tire dressing for complete finish"]}, {"id": "std-interior", "cat": "Interior Detail", "name": "Profound Tend Standard Interior Detail", "img": "https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/fc98d621-c608-44b5-9869-b46381fce430/IMG_5811.jpeg?format=1000w", "price": "from $144.99", "priceSmall": "By vehicle size", "tabs": ["all", "interior"], "badge": "", "desc": "Transform your vehicle's interior with our comprehensive Standard Interior Detail. We bring professional-grade equipment and premium products directly to you.", "duration": "1\u20132 hrs", "pricing": [["Sedans/Coupes", 144.99], ["Small-Sized SUV (2 rows)", 164.99], ["Large-Sized SUV (3 rows)", 204.99]], "sub": "", "features": ["Complete carpet/seat/trunk vacuuming", "Crevice tool detailing in seams", "Brush agitation of carpets and upholstery", "Stain spot treatment", "Floor mat shampooing and extraction", "Dashboard, console, and trim cleaning and dressing", "Door panels and armrest detailing", "Center console deep cleaning", "Steering wheel and gear shift conditioning", "Button, vent, and control detailing", "Interior & sunroof glass cleaning", "UV protectant application", "Leather conditioning (if applicable)", "Cloth seat shampooing", "Fresh air odor treatment", "Final inspection and touch-ups"]}, {"id": "full-interior", "cat": "Interior Detail", "name": "Profound Tend Full Interior Detail", "img": "https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/fc98d621-c608-44b5-9869-b46381fce430/IMG_5811.jpeg?format=1000w", "price": "from $209.99", "priceSmall": "By vehicle size", "tabs": ["all", "interior"], "badge": "", "desc": "A comprehensive mobile interior cleaning service that addresses all aspects of vehicle interiors \u2014 from carpet extraction to leather restoration, steam cleaning, glass polishing, and odor neutralization.", "duration": "3\u20135 hrs", "pricing": [["Sedans & Coupes", 209.99], ["Small SUV", 254.99], ["Large SUV", 304.99]], "sub": "", "features": ["Deep floor mat cleaning", "Carpet and upholstery shampooing and extraction", "Leather conditioning and restoration", "Fabric seat refreshing", "Plastic surface and trim scrubbing", "Door jamb cleaning", "Steam cleaning of vents and crevices", "Glass polishing", "Odor neutralization treatment"]}, {"id": "full-detail", "cat": "Full Detail", "name": "Profound Full Detail", "img": "https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/01f33914-1fed-490b-a8de-3bc46592a0c5/wash+%26++Wax.jpg?format=1000w", "price": "Get Quote", "priceSmall": "Custom pricing", "tabs": ["all", "full"], "badge": "Best Value", "desc": "The complete package \u2014 interior and exterior combined. Our most thorough service, tailored to your vehicle. Contact us for a custom quote based on size and condition.", "duration": "4\u20136 hrs", "pricing": [], "sub": "", "features": ["Complete interior deep clean", "Full exterior hand wash & wax", "Paint decontamination", "Leather & upholstery conditioning", "Wheel & tire detail", "Engine bay cleaning available", "Odor removal treatment"]}];
+const params=new URLSearchParams(location.search);
+const id=params.get('id');
+const svc=SERVICES.find(s=>s.id===id)||SERVICES[0];
+document.title=svc.name+' | Profound Mobile Tend';
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function pretty(name){return name.replace(/&/g,'&amp;');}
+const pricingRows = svc.pricing && svc.pricing.length
+  ? '<div class="sd-section-h">Pricing by Vehicle Size</div><div class="sd-pricetbl">'
+    + svc.pricing.map(p=>`<div class="row"><span>${pretty(p[0])}</span><span>$${p[1].toFixed(2)}</span></div>`).join('')
+    + '</div>'
+  : '';
+const subBox = svc.sub ? `<div class="sd-sub"><strong style="color:var(--green-l)">${pretty(svc.sub.split('—')[0].trim())}</strong>${svc.sub.includes('—')?' — '+pretty(svc.sub.split('—').slice(1).join('—').trim()):''}</div>` : '';
+const feat = svc.features.map(f=>`<li>${pretty(f)}</li>`).join('');
+document.getElementById('sd-root').innerHTML = `
+  <div class="sd-grid">
+    <div><img class="sd-img" src="${svc.img}" alt="${pretty(svc.name)}"/></div>
+    <div>
+      <div class="sd-cat">${pretty(svc.cat)}</div>
+      <h1 class="sd-name">${pretty(svc.name)}</h1>
+      <div class="sd-price">${svc.price}<small>${svc.priceSmall}</small></div>
+      <p class="sd-desc">${pretty(svc.desc)}</p>
+      <div class="sd-meta">
+        <div class="sd-mi"><strong>Duration</strong><span>${svc.duration}</span></div>
+        <div class="sd-mi"><strong>Availability</strong><span>Mon–Sat</span></div>
+        <div class="sd-mi"><strong>Location</strong><span>We come to you</span></div>
+      </div>
+      ${pricingRows}
+      ${subBox}
+      <div class="sd-cta">
+        <button class="sd-book" onclick="sessionStorage.setItem('svc','${svc.id}');location.href='/#booking';">Book This Service →</button>
+        <a class="sd-alt" href="/#contact">Contact Us</a>
+      </div>
+    </div>
+    <div class="sd-included">
+      <h3>What's <em style="color:var(--green);font-style:italic">Included</em></h3>
+      <ul class="sd-list">${feat}</ul>
+    </div>
+  </div>`;
+
+/* hamburger menu */
+const ham=document.getElementById('ham');const mn=document.getElementById('mobNav');
+if(ham){ham.addEventListener('click',()=>{ham.classList.toggle('open');mn.classList.toggle('open');document.body.style.overflow=mn.classList.contains('open')?'hidden':'';});}
+/* reveal */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.style.opacity=1;e.target.style.transform='none';}}),{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>{el.style.opacity=0;el.style.transform='translateY(20px)';el.style.transition='all 0.7s ease';io.observe(el);});
+</script>
 </html>
