@@ -139,6 +139,42 @@ h2 em{font-style:italic;color:var(--green);}
 .sc-book{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);text-decoration:none;font-weight:600;border-bottom:1px solid rgba(60,142,57,0.4);padding-bottom:1px;transition:all 0.2s;cursor:pointer;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--sans);}
 .sc-book:hover{color:var(--green-l);}
 
+/* ── RICH SERVICE CARDS (match Squarespace services-store) ── */
+.svc-panel.active{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5px;background:rgba(60,142,57,0.12);border:1.5px solid rgba(60,142,57,0.12);}
+.sc{background:var(--black);padding:0;transition:background 0.3s;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;}
+.sc:hover{background:#0e0e0e;}
+.sc:hover::after{transform:scaleX(1);}
+.sc-img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;background:#111;border-bottom:1px solid rgba(255,255,255,0.06);}
+.sc-body{padding:1.8rem 1.9rem 2rem;display:flex;flex-direction:column;flex:1;}
+.sc-cat{font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:var(--green);margin-bottom:0.7rem;display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap;}
+.sc-cat .dot{width:3px;height:3px;border-radius:50%;background:rgba(244,242,238,0.3);}
+.sc-cat .pop{background:rgba(60,142,57,0.18);border:1px solid var(--green);padding:0.14rem 0.5rem;border-radius:1px;}
+.sc-name{font-family:var(--serif);font-size:1.45rem;font-weight:600;margin-bottom:0.45rem;line-height:1.2;}
+.sc-desc{font-size:0.82rem;color:rgba(244,242,238,0.6);line-height:1.65;margin-bottom:1.2rem;font-weight:300;}
+.sc-meta{display:flex;gap:1.4rem;margin-bottom:1.1rem;flex-wrap:wrap;}
+.sc-mi{font-size:0.72rem;color:var(--mid);}
+.sc-mi strong{display:block;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(244,242,238,0.38);margin-bottom:0.15rem;font-weight:500;}
+.sc-pricetbl{border:1px solid rgba(255,255,255,0.07);margin-bottom:1.1rem;}
+.sc-pricetbl .row{display:flex;justify-content:space-between;padding:0.55rem 0.85rem;font-size:0.76rem;border-bottom:1px solid rgba(255,255,255,0.04);}
+.sc-pricetbl .row:last-child{border-bottom:none;}
+.sc-pricetbl .row span:first-child{color:rgba(244,242,238,0.6);}
+.sc-pricetbl .row span:last-child{color:var(--green-l);font-weight:600;font-family:var(--serif);}
+.sc-sub-box{background:rgba(60,142,57,0.06);border-left:2px solid var(--green);padding:0.65rem 0.9rem;margin-bottom:1.1rem;font-size:0.72rem;color:rgba(244,242,238,0.7);line-height:1.5;}
+.sc-sub-box strong{color:var(--green-l);letter-spacing:0.04em;font-weight:600;}
+.sc-feat-h{font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(244,242,238,0.42);font-weight:600;margin-bottom:0.55rem;}
+.sc-list{list-style:none;margin-bottom:1.4rem;}
+.sc-list li{font-size:0.76rem;color:rgba(244,242,238,0.6);padding:0.26rem 0;display:flex;align-items:flex-start;gap:0.55rem;line-height:1.5;}
+.sc-list li::before{content:'✓';color:var(--green);font-size:0.72rem;flex-shrink:0;margin-top:1px;}
+.sc-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.05);gap:1rem;}
+.sc-price{font-family:var(--serif);font-size:1.5rem;font-weight:700;color:var(--green);line-height:1.1;}
+.sc-price small{font-size:0.66rem;color:var(--mid);font-family:var(--sans);font-weight:300;display:block;letter-spacing:0.04em;margin-top:0.15rem;}
+.sc-book{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);text-decoration:none;font-weight:600;border:1px solid var(--green);padding:0.65rem 1.1rem;border-radius:1px;transition:all 0.2s;cursor:pointer;background:none;font-family:var(--sans);white-space:nowrap;}
+.sc-book:hover{background:var(--green);color:var(--black);}
+@media(max-width:640px){.svc-panel.active{grid-template-columns:1fr;}.sc-body{padding:1.4rem 1.3rem 1.6rem;}.sc-name{font-size:1.25rem;}.sc-price{font-size:1.3rem;}}
+/* ─────────────────────────────────────────────── */
+
+
 /* ── HOURS ── */
 #hours{background:var(--dark);display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;}
 .htbl{width:100%;border-collapse:collapse;margin-top:2rem;}
@@ -545,24 +581,216 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
     <button class="tab" data-tab="full">Full Detail</button>
   </div>
   <div class="svc-panel active" id="p-all">
-    <div class="sc reveal"><div class="sc-badge">Entry</div><div class="sc-name">Standard Hand Wash</div><div class="sc-sub">Profound Tend Wash</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>45–60 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Exterior hand wash &amp; rinse</li><li>Wheel &amp; tire clean</li><li>Window wipe-down</li><li>Door jambs cleaned</li></ul><div class="sc-foot"><div class="sc-price">$54.99<small>Starting price</small></div><button class="sc-book" onclick="sessionStorage.setItem('svc','hand-wash');location.href='/#booking';return false;">Book Now →</button></div></div>
-    <div class="sc reveal"><div class="sc-badge hot">Popular</div><div class="sc-name">Basic Wash</div><div class="sc-sub">Profound Tend Wash</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>60–75 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Full exterior hand wash</li><li>Tire dressing applied</li><li>Interior vacuum</li><li>Dashboard wipe-down</li></ul><div class="sc-foot"><div class="sc-price">from $149.99<small>Starting price</small></div><button class="sc-book" onclick="sessionStorage.setItem('svc','basic-wash');location.href='/#booking';return false;">Book Now →</button></div></div>
-    <div class="sc reveal"><div class="sc-badge">Signature</div><div class="sc-name">Wash &amp; Wax</div><div class="sc-sub">Profound Tend Wash</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>90–120 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Complete exterior hand wash</li><li>Hand wax application</li><li>Streak-free window polish</li><li>Tire shine &amp; wheel detail</li><li>Exterior trim dressed</li></ul><div class="sc-foot"><div class="sc-price">$134.99<small>Starting price</small></div><button class="sc-book" onclick="sessionStorage.setItem('svc','wash-wax');location.href='/#booking';return false;">Book Now →</button></div></div>
-    <div class="sc reveal"><div class="sc-badge">Essential</div><div class="sc-name">Standard Interior Detail</div><div class="sc-sub">Profound Tend Interior Detail</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>2–3 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Deep interior vacuum</li><li>Seat &amp; carpet shampoo</li><li>Dashboard &amp; console detail</li><li>Door panel wipe-down</li><li>Interior windows cleaned</li></ul><div class="sc-foot"><div class="sc-price">from $144.99<small>Starting price</small></div><button class="sc-book" onclick="sessionStorage.setItem('svc','std-interior');location.href='/#booking';return false;">Book Now →</button></div></div>
-    <div class="sc reveal"><div class="sc-badge">Premium</div><div class="sc-name">Full Interior Detail</div><div class="sc-sub">Profound Tend Interior Detail</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>3–5 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Full deep vacuum &amp; extraction</li><li>Steam clean all surfaces</li><li>Leather conditioning</li><li>Odor elimination treatment</li><li>All vents &amp; crevices detailed</li><li>Interior windows polished</li></ul><div class="sc-foot"><div class="sc-price">from $209.99<small>Starting price</small></div><button class="sc-book" onclick="sessionStorage.setItem('svc','full-interior');location.href='/#booking';return false;">Book Now →</button></div></div>
-    <div class="sc reveal"><div class="sc-badge hot">Best Value</div><div class="sc-name">Profound Full Detail</div><div class="sc-sub">Interior + Exterior — Complete Service</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>4–6 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Complete interior deep clean</li><li>Full exterior hand wash &amp; wax</li><li>Paint decontamination</li><li>Leather &amp; upholstery condition</li><li>Wheel &amp; tire detail</li><li>Engine bay cleaning available</li><li>Odor removal treatment</li></ul><div class="sc-foot"><div class="sc-price" style="font-size:1.15rem">Contact for Quote<small>Custom pricing</small></div><button class="sc-book" onclick="sessionStorage.setItem('svc','full-detail');location.href='/#booking';return false;">Get a Quote →</button></div></div>
+    <div class="sc reveal">
+      <img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ee35151a-7183-4309-92b5-73a1e9bcbb77/carwash.jpg?format=1000w" alt="Profound Tend Standard Hand Wash" loading="lazy"/>
+      <div class="sc-body">
+        <div class="sc-cat"><span>Profound Tend Wash</span></div>
+        <div class="sc-name">Profound Tend Standard Hand Wash</div>
+        <div class="sc-desc">Our entry-level professional hand wash brings showroom-quality care to your driveway. Every vehicle gets the same hand-finished attention as our signature services.</div>
+        <div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>45–60 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div>
+        
+        
+        <div class="sc-feat-h">What's Included</div>
+        <ul class="sc-list"><li>Exterior hand wash &amp; rinse</li><li>Wheel &amp; tire clean</li><li>Exterior window wipe-down</li><li>Door jambs cleaned</li><li>Microfiber hand-dry</li></ul>
+        <div class="sc-foot">
+          <div class="sc-price">$54.99<small>Starting price</small></div>
+          <button class="sc-book" onclick="sessionStorage.setItem('svc','hand-wash');location.href='/#booking';return false;">Book Now →</button>
+        </div>
+      </div>
+    </div>
+    <div class="sc reveal">
+      <img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/aaa0b6aa-d00f-4183-b788-bbdaa2504cf6/Screenshot+2026-03-10+at+07.30.31.png?format=1000w" alt="Profound Tend Basic Wash" loading="lazy"/>
+      <div class="sc-body">
+        <div class="sc-cat"><span class="pop">Popular</span><span class="dot"></span><span>Profound Tend Wash</span></div>
+        <div class="sc-name">Profound Tend Basic Wash</div>
+        <div class="sc-desc">Our signature basic wash brings professional-grade cleaning directly to your driveway, office, or hangar.</div>
+        <div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>2–3 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div>
+        <div class="sc-pricetbl"><div class="row"><span>Sedans/Coupes</span><span>$149.99</span></div><div class="row"><span>Small-Sized SUV (2 rows)</span><span>$169.99</span></div><div class="row"><span>Large-Sized SUV (3 rows)</span><span>$204.99</span></div></div>
+        <div class="sc-sub-box"><strong>Subscribe &amp; Save 20%</strong> — every 2 weeks. From $119.99 depending on vehicle size.</div>
+        <div class="sc-feat-h">What's Included</div>
+        <ul class="sc-list"><li>Hand wash with pH-balanced soap</li><li>Filtered water rinse to prevent spotting</li><li>Wheel/tire cleaning with specialized brushes</li><li>Window/mirror cleaning (exterior)</li><li>Door jamb wipe-down</li><li>Microfiber towel hand-dry</li><li>Tire shine application</li><li>Complete interior vacuum</li><li>Dashboard &amp; console wipe-down</li><li>Cup holders and storage cleaning</li><li>Interior window/mirror cleaning</li><li>Door panel dusting</li><li>Air vent cleaning</li></ul>
+        <div class="sc-foot">
+          <div class="sc-price">from $149.99<small>Starting price</small></div>
+          <button class="sc-book" onclick="sessionStorage.setItem('svc','basic-wash');location.href='/#booking';return false;">Book Now →</button>
+        </div>
+      </div>
+    </div>
+    <div class="sc reveal">
+      <img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/01f33914-1fed-490b-a8de-3bc46592a0c5/wash+%26++Wax.jpg?format=1000w" alt="Profound Tend Wash &amp; Wax" loading="lazy"/>
+      <div class="sc-body">
+        <div class="sc-cat"><span>Profound Tend Wash</span></div>
+        <div class="sc-name">Profound Tend Wash &amp; Wax</div>
+        <div class="sc-desc">Transform your car into a showroom masterpiece with the Profound Tend Wash &amp; Wax — our elevated exterior experience that combines the care of a meticulous hand wash with the lasting protection of a professional wax.</div>
+        <div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>90–120 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div>
+        
+        <div class="sc-sub-box"><strong>Subscribe &amp; Save 10%</strong> — $121.49 every 2 months.</div>
+        <div class="sc-feat-h">What's Included</div>
+        <ul class="sc-list"><li>Thorough pre-rinse to remove surface dirt and debris</li><li>Premium EcoFoam hand wash (biodegradable, safe for all finishes)</li><li>Wheel, tire, and wheel well scrubbing</li><li>Door jamb cleaning</li><li>Hand-dried with microfiber towels</li><li>Professional-grade wax hand-applied</li><li>Tire dressing for complete finish</li></ul>
+        <div class="sc-foot">
+          <div class="sc-price">$134.99<small>Starting price</small></div>
+          <button class="sc-book" onclick="sessionStorage.setItem('svc','wash-wax');location.href='/#booking';return false;">Book Now →</button>
+        </div>
+      </div>
+    </div>
+    <div class="sc reveal">
+      <img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/fc98d621-c608-44b5-9869-b46381fce430/IMG_5811.jpeg?format=1000w" alt="Profound Tend Standard Interior Detail" loading="lazy"/>
+      <div class="sc-body">
+        <div class="sc-cat"><span>Interior Detail</span></div>
+        <div class="sc-name">Profound Tend Standard Interior Detail</div>
+        <div class="sc-desc">Transform your vehicle's interior with our comprehensive Standard Interior Detail. We bring professional-grade equipment and premium products directly to you.</div>
+        <div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>1–2 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div>
+        <div class="sc-pricetbl"><div class="row"><span>Sedans/Coupes</span><span>$144.99</span></div><div class="row"><span>Small-Sized SUV (2 rows)</span><span>$164.99</span></div><div class="row"><span>Large-Sized SUV (3 rows)</span><span>$204.99</span></div></div>
+        
+        <div class="sc-feat-h">What's Included</div>
+        <ul class="sc-list"><li>Complete carpet/seat/trunk vacuuming</li><li>Crevice tool detailing in seams</li><li>Brush agitation of carpets and upholstery</li><li>Stain spot treatment</li><li>Floor mat shampooing and extraction</li><li>Dashboard, console, and trim cleaning and dressing</li><li>Door panels and armrest detailing</li><li>Center console deep cleaning</li><li>Steering wheel and gear shift conditioning</li><li>Button, vent, and control detailing</li><li>Interior &amp; sunroof glass cleaning</li><li>UV protectant application</li><li>Leather conditioning (if applicable)</li><li>Cloth seat shampooing</li><li>Fresh air odor treatment</li><li>Final inspection and touch-ups</li></ul>
+        <div class="sc-foot">
+          <div class="sc-price">from $144.99<small>Starting price</small></div>
+          <button class="sc-book" onclick="sessionStorage.setItem('svc','std-interior');location.href='/#booking';return false;">Book Now →</button>
+        </div>
+      </div>
+    </div>
+    <div class="sc reveal">
+      <img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/fc98d621-c608-44b5-9869-b46381fce430/IMG_5811.jpeg?format=1000w" alt="Profound Tend Full Interior Detail" loading="lazy"/>
+      <div class="sc-body">
+        <div class="sc-cat"><span>Interior Detail</span></div>
+        <div class="sc-name">Profound Tend Full Interior Detail</div>
+        <div class="sc-desc">A comprehensive mobile interior cleaning service that addresses all aspects of vehicle interiors — from carpet extraction to leather restoration, steam cleaning, glass polishing, and odor neutralization.</div>
+        <div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>3–5 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div>
+        <div class="sc-pricetbl"><div class="row"><span>Sedans &amp; Coupes</span><span>$209.99</span></div><div class="row"><span>Small SUV</span><span>$254.99</span></div><div class="row"><span>Large SUV</span><span>$304.99</span></div></div>
+        
+        <div class="sc-feat-h">What's Included</div>
+        <ul class="sc-list"><li>Deep floor mat cleaning</li><li>Carpet and upholstery shampooing and extraction</li><li>Leather conditioning and restoration</li><li>Fabric seat refreshing</li><li>Plastic surface and trim scrubbing</li><li>Door jamb cleaning</li><li>Steam cleaning of vents and crevices</li><li>Glass polishing</li><li>Odor neutralization treatment</li></ul>
+        <div class="sc-foot">
+          <div class="sc-price">from $209.99<small>Starting price</small></div>
+          <button class="sc-book" onclick="sessionStorage.setItem('svc','full-interior');location.href='/#booking';return false;">Book Now →</button>
+        </div>
+      </div>
+    </div>
+    <div class="sc reveal">
+      <img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/01f33914-1fed-490b-a8de-3bc46592a0c5/wash+%26++Wax.jpg?format=1000w" alt="Profound Full Detail" loading="lazy"/>
+      <div class="sc-body">
+        <div class="sc-cat"><span class="pop">Best Value</span><span class="dot"></span><span>Full Detail</span></div>
+        <div class="sc-name">Profound Full Detail</div>
+        <div class="sc-desc">The complete package — interior and exterior combined. Our most thorough service, tailored to your vehicle. Contact us for a custom quote based on size and condition.</div>
+        <div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>4–6 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div>
+        
+        
+        <div class="sc-feat-h">What's Included</div>
+        <ul class="sc-list"><li>Complete interior deep clean</li><li>Full exterior hand wash &amp; wax</li><li>Paint decontamination</li><li>Leather &amp; upholstery conditioning</li><li>Wheel &amp; tire detail</li><li>Engine bay cleaning available</li><li>Odor removal treatment</li></ul>
+        <div class="sc-foot">
+          <div class="sc-price">Get Quote<small>Starting price</small></div>
+          <button class="sc-book" onclick="sessionStorage.setItem('svc','full-detail');location.href='/#booking';return false;">Book Now →</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="svc-panel" id="p-wash">
-    <div class="sc"><div class="sc-badge">Entry</div><div class="sc-name">Standard Hand Wash</div><div class="sc-sub">Profound Tend Wash</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>45–60 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Exterior hand wash &amp; rinse</li><li>Wheel &amp; tire clean</li><li>Window wipe-down</li><li>Door jambs cleaned</li></ul><div class="sc-foot"><div class="sc-price">$54.99<small>Starting price</small></div><button class="sc-book" onclick="sessionStorage.setItem('svc','hand-wash');location.href='/#booking';return false;">Book Now →</button></div></div>
-    <div class="sc"><div class="sc-badge hot">Popular</div><div class="sc-name">Basic Wash</div><div class="sc-sub">Profound Tend Wash</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>60–75 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Full exterior hand wash</li><li>Tire dressing applied</li><li>Interior vacuum</li><li>Dashboard wipe-down</li></ul><div class="sc-foot"><div class="sc-price">from $149.99<small>Starting price</small></div><button class="sc-book" onclick="sessionStorage.setItem('svc','basic-wash');location.href='/#booking';return false;">Book Now →</button></div></div>
-    <div class="sc"><div class="sc-badge">Signature</div><div class="sc-name">Wash &amp; Wax</div><div class="sc-sub">Profound Tend Wash</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>90–120 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Complete exterior hand wash</li><li>Hand wax application</li><li>Streak-free window polish</li><li>Tire shine &amp; wheel detail</li><li>Exterior trim dressed</li></ul><div class="sc-foot"><div class="sc-price">$134.99<small>Starting price</small></div><button class="sc-book" onclick="sessionStorage.setItem('svc','wash-wax');location.href='/#booking';return false;">Book Now →</button></div></div>
+    <div class="sc reveal">
+      <img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/ee35151a-7183-4309-92b5-73a1e9bcbb77/carwash.jpg?format=1000w" alt="Profound Tend Standard Hand Wash" loading="lazy"/>
+      <div class="sc-body">
+        <div class="sc-cat"><span>Profound Tend Wash</span></div>
+        <div class="sc-name">Profound Tend Standard Hand Wash</div>
+        <div class="sc-desc">Our entry-level professional hand wash brings showroom-quality care to your driveway. Every vehicle gets the same hand-finished attention as our signature services.</div>
+        <div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>45–60 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div>
+        
+        
+        <div class="sc-feat-h">What's Included</div>
+        <ul class="sc-list"><li>Exterior hand wash &amp; rinse</li><li>Wheel &amp; tire clean</li><li>Exterior window wipe-down</li><li>Door jambs cleaned</li><li>Microfiber hand-dry</li></ul>
+        <div class="sc-foot">
+          <div class="sc-price">$54.99<small>Starting price</small></div>
+          <button class="sc-book" onclick="sessionStorage.setItem('svc','hand-wash');location.href='/#booking';return false;">Book Now →</button>
+        </div>
+      </div>
+    </div>
+    <div class="sc reveal">
+      <img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/aaa0b6aa-d00f-4183-b788-bbdaa2504cf6/Screenshot+2026-03-10+at+07.30.31.png?format=1000w" alt="Profound Tend Basic Wash" loading="lazy"/>
+      <div class="sc-body">
+        <div class="sc-cat"><span class="pop">Popular</span><span class="dot"></span><span>Profound Tend Wash</span></div>
+        <div class="sc-name">Profound Tend Basic Wash</div>
+        <div class="sc-desc">Our signature basic wash brings professional-grade cleaning directly to your driveway, office, or hangar.</div>
+        <div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>2–3 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div>
+        <div class="sc-pricetbl"><div class="row"><span>Sedans/Coupes</span><span>$149.99</span></div><div class="row"><span>Small-Sized SUV (2 rows)</span><span>$169.99</span></div><div class="row"><span>Large-Sized SUV (3 rows)</span><span>$204.99</span></div></div>
+        <div class="sc-sub-box"><strong>Subscribe &amp; Save 20%</strong> — every 2 weeks. From $119.99 depending on vehicle size.</div>
+        <div class="sc-feat-h">What's Included</div>
+        <ul class="sc-list"><li>Hand wash with pH-balanced soap</li><li>Filtered water rinse to prevent spotting</li><li>Wheel/tire cleaning with specialized brushes</li><li>Window/mirror cleaning (exterior)</li><li>Door jamb wipe-down</li><li>Microfiber towel hand-dry</li><li>Tire shine application</li><li>Complete interior vacuum</li><li>Dashboard &amp; console wipe-down</li><li>Cup holders and storage cleaning</li><li>Interior window/mirror cleaning</li><li>Door panel dusting</li><li>Air vent cleaning</li></ul>
+        <div class="sc-foot">
+          <div class="sc-price">from $149.99<small>Starting price</small></div>
+          <button class="sc-book" onclick="sessionStorage.setItem('svc','basic-wash');location.href='/#booking';return false;">Book Now →</button>
+        </div>
+      </div>
+    </div>
+    <div class="sc reveal">
+      <img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/01f33914-1fed-490b-a8de-3bc46592a0c5/wash+%26++Wax.jpg?format=1000w" alt="Profound Tend Wash &amp; Wax" loading="lazy"/>
+      <div class="sc-body">
+        <div class="sc-cat"><span>Profound Tend Wash</span></div>
+        <div class="sc-name">Profound Tend Wash &amp; Wax</div>
+        <div class="sc-desc">Transform your car into a showroom masterpiece with the Profound Tend Wash &amp; Wax — our elevated exterior experience that combines the care of a meticulous hand wash with the lasting protection of a professional wax.</div>
+        <div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>90–120 min</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div>
+        
+        <div class="sc-sub-box"><strong>Subscribe &amp; Save 10%</strong> — $121.49 every 2 months.</div>
+        <div class="sc-feat-h">What's Included</div>
+        <ul class="sc-list"><li>Thorough pre-rinse to remove surface dirt and debris</li><li>Premium EcoFoam hand wash (biodegradable, safe for all finishes)</li><li>Wheel, tire, and wheel well scrubbing</li><li>Door jamb cleaning</li><li>Hand-dried with microfiber towels</li><li>Professional-grade wax hand-applied</li><li>Tire dressing for complete finish</li></ul>
+        <div class="sc-foot">
+          <div class="sc-price">$134.99<small>Starting price</small></div>
+          <button class="sc-book" onclick="sessionStorage.setItem('svc','wash-wax');location.href='/#booking';return false;">Book Now →</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="svc-panel" id="p-interior">
-    <div class="sc"><div class="sc-badge">Essential</div><div class="sc-name">Standard Interior Detail</div><div class="sc-sub">Profound Tend Interior Detail</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>2–3 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Deep interior vacuum</li><li>Seat &amp; carpet shampoo</li><li>Dashboard &amp; console detail</li><li>Door panel wipe-down</li><li>Interior windows cleaned</li></ul><div class="sc-foot"><div class="sc-price">from $144.99<small>Starting price</small></div><button class="sc-book" onclick="sessionStorage.setItem('svc','std-interior');location.href='/#booking';return false;">Book Now →</button></div></div>
-    <div class="sc"><div class="sc-badge">Premium</div><div class="sc-name">Full Interior Detail</div><div class="sc-sub">Profound Tend Interior Detail</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>3–5 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Full deep vacuum &amp; extraction</li><li>Steam clean all surfaces</li><li>Leather conditioning</li><li>Odor elimination treatment</li><li>All vents &amp; crevices detailed</li><li>Interior windows polished</li></ul><div class="sc-foot"><div class="sc-price">from $209.99<small>Starting price</small></div><button class="sc-book" onclick="sessionStorage.setItem('svc','full-interior');location.href='/#booking';return false;">Book Now →</button></div></div>
+    <div class="sc reveal">
+      <img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/fc98d621-c608-44b5-9869-b46381fce430/IMG_5811.jpeg?format=1000w" alt="Profound Tend Standard Interior Detail" loading="lazy"/>
+      <div class="sc-body">
+        <div class="sc-cat"><span>Interior Detail</span></div>
+        <div class="sc-name">Profound Tend Standard Interior Detail</div>
+        <div class="sc-desc">Transform your vehicle's interior with our comprehensive Standard Interior Detail. We bring professional-grade equipment and premium products directly to you.</div>
+        <div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>1–2 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div>
+        <div class="sc-pricetbl"><div class="row"><span>Sedans/Coupes</span><span>$144.99</span></div><div class="row"><span>Small-Sized SUV (2 rows)</span><span>$164.99</span></div><div class="row"><span>Large-Sized SUV (3 rows)</span><span>$204.99</span></div></div>
+        
+        <div class="sc-feat-h">What's Included</div>
+        <ul class="sc-list"><li>Complete carpet/seat/trunk vacuuming</li><li>Crevice tool detailing in seams</li><li>Brush agitation of carpets and upholstery</li><li>Stain spot treatment</li><li>Floor mat shampooing and extraction</li><li>Dashboard, console, and trim cleaning and dressing</li><li>Door panels and armrest detailing</li><li>Center console deep cleaning</li><li>Steering wheel and gear shift conditioning</li><li>Button, vent, and control detailing</li><li>Interior &amp; sunroof glass cleaning</li><li>UV protectant application</li><li>Leather conditioning (if applicable)</li><li>Cloth seat shampooing</li><li>Fresh air odor treatment</li><li>Final inspection and touch-ups</li></ul>
+        <div class="sc-foot">
+          <div class="sc-price">from $144.99<small>Starting price</small></div>
+          <button class="sc-book" onclick="sessionStorage.setItem('svc','std-interior');location.href='/#booking';return false;">Book Now →</button>
+        </div>
+      </div>
+    </div>
+    <div class="sc reveal">
+      <img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/fc98d621-c608-44b5-9869-b46381fce430/IMG_5811.jpeg?format=1000w" alt="Profound Tend Full Interior Detail" loading="lazy"/>
+      <div class="sc-body">
+        <div class="sc-cat"><span>Interior Detail</span></div>
+        <div class="sc-name">Profound Tend Full Interior Detail</div>
+        <div class="sc-desc">A comprehensive mobile interior cleaning service that addresses all aspects of vehicle interiors — from carpet extraction to leather restoration, steam cleaning, glass polishing, and odor neutralization.</div>
+        <div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>3–5 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div>
+        <div class="sc-pricetbl"><div class="row"><span>Sedans &amp; Coupes</span><span>$209.99</span></div><div class="row"><span>Small SUV</span><span>$254.99</span></div><div class="row"><span>Large SUV</span><span>$304.99</span></div></div>
+        
+        <div class="sc-feat-h">What's Included</div>
+        <ul class="sc-list"><li>Deep floor mat cleaning</li><li>Carpet and upholstery shampooing and extraction</li><li>Leather conditioning and restoration</li><li>Fabric seat refreshing</li><li>Plastic surface and trim scrubbing</li><li>Door jamb cleaning</li><li>Steam cleaning of vents and crevices</li><li>Glass polishing</li><li>Odor neutralization treatment</li></ul>
+        <div class="sc-foot">
+          <div class="sc-price">from $209.99<small>Starting price</small></div>
+          <button class="sc-book" onclick="sessionStorage.setItem('svc','full-interior');location.href='/#booking';return false;">Book Now →</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="svc-panel" id="p-full">
-    <div class="sc"><div class="sc-badge hot">Best Value</div><div class="sc-name">Profound Full Detail</div><div class="sc-sub">Interior + Exterior — Complete Service</div><div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>4–6 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div><ul class="sc-list"><li>Complete interior deep clean</li><li>Full exterior hand wash &amp; wax</li><li>Paint decontamination</li><li>Leather &amp; upholstery condition</li><li>Wheel &amp; tire detail</li><li>Engine bay cleaning available</li><li>Odor removal treatment</li></ul><div class="sc-foot"><div class="sc-price" style="font-size:1.15rem">Contact for Quote<small>Custom pricing</small></div><button class="sc-book" onclick="sessionStorage.setItem('svc','full-detail');location.href='/#booking';return false;">Get a Quote →</button></div></div>
+    <div class="sc reveal">
+      <img class="sc-img" src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/01f33914-1fed-490b-a8de-3bc46592a0c5/wash+%26++Wax.jpg?format=1000w" alt="Profound Full Detail" loading="lazy"/>
+      <div class="sc-body">
+        <div class="sc-cat"><span class="pop">Best Value</span><span class="dot"></span><span>Full Detail</span></div>
+        <div class="sc-name">Profound Full Detail</div>
+        <div class="sc-desc">The complete package — interior and exterior combined. Our most thorough service, tailored to your vehicle. Contact us for a custom quote based on size and condition.</div>
+        <div class="sc-meta"><div class="sc-mi"><strong>Duration</strong>4–6 hrs</div><div class="sc-mi"><strong>Availability</strong>Mon–Sat</div></div>
+        
+        
+        <div class="sc-feat-h">What's Included</div>
+        <ul class="sc-list"><li>Complete interior deep clean</li><li>Full exterior hand wash &amp; wax</li><li>Paint decontamination</li><li>Leather &amp; upholstery conditioning</li><li>Wheel &amp; tire detail</li><li>Engine bay cleaning available</li><li>Odor removal treatment</li></ul>
+        <div class="sc-foot">
+          <div class="sc-price">Get Quote<small>Starting price</small></div>
+          <button class="sc-book" onclick="sessionStorage.setItem('svc','full-detail');location.href='/#booking';return false;">Book Now →</button>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 <!-- CTA -->
