@@ -255,6 +255,9 @@ h2 em{font-style:italic;color:var(--green);}
 .svo-name{font-family:var(--serif);font-size:1.15rem;font-weight:600;margin-bottom:0.2rem;}
 .svo-dur{font-size:0.72rem;color:var(--mid);margin-bottom:0.7rem;}
 .svo-price{font-family:var(--serif);font-size:1.35rem;font-weight:700;color:var(--green);}
+.svo-tiers{margin-top:0.9rem;padding-top:0.85rem;border-top:1px solid rgba(255,255,255,0.06);display:grid;gap:0.3rem;}
+.svo-tier{display:flex;justify-content:space-between;align-items:center;font-size:0.76rem;color:rgba(244,242,238,0.7);gap:0.7rem;}
+.svo-tier span:last-child{color:var(--green-l);font-family:var(--serif);font-weight:700;font-size:0.92rem;}
 
 /* Step 2 — Calendar & Slots */
 .cal-layout{display:grid;grid-template-columns:1fr 320px;gap:2rem;max-width:900px;margin:0 auto 2.5rem;}
@@ -989,13 +992,19 @@ function bkGoStep(n){
 
 /* ─── STEP 1 ─── */
 function renderSvcGrid(){
-  document.getElementById('svcSelGrid').innerHTML=SVCS.map(s=>`
+  document.getElementById('svcSelGrid').innerHTML=SVCS.map(s=>{
+    const tiers = (s.pricing && s.pricing.length)
+      ? `<div class="svo-tiers">${s.pricing.map(p=>`<div class="svo-tier"><span>${p[0]}</span><span>$${p[1].toFixed(2)}</span></div>`).join('')}</div>`
+      : '';
+    return `
     <div class="svc-opt${selSvc&&selSvc.id===s.id?' selected':''}" onclick="pickSvc('${s.id}')">
       <div class="svo-badge">${s.badge}</div>
       <div class="svo-name">${s.name}</div>
       <div class="svo-dur">⏱ ${s.dur}</div>
       <div class="svo-price">${s.price}</div>
-    </div>`).join('');
+      ${tiers}
+    </div>`;
+  }).join('');
 }
 function pickSvc(id){
   selSvc=SVCS.find(s=>s.id===id);
