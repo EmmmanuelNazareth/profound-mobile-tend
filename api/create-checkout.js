@@ -63,6 +63,17 @@ export default async function handler(req, res) {
           .join('\n')
       : 'Profound Mobile Tend order';
 
+  // Square rejects malformed email/phone with a hard error — sanitize before
+  // passing so a customer typo can't block checkout. Square wants E.164-ish
+  // phone (+15551234567) and a syntactically-valid email.
+  const emailOk = typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  let phoneOk;
+  if (typeof phone === 'string') {
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length === 10) phoneOk = '+1' + digits;
+    else if (digits.length === 11 && digits.startsWith('1')) phoneOk = '+' + digits;
+  }
+
   const payload = {
     idempotency_key: orderId + '-' + Date.now(),
     quick_pay: {
@@ -72,8 +83,8 @@ export default async function handler(req, res) {
     },
     description: description.slice(0, 1000),
     pre_populated_data: {
-      buyer_email: email || undefined,
-      buyer_phone_number: phone || undefined,
+      buyer_email: emailOk ? email : undefined,
+      buyer_phone_number: phoneOk || undefined,
       buyer_address: address
         ? { address_line_1: address, country: 'US' }
         : undefined,
