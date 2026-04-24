@@ -811,12 +811,12 @@ nav.nav-menu-open{transform:translateY(0)!important;}
 <script>
 /* ─── SERVICES DATA ─── */
 const SVCS=[
-  {id:'hand-wash',badge:'Entry',name:'Standard Hand Wash',sub:'Profound Tend Wash',dur:'45–60 min',price:'$54.99'},
-  {id:'basic-wash',badge:'Popular',name:'Basic Wash',sub:'Profound Tend Wash',dur:'60–75 min',price:'from $149.99'},
-  {id:'wash-wax',badge:'Signature',name:'Wash & Wax',sub:'Profound Tend Wash',dur:'90–120 min',price:'$134.99'},
-  {id:'std-interior',badge:'Essential',name:'Standard Interior Detail',sub:'Profound Tend Interior',dur:'2–3 hrs',price:'$144.99'},
-  {id:'full-interior',badge:'Premium',name:'Full Interior Detail',sub:'Profound Tend Interior',dur:'3–5 hrs',price:'$209.99'},
-  {id:'full-detail',badge:'Best Value',name:'Profound Full Detail',sub:'Interior + Exterior Complete',dur:'4–6 hrs',price:'Contact for Quote'}
+  {id:'hand-wash',badge:'Entry',name:'Standard Hand Wash',sub:'Profound Tend Wash',dur:'45–60 min',price:'$54.99',priceSmall:'Flat rate'},
+  {id:'basic-wash',badge:'Popular',name:'Basic Wash',sub:'Profound Tend Wash',dur:'2–3 hrs',price:'from $149.99',priceSmall:'By vehicle size',pricing:[['Sedans/Coupes',149.99],['Small-Sized SUV (2 rows)',169.99],['Large-Sized SUV (3 rows)',204.99]]},
+  {id:'wash-wax',badge:'Signature',name:'Wash & Wax',sub:'Profound Tend Wash',dur:'90–120 min',price:'$134.99',priceSmall:'Flat rate'},
+  {id:'std-interior',badge:'Essential',name:'Standard Interior Detail',sub:'Profound Tend Interior',dur:'1–2 hrs',price:'from $144.99',priceSmall:'By vehicle size',pricing:[['Sedans/Coupes',144.99],['Small-Sized SUV (2 rows)',164.99],['Large-Sized SUV (3 rows)',204.99]]},
+  {id:'full-interior',badge:'Premium',name:'Full Interior Detail',sub:'Profound Tend Interior',dur:'3–5 hrs',price:'from $209.99',priceSmall:'By vehicle size',pricing:[['Sedans & Coupes',209.99],['Small SUV',254.99],['Large SUV',304.99]]},
+  {id:'full-detail',badge:'Best Value',name:'Profound Full Detail',sub:'Interior + Exterior Complete',dur:'4–6 hrs',price:'Get Quote',priceSmall:'Custom pricing'}
 ];
 
 /* ─── TIME SLOTS 8AM–7PM / 45min ─── */
