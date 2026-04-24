@@ -758,14 +758,13 @@ nav.nav-menu-open{transform:translateY(0)!important;}
     <div class="contact-form-wrap reveal">
       <div class="sec-tag">Send a Message</div>
       <h2 style="font-size:1.8rem;margin-bottom:1.5rem;">Quick <em>Message</em></h2>
-      <!-- 
-        TO ACTIVATE EMAIL: 
-        1. Go to formspree.io and create a free account
-        2. Create a new form and set email to sales@profoundmobiletend.com
-        3. Replace YOUR_FORM_ID below with your Formspree form ID
-      -->
-      <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-        <input type="hidden" name="_subject" value="New Contact from Profound Mobile Tend Website"/>
+      <!-- Sends to sales@profoundmobiletend.com via FormSubmit (no signup).
+           FIRST submission triggers a one-time confirmation email to that
+           address; click the link once and every future message flows through. -->
+      <form id="contactForm" action="https://formsubmit.co/ajax/sales@profoundmobiletend.com" method="POST">
+        <input type="hidden" name="_subject" value="New Quick Message — Profound Mobile Tend"/>
+        <input type="hidden" name="_template" value="table"/>
+        <input type="hidden" name="_captcha" value="false"/>
         <input type="hidden" name="_replyto" id="cf_replyto"/>
         <div class="fg"><label>Name *</label><input type="text" name="name" id="cf_name" placeholder="Your name" required/></div>
         <div class="fg"><label>Email *</label><input type="email" name="email" id="cf_email" placeholder="your@email.com" required oninput="document.getElementById('cf_replyto').value=this.value"/></div>
@@ -1111,11 +1110,14 @@ Booked on: ${new Date().toLocaleString()}
   `.trim();
 
   try{
-    await fetch('https://formspree.io/f/YOUR_FORM_ID',{
+    await fetch('https://formsubmit.co/ajax/sales@profoundmobiletend.com',{
       method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json'},
       body:JSON.stringify({
-        _subject:`New Booking ${bookingId} — ${selSvc.name} on ${fmtDisp(selDate)} at ${selSlot}`,
+        _subject:`New Appointment ${bookingId} — ${selSvc.name} on ${fmtDisp(selDate)} at ${selSlot}`,
+        _template:'table',
+        _captcha:'false',
+        _replyto:email,
         name:booking.name,email:email,phone:phone,
         service:selSvc.name,date:fmtDisp(selDate),time:selSlot,
         address:address,vehicle:vehicle,notes:notes||'None',
