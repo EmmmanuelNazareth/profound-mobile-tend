@@ -485,6 +485,7 @@ nav.nav-scrolled .nav-logo img{height:34px;transition:height 0.3s;}
 nav.nav-menu-open{transform:translateY(0)!important;}
 
 </style>
+<script src="/pmt-cart.js" defer></script>
 </head>
 <body>
 
@@ -569,7 +570,7 @@ nav.nav-menu-open{transform:translateY(0)!important;}
         </div>
         <div class="buy-row">
           <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
-          <button class="buy-btn wide" data-product="hand-wash" data-name="Standard Hand Wash">Book A Tend</button>
+          <button class="buy-btn wide" data-product="hand-wash" data-name="Standard Hand Wash">Add to Cart</button>
         </div>
       </div>
     </div>
@@ -592,7 +593,7 @@ nav.nav-menu-open{transform:translateY(0)!important;}
         </div>
         <div class="buy-row">
           <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
-          <button class="buy-btn wide" data-product="basic-wash" data-name="Basic Wash">Book A Tend</button>
+          <button class="buy-btn wide" data-product="basic-wash" data-name="Basic Wash">Add to Cart</button>
         </div>
       </div>
     </div>
@@ -615,7 +616,7 @@ nav.nav-menu-open{transform:translateY(0)!important;}
         </div>
         <div class="buy-row">
           <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
-          <button class="buy-btn wide" data-product="wash-wax" data-name="Wash &amp; Wax">Book A Tend</button>
+          <button class="buy-btn wide" data-product="wash-wax" data-name="Wash &amp; Wax">Add to Cart</button>
         </div>
       </div>
     </div>
@@ -638,7 +639,7 @@ nav.nav-menu-open{transform:translateY(0)!important;}
         </div>
         <div class="buy-row">
           <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
-          <button class="buy-btn wide" data-product="std-interior" data-name="Standard Interior Detail">Book A Tend</button>
+          <button class="buy-btn wide" data-product="std-interior" data-name="Standard Interior Detail">Add to Cart</button>
         </div>
       </div>
     </div>
@@ -661,7 +662,7 @@ nav.nav-menu-open{transform:translateY(0)!important;}
         </div>
         <div class="buy-row">
           <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
-          <button class="buy-btn wide" data-product="full-interior" data-name="Full Interior Detail">Book A Tend</button>
+          <button class="buy-btn wide" data-product="full-interior" data-name="Full Interior Detail">Add to Cart</button>
         </div>
       </div>
     </div>
@@ -684,7 +685,7 @@ nav.nav-menu-open{transform:translateY(0)!important;}
         </div>
         <div class="buy-row">
           <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
-          <button class="buy-btn wide" data-product="headlight" data-name="Headlight Restoration">Book A Tend</button>
+          <button class="buy-btn wide" data-product="headlight" data-name="Headlight Restoration">Add to Cart</button>
         </div>
       </div>
     </div>
@@ -707,7 +708,7 @@ nav.nav-menu-open{transform:translateY(0)!important;}
         </div>
         <div class="buy-row">
           <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
-          <button class="buy-btn wide" data-product="leather-ceramic" data-name="Leather Ceramic Coating">Book A Tend</button>
+          <button class="buy-btn wide" data-product="leather-ceramic" data-name="Leather Ceramic Coating">Add to Cart</button>
         </div>
       </div>
     </div>
@@ -730,7 +731,7 @@ nav.nav-menu-open{transform:translateY(0)!important;}
         </div>
         <div class="buy-row">
           <div class="qty-box"><button type="button" data-qty="-">−</button><input type="number" value="1" min="1" readonly><button type="button" data-qty="+">+</button></div>
-          <button class="buy-btn wide" data-product="engine-bay" data-name="Engine Bay Detail">Book A Tend</button>
+          <button class="buy-btn wide" data-product="engine-bay" data-name="Engine Bay Detail">Add to Cart</button>
         </div>
       </div>
     </div>
@@ -894,39 +895,22 @@ document.addEventListener('DOMContentLoaded',()=>{
     });
   });
 
-  /* Book A Tend → send purchase-order email to sales@profoundmobiletend.com
-     and route to /#booking with the service pre-selected. */
+  /* Add to Cart from the shop */
   document.querySelectorAll('.buy-btn[data-product]').forEach(btn=>{
     btn.addEventListener('click',(e)=>{
       const pid=btn.dataset.product;
       const pname=btn.dataset.name||pid;
       const card=btn.closest('.product');
-      const price=card?card.dataset.price:'';
-      const qty=card?(card.querySelector('.qty-box input')||{}).value||'1':'1';
+      const basePrice=card?parseFloat(card.dataset.price||'0'):0;
+      const subPrice=card?parseFloat(card.dataset.sub||'0'):0;
+      const qty=parseInt((card&&card.querySelector('.qty-box input')||{}).value||'1',10);
       const vehicles=card?Array.from(card.querySelectorAll('.veh-sel')).map(s=>s.value).filter(Boolean).join(', '):'';
       const freqEl=card?card.querySelector('input[type=radio]:checked'):null;
       const freq=freqEl?freqEl.value:'one';
-      /* Fire-and-forget purchase-order notification */
-      fetch('https://formsubmit.co/ajax/sales@profoundmobiletend.com',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body:JSON.stringify({
-          _subject:`Purchase Order — ${pname} × ${qty}`,
-          _template:'table',
-          _captcha:'false',
-          order_type:'Shop purchase inquiry',
-          product:pname,
-          product_id:pid,
-          starting_price:price?('$'+price):'',
-          quantity:qty,
-          vehicle_selected:vehicles||'(none chosen yet)',
-          frequency:freq==='sub'?'Subscribe':'One-time',
-          message:'Customer clicked Book A Tend from the shop. Follow up to confirm details, vehicle size, and payment.'
-        })
-      }).catch(()=>{});
-      /* Always navigate to the booking form on the homepage */
-      sessionStorage.setItem('svc',pid);
-      location.href='/#booking';
+      const unit = (freq==='sub' && subPrice>0) ? subPrice : basePrice;
+      if(window.PMT){
+        window.PMT.add({id:pid,name:pname,vehicle:vehicles,frequency:freq,unitPrice:unit,qty:qty});
+      }
     });
   });
 });
