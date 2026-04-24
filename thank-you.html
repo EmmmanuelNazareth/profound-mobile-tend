@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Thank You | Profound Mobile Tend</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:#080808;color:#f4f2ee;font-family:'Outfit',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;text-align:center;}
+.wrap{max-width:540px;}
+.ico{width:92px;height:92px;border-radius:50%;background:rgba(60,142,57,0.15);border:2px solid #3C8E39;color:#3C8E39;font-size:3rem;line-height:88px;margin:0 auto 1.8rem;}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,2.8rem);font-weight:600;margin-bottom:0.8rem;letter-spacing:-0.01em;}
+h1 em{color:#3C8E39;font-style:italic;}
+p{color:rgba(244,242,238,0.7);font-size:1rem;line-height:1.75;font-weight:300;margin-bottom:0.7rem;}
+.id{font-family:'Cormorant Garamond',serif;color:#52b84f;font-size:1.1rem;font-weight:600;margin:0.5rem 0 1.5rem;letter-spacing:0.02em;}
+.row{display:flex;gap:0.8rem;justify-content:center;margin-top:2rem;flex-wrap:wrap;}
+.btn{padding:0.95rem 1.8rem;border-radius:2px;text-decoration:none;font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;transition:all 0.2s;display:inline-block;}
+.btn.p{background:#3C8E39;color:#fff;}
+.btn.p:hover{background:#52b84f;color:#080808;}
+.btn.g{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.15);}
+.btn.g:hover{border-color:#3C8E39;color:#3C8E39;}
+.sm{font-size:0.8rem;color:rgba(244,242,238,0.5);margin-top:2rem;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="ico">✓</div>
+  <h1>Payment <em>Received</em></h1>
+  <p>Thank you for booking with Profound Mobile Tend.</p>
+  <div class="id" id="orderId"></div>
+  <p>We've emailed your receipt and will reach out within 24 hours to confirm your appointment time and address details.</p>
+  <div class="row">
+    <a class="btn p" href="/">Back to Home</a>
+    <a class="btn g" href="/services">Browse Services</a>
+  </div>
+  <div class="sm">Questions? Email <a href="mailto:sales@profoundmobiletend.com" style="color:#52b84f;">sales@profoundmobiletend.com</a></div>
+</div>
+<script>
+const p=new URLSearchParams(location.search);
+const id=p.get('order');
+if(id){document.getElementById('orderId').textContent='Order '+id;}
+try{localStorage.removeItem('pmt_cart_v1');}catch(e){}
+</script>
+</body>
+</html>

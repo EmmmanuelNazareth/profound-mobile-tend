@@ -163,7 +163,8 @@
           <label>Service Address *</label><input type="text" name="address" required placeholder="Street, City, ZIP"/>
           <label>Preferred Date / Time</label><input type="text" name="preferred" placeholder="e.g. Sat morning"/>
           <label>Notes</label><textarea name="notes" rows="2" placeholder="Vehicle make/model, gate code, etc."></textarea>
-          <button class="pmt-co" id="pmtSubmitBtn" type="submit">Place Order →</button>
+          <button class="pmt-co" id="pmtSubmitBtn" type="submit">Continue to Secure Payment →</button>
+          <div style="font-size:0.66rem;color:#666;text-align:center;margin-top:0.55rem;line-height:1.5;">Payments processed securely by Square. We'll email a receipt and confirm your appointment within 24 hrs.</div>
         </form>
       </div>`;
   }
@@ -180,37 +181,75 @@
     ev.preventDefault();
     const f=ev.target;
     const btn=document.getElementById('pmtSubmitBtn');
-    btn.disabled=true;btn.textContent='Sending…';
+    btn.disabled=true;btn.textContent='Processing…';
     const fd=new FormData(f);
     const items=read();
     const orderId='PMT-'+Date.now().toString(36).toUpperCase();
     const lines=items.map(it=>`• ${it.name}${it.vehicle?' — '+it.vehicle:''}${it.frequency==='sub'?' (Subscription)':''} × ${it.qty}  @ $${it.unitPrice.toFixed(2)} = $${(it.unitPrice*it.qty).toFixed(2)}`).join('\n');
-    const tot=total().toFixed(2);
-    const payload={
-      _subject:`New Order ${orderId} — ${items.length} item(s), $${tot}`,
-      _template:'table',
-      _captcha:'false',
-      _replyto:fd.get('email'),
-      order_id:orderId,
+    const tot=total();
+    const totStr=tot.toFixed(2);
+    const customer={
       name:fd.get('name'),email:fd.get('email'),phone:fd.get('phone'),
-      address:fd.get('address'),preferred:fd.get('preferred')||'(not specified)',
-      notes:fd.get('notes')||'(none)',
+      address:fd.get('address'),preferred:fd.get('preferred')||'',
+      notes:fd.get('notes')||''
+    };
+
+    /* 1) Fire notification email to sales@ (non-blocking) */
+    const emailPayload={
+      _subject:`New Order ${orderId} — ${items.length} item(s), $${totStr}`,
+      _template:'table',_captcha:'false',_replyto:customer.email,
+      order_id:orderId,
+      name:customer.name,email:customer.email,phone:customer.phone,
+      address:customer.address,
+      preferred:customer.preferred||'(not specified)',
+      notes:customer.notes||'(none)',
       items_summary:lines,
       items_json:JSON.stringify(items),
-      subtotal:'$'+tot
+      subtotal:'$'+totStr
     };
+    fetch(EMAIL_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(emailPayload)}).catch(()=>{});
+
+    /* 2) Create Square payment link and redirect to secure checkout */
     try{
-      await fetch(EMAIL_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
-    }catch(e){}
-    /* Show success + clear cart */
-    document.getElementById('pmtBody').innerHTML=`
-      <div class="pmt-success">
-        <div class="ico">✓</div>
-        <h4>Order received</h4>
-        <p>Order <strong>${orderId}</strong> — ${items.length} item(s), total $${tot}.<br/>We've emailed the details to our team and will contact you within 24 hours to confirm your appointment time.</p>
-      </div>`;
-    document.getElementById('pmtFoot').innerHTML='<button class="pmt-co" onclick="PMT.close()">Close</button>';
-    clear();
+      const r=await fetch('/api/create-checkout',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          orderId:orderId,amount:tot,
+          name:customer.name,email:customer.email,phone:customer.phone,
+          address:customer.address,note:customer.notes,items:items
+        })
+      });
+      const data=await r.json();
+      if(r.ok && data.url){
+        /* Keep a copy of the order on the client side in case of reload */
+        try{sessionStorage.setItem('pmt_last_order',JSON.stringify({orderId,tot:totStr,items,customer}));}catch(e){}
+        /* Clear cart — order is in Square's hands now */
+        clear();
+        location.href=data.url;
+        return false;
+      }
+      /* Payment endpoint failed (e.g. env vars not set). Fall back to email-only. */
+      console.warn('Checkout endpoint error:',data);
+      document.getElementById('pmtBody').innerHTML=`
+        <div class="pmt-success">
+          <div class="ico">✓</div>
+          <h4>Order received</h4>
+          <p>Order <strong>${orderId}</strong> — ${items.length} item(s), total $${totStr}.<br/>We've emailed the details to our team and will contact you within 24 hours to confirm your appointment time and take payment.</p>
+          <p style="margin-top:0.8rem;font-size:0.74rem;color:#666;">(Online payment not available right now — your order is still received.)</p>
+        </div>`;
+      document.getElementById('pmtFoot').innerHTML='<button class="pmt-co" onclick="PMT.close()">Close</button>';
+      clear();
+    }catch(e){
+      document.getElementById('pmtBody').innerHTML=`
+        <div class="pmt-success">
+          <div class="ico">✓</div>
+          <h4>Order received</h4>
+          <p>Order <strong>${orderId}</strong> — we've emailed the details to our team and will contact you within 24 hours to finalize payment.</p>
+        </div>`;
+      document.getElementById('pmtFoot').innerHTML='<button class="pmt-co" onclick="PMT.close()">Close</button>';
+      clear();
+    }
     return false;
   }
 
