@@ -391,7 +391,6 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
   .hamburger{display:flex;}
   .mob-nav{display:block;}
   .slide-content{padding:0 2rem;}
-  .faith-badge{display:none;}
   .hero-ctrl{left:2rem;bottom:2rem;}
   #about{grid-template-columns:1fr;}
   .about-img{min-height:280px;}
@@ -429,6 +428,12 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
   .hero-ctrl{left:1.4rem;bottom:1.2rem;gap:0.8rem;}
   .arr{width:34px;height:34px;font-size:0.8rem;}
   .arrows{margin-left:0.4rem;}
+
+  /* Faith Drives Clean badge — move to top-right on mobile so it
+     doesn't collide with the floating cart button or hero controls. */
+  .faith-badge{display:flex;right:1.1rem;bottom:auto;top:calc(var(--nav-h) + 0.9rem);width:78px;height:78px;}
+  .faith-badge span{font-size:1.15rem;}
+  .faith-badge p{font-size:0.42rem;letter-spacing:0.14em;}
 
   /* Strip */
   .strip{padding:1.8rem 1.2rem;gap:1.2rem;}
@@ -480,6 +485,17 @@ footer{background:#050505;border-top:1px solid rgba(60,142,57,0.1);padding:3rem 
 
   /* Toast */
   .toast{bottom:1rem;right:1rem;left:1rem;max-width:none;font-size:0.78rem;}
+
+  /* Smoothness — kill iOS tap flash, ensure long text never overflows,
+     give buttons visible press feedback, smoother momentum scrolling. */
+  *{-webkit-tap-highlight-color:transparent;}
+  html,body{-webkit-overflow-scrolling:touch;overflow-x:hidden;}
+  h1,h2,h3,p{overflow-wrap:break-word;word-break:break-word;}
+  a,button{-webkit-touch-callout:none;}
+  .btn-p:active,.btn-g:active,.nav-cta:active,.mob-book:active,.tab:active{transform:scale(0.97);transition:transform 0.08s;}
+  /* Respect safe-area on notched phones */
+  nav{padding-left:max(1.1rem,env(safe-area-inset-left));padding-right:max(1.1rem,env(safe-area-inset-right));}
+  footer{padding-bottom:max(2.2rem,env(safe-area-inset-bottom));}
 }
 
 /* ── SMART NAV: auto-hide on scroll-down, reveal on scroll-up ── */
