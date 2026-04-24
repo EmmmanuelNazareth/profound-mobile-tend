@@ -98,7 +98,10 @@ export default async function handler(req, res) {
     payment_note: `Order ${orderId} — ${name || 'Customer'}${note ? ' — ' + note : ''}`.slice(0, 500),
   };
 
-  try {
+  // Call Square, and if it rejects the pre-populated email or phone
+  // (e.g. @example.com, 555- numbers, reserved domains) strip the offender
+  // and retry up to twice. A typo shouldn't cost us a paying customer.
+  async function callSquare(body) {
     const r = await fetch(`${host}/v2/online-checkout/payment-links`, {
       method: 'POST',
       headers: {
@@ -106,22 +109,38 @@ export default async function handler(req, res) {
         'Square-Version': '2024-07-17',
         Authorization: `Bearer ${TOKEN}`,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(body),
     });
     const data = await r.json();
-    if (!r.ok) {
-      const msg =
-        (data && data.errors && data.errors[0] && data.errors[0].detail) ||
-        'Square API error';
-      res.status(502).json({ error: msg, details: data });
+    return { ok: r.ok, status: r.status, data };
+  }
+
+  try {
+    let attempt = await callSquare(payload);
+    for (let i = 0; i < 2 && !attempt.ok; i++) {
+      const code = attempt.data?.errors?.[0]?.code;
+      if (code === 'INVALID_EMAIL_ADDRESS' && payload.pre_populated_data.buyer_email) {
+        delete payload.pre_populated_data.buyer_email;
+      } else if (code === 'INVALID_PHONE_NUMBER' && payload.pre_populated_data.buyer_phone_number) {
+        delete payload.pre_populated_data.buyer_phone_number;
+      } else {
+        break;
+      }
+      payload.idempotency_key = orderId + '-' + Date.now() + '-r' + i;
+      attempt = await callSquare(payload);
+    }
+
+    if (!attempt.ok) {
+      const msg = attempt.data?.errors?.[0]?.detail || 'Square API error';
+      res.status(502).json({ error: msg, details: attempt.data });
       return;
     }
-    const url = data && data.payment_link && data.payment_link.url;
+    const url = attempt.data?.payment_link?.url;
     if (!url) {
       res.status(502).json({ error: 'No payment URL returned by Square' });
       return;
     }
-    res.status(200).json({ url, paymentLinkId: data.payment_link.id });
+    res.status(200).json({ url, paymentLinkId: attempt.data.payment_link.id });
   } catch (err) {
     res.status(500).json({ error: 'Network error: ' + (err && err.message) });
   }
