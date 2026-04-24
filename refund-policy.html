@@ -19,6 +19,9 @@ a{color:inherit;}
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;height:var(--nav-h);padding:0 3rem;background:rgba(8,8,8,0.82);backdrop-filter:blur(22px) saturate(140%);border-bottom:1px solid var(--line);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo img{height:38px;width:auto;display:block;transition:opacity 0.2s;}
+.nav-logo:hover img{opacity:0.8;}
 .nav-links{display:flex;gap:2.4rem;list-style:none;align-items:center;}
 .nav-links a{color:var(--white);text-decoration:none;font-size:0.82rem;letter-spacing:0.05em;font-weight:400;transition:color 0.2s;}
 .nav-links a:hover{color:var(--green-l);}
@@ -69,6 +72,7 @@ footer a:hover{text-decoration:underline;}
 @media(max-width:760px){
   nav{padding:0 1.1rem;height:62px;}
   :root{--nav-h:62px;}
+  .nav-logo img{height:30px;}
   .nav-links{display:none;}
   .ham{display:flex;}
   .nav-cta{display:none;}
@@ -86,6 +90,7 @@ footer a:hover{text-decoration:underline;}
 <body>
 
 <nav>
+  <a class="nav-logo" href="/" aria-label="Profound Mobile Tend"><img src="https://images.squarespace-cdn.com/content/v1/69b93cf6a3855d76788b4110/8c0520dd-65b4-41f1-967c-53233512cd7d/MY+LOGO.png" alt="Profound Mobile Tend"/></a>
   <ul class="nav-links">
     <li><a href="/services">Services</a></li>
     <li><a href="/shop">Shop</a></li>
