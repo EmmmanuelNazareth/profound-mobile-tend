@@ -14,6 +14,31 @@
   if (window.PMT_ENGAGE) return;
   window.PMT_ENGAGE = true;
 
+  // ── Visitor ping ─────────────────────────────────────────────
+  // Fire once per browser session — server adds geo from Vercel
+  // edge headers and emails the owner. Skip in obvious dev/preview
+  // contexts so we don't spam the inbox while testing.
+  (function pingVisit(){
+    try {
+      if (sessionStorage.getItem('pmt_visit_pinged_v1')) return;
+      // Skip on localhost & on Vercel auto-generated preview hostnames
+      const h = location.hostname;
+      if (h === 'localhost' || h === '127.0.0.1' || /\.vercel\.app$/i.test(h)) return;
+      sessionStorage.setItem('pmt_visit_pinged_v1','1');
+      fetch('/api/visit', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          page: location.pathname + location.search,
+          referrer: document.referrer || 'Direct',
+          screen: (window.innerWidth||0)+'x'+(window.innerHeight||0),
+          lang: navigator.language || ''
+        }),
+        keepalive: true
+      }).catch(()=>{});
+    } catch(e) {}
+  })();
+
   // ── Shared styles ──────────────────────────────────────────────
   const css = `
   .pmt-ov{position:fixed;inset:0;background:rgba(4,4,4,0.78);backdrop-filter:blur(10px);z-index:4000;display:flex;align-items:center;justify-content:center;padding:1.3rem;opacity:0;pointer-events:none;transition:opacity 0.38s ease;}
