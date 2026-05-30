@@ -1,10 +1,10 @@
 /**
  * POST /api/chat
- * Relays a chat message from the on-site widget to sales@profoundmobiletend.com.
- * Uses FormSubmit.co (same transport as the booking form) so no extra env vars
- * are required. This is fire-and-forget from the client's perspective — the
- * owner sees a threaded email per session.
+ * Relays a chat message from the on-site widget to the owner via Resend.
+ * Replying from the inbox sends back to the visitor's address via reply_to.
  */
+import { sendMail, shell, kvTable, escapeHtml } from './_sendmail.js';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
@@ -23,31 +23,25 @@ export default async function handler(req, res) {
     return;
   }
 
-  const payload = {
-    _subject: `Live Chat — ${name} · session ${String(sessionId || '').slice(0, 14)}`,
-    _template: 'table',
-    _captcha: 'false',
-    _replyto: email,
-    session_id: sessionId || '',
-    visitor_name: name,
-    visitor_email: email,
-    message,
-    from_page: page || '/',
-    received_at: new Date().toISOString(),
-  };
+  const subject = `💬 Chat from ${name}`;
+  const html = shell(
+    `Live chat: ${name}`,
+    `<p style="margin:0 0 14px;color:rgba(244,242,238,0.85);font-size:15px;">A visitor just sent a chat message. Reply to this email and it'll go straight to them.</p>
+     <div style="background:rgba(60,142,57,0.08);border-left:3px solid #52b84f;padding:14px 16px;border-radius:4px;margin:0 0 18px;font-size:15px;line-height:1.7;color:#fff;white-space:pre-wrap;">${escapeHtml(message)}</div>
+     ${kvTable([
+       ['From', name],
+       ['Email', email],
+       ['On page', page || '/'],
+       ['Session', String(sessionId || '').slice(0, 18)],
+       ['Received', new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })],
+     ])}`,
+    `Replying to this email sends back to <strong>${escapeHtml(email)}</strong>.`,
+  );
 
-  try {
-    const r = await fetch('https://formsubmit.co/ajax/sales@profoundmobiletend.com', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    if (!r.ok) {
-      res.status(502).json({ error: 'Relay failed' });
-      return;
-    }
-    res.status(200).json({ ok: true });
-  } catch (err) {
-    res.status(500).json({ error: 'Network error: ' + (err && err.message) });
+  const result = await sendMail({ subject, html, replyTo: email });
+  if (!result.ok) {
+    res.status(502).json({ error: result.error });
+    return;
   }
+  res.status(200).json({ ok: true });
 }

@@ -1,12 +1,11 @@
 /**
  * POST /api/visit
- * Records a new visitor and emails sales@profoundmobiletend.com with
- * geo + device info. Vercel automatically sets x-vercel-ip-* headers
- * based on the visitor's IP, so no external geo service is needed.
- *
- * The client (pmt-engage.js) fires this once per browser session so
- * the owner doesn't get spammed by every page-to-page navigation.
+ * Fires once per browser session from pmt-engage.js. Vercel's edge
+ * headers give us the visitor's city/region/country/timezone without
+ * any third-party geo lookup. We email the owner via Resend.
  */
+import { sendMail, shell, kvTable, escapeHtml } from './_sendmail.js';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
@@ -25,8 +24,8 @@ export default async function handler(req, res) {
   const lon     = h['x-vercel-ip-longitude'] || '';
   const tz      = decodeURIComponent(h['x-vercel-ip-timezone'] || '') || '';
 
-  // Truncate IP for privacy (keep first three octets) so the email isn't
-  // a creepy full address but is still useful for distinguishing visitors.
+  // Privacy: keep first three octets only so the email isn't a creepy
+  // full IP, but is still enough to tell two visitors apart.
   let ip = (h['x-forwarded-for'] || '').toString().split(',')[0].trim() || (h['x-real-ip'] || '').toString();
   if (ip && ip.indexOf('.') > -1) {
     const parts = ip.split('.');
@@ -34,7 +33,6 @@ export default async function handler(req, res) {
   }
 
   const ua = (h['user-agent'] || '').toString();
-  // Quick OS / browser sniff — readable, not bulletproof.
   const os =
     /iPhone|iPad/.test(ua) ? 'iPhone/iPad' :
     /Android/.test(ua) ? 'Android' :
@@ -48,48 +46,38 @@ export default async function handler(req, res) {
     /Safari\//.test(ua) ? 'Safari' : 'Unknown';
   const device = /Mobile|Android|iPhone/.test(ua) ? 'Mobile' : 'Desktop';
 
-  const page = (body.page || '/').toString().slice(0, 200);
-  const ref  = (body.referrer || 'Direct').toString().slice(0, 200);
+  const page   = (body.page || '/').toString().slice(0, 200);
+  const ref    = (body.referrer || 'Direct').toString().slice(0, 200);
   const screen = (body.screen || '').toString().slice(0, 30);
-  const lang = (body.lang || (h['accept-language'] || '').toString().split(',')[0]).slice(0, 16);
+  const lang   = (body.lang || (h['accept-language'] || '').toString().split(',')[0]).slice(0, 16);
 
   const niceLocation = [city, region, country].filter(Boolean).join(', ');
   const mapsUrl = (lat && lon) ? `https://www.google.com/maps?q=${lat},${lon}&z=11` : '';
+  const niceTime = new Date().toLocaleString('en-US', { timeZone: tz || 'America/New_York' });
 
-  const payload = {
-    _subject: `Site visitor — ${niceLocation}`,
-    _template: 'table',
-    _captcha: 'false',
-    location: niceLocation,
-    city,
-    region,
-    country,
-    coordinates: (lat && lon) ? `${lat}, ${lon}` : '',
-    map_link: mapsUrl,
-    timezone: tz,
-    page_visited: page,
-    referrer: ref,
-    device,
-    os,
-    browser,
-    screen,
-    language: lang,
-    ip_partial: ip || 'unknown',
-    visited_at: new Date().toISOString(),
-  };
+  const subject = `🌐 New visitor — ${niceLocation}`;
+  const html = shell(
+    `New visitor from ${city}`,
+    `<p style="margin:0 0 14px;color:rgba(244,242,238,0.85);">Someone just opened your site. Here's where they're coming from:</p>
+     ${kvTable([
+       ['Location', niceLocation],
+       ['Local time', niceTime],
+       ['Timezone', tz],
+       ['On page', page],
+       ['Referrer', ref],
+       ['Device', `${device} · ${os} · ${browser}`],
+       ['Screen', screen],
+       ['Language', lang],
+       ['IP (partial)', ip || 'unknown'],
+     ])}
+     ${mapsUrl ? `<p style="margin:16px 0 0;"><a href="${escapeHtml(mapsUrl)}" style="color:#52b84f;text-decoration:none;font-weight:600;">View on map →</a></p>` : ''}`,
+    'Visitor pings fire once per browser session, so you won\'t get spammed by page-to-page navigation.',
+  );
 
-  try {
-    const r = await fetch('https://formsubmit.co/ajax/sales@profoundmobiletend.com', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    if (!r.ok) {
-      res.status(502).json({ error: 'Relay failed' });
-      return;
-    }
-    res.status(200).json({ ok: true });
-  } catch (err) {
-    res.status(500).json({ error: 'Network error' });
+  const result = await sendMail({ subject, html });
+  if (!result.ok) {
+    res.status(502).json({ error: result.error });
+    return;
   }
+  res.status(200).json({ ok: true });
 }

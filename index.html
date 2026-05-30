@@ -784,18 +784,42 @@ nav.nav-menu-open{transform:translateY(0)!important;}
       <!-- Sends to sales@profoundmobiletend.com via FormSubmit (no signup).
            FIRST submission triggers a one-time confirmation email to that
            address; click the link once and every future message flows through. -->
-      <form id="contactForm" action="https://formsubmit.co/ajax/sales@profoundmobiletend.com" method="POST">
-        <input type="hidden" name="_subject" value="New Quick Message — Profound Mobile Tend"/>
-        <input type="hidden" name="_template" value="table"/>
-        <input type="hidden" name="_captcha" value="false"/>
-        <input type="hidden" name="_replyto" id="cf_replyto"/>
+      <!-- Posts to /api/contact (Resend-backed) — no third-party form host -->
+      <form id="contactForm" onsubmit="return submitContactForm(event)">
         <div class="fg"><label>Name *</label><input type="text" name="name" id="cf_name" placeholder="Your name" required/></div>
-        <div class="fg"><label>Email *</label><input type="email" name="email" id="cf_email" placeholder="your@email.com" required oninput="document.getElementById('cf_replyto').value=this.value"/></div>
-        <div class="fg"><label>Phone</label><input type="tel" name="phone" placeholder="(443) 000-0000"/></div>
-        <div class="fg"><label>Message *</label><textarea name="message" placeholder="Ask about a service, request a custom quote, or just say hello…" rows="5" required></textarea></div>
-        <button type="submit" class="btn-p" style="width:100%;justify-content:center;">Send Message →</button>
+        <div class="fg"><label>Email *</label><input type="email" name="email" id="cf_email" placeholder="your@email.com" required/></div>
+        <div class="fg"><label>Phone</label><input type="tel" name="phone" id="cf_phone" placeholder="(443) 000-0000"/></div>
+        <div class="fg"><label>Message *</label><textarea name="message" id="cf_message" placeholder="Ask about a service, request a custom quote, or just say hello…" rows="5" required></textarea></div>
+        <button type="submit" class="btn-p" id="cf_submit" style="width:100%;justify-content:center;">Send Message →</button>
         <div class="sending-msg" id="sendingMsg">✓ Message sent! We'll get back to you soon.</div>
       </form>
+      <script>
+        async function submitContactForm(e){
+          e.preventDefault();
+          const btn = document.getElementById('cf_submit');
+          const msg = document.getElementById('sendingMsg');
+          const payload = {
+            name: document.getElementById('cf_name').value.trim(),
+            email: document.getElementById('cf_email').value.trim(),
+            phone: document.getElementById('cf_phone').value.trim(),
+            message: document.getElementById('cf_message').value.trim()
+          };
+          btn.disabled = true; btn.textContent = 'Sending…';
+          try{
+            const r = await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+            const d = await r.json().catch(()=>({}));
+            if (!r.ok) throw new Error(d.error||'send failed');
+            msg.style.display='block';
+            document.getElementById('contactForm').reset();
+            btn.textContent='✓ Sent';
+            setTimeout(()=>{btn.disabled=false;btn.textContent='Send Message →';msg.style.display='none';},5000);
+          }catch(err){
+            btn.disabled=false; btn.textContent='Send Message →';
+            alert('Sorry — message didn\'t go through. Please email sales@profoundmobiletend.com directly. ('+err.message+')');
+          }
+          return false;
+        }
+      </script>
     </div>
   </div>
 </section>
@@ -1152,21 +1176,19 @@ Booked on: ${new Date().toLocaleString()}
   `.trim();
 
   try{
-    await fetch('https://formsubmit.co/ajax/sales@profoundmobiletend.com',{
+    await fetch('/api/booking',{
       method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        _subject:`New Appointment ${bookingId} — ${selSvc.name} on ${fmtDisp(selDate)} at ${selSlot}`,
-        _template:'table',
-        _captcha:'false',
-        _replyto:email,
-        name:booking.name,email:email,phone:phone,
-        service:selSvc.name,date:fmtDisp(selDate),time:selSlot,
-        address:address,vehicle:vehicle,notes:notes||'None',
-        booking_id:bookingId,price:selSvc.price,message:emailBody
+        name:booking.name, email:email, phone:phone,
+        service:selSvc.name, vehicle:vehicle,
+        date:fmtDisp(selDate), time:selSlot,
+        address:address, notes:notes||'',
+        booking_id:bookingId, price:selSvc.price,
+        duration:selSvc.dur
       })
     });
-  }catch(e){console.log('Email note:',e);}
+  }catch(e){console.log('Booking email note:',e);}
 
   // Show confirmation
   document.getElementById('confirmCard').innerHTML=`
