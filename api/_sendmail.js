@@ -12,7 +12,7 @@
  * visitor's address via reply_to.
  */
 const RESEND_URL = 'https://api.resend.com/emails';
-const FROM = 'Profound Mobile Tend <onboarding@resend.dev>';
+const FROM = 'Profound Mobile Tend <sales@profoundmobiletend.com>';
 
 export async function sendMail({ subject, html, replyTo, to }) {
   const key = process.env.RESEND_API_KEY;
