@@ -28,6 +28,17 @@ export default async function handler(req, res) {
   const ip = (h['x-forwarded-for'] || '').toString().split(',')[0].trim() || (h['x-real-ip'] || '').toString();
 
   const ua = (h['user-agent'] || '').toString();
+
+  // Skip crawlers/bots so the owner only hears about real human visitors.
+  // Covers Googlebot, Bingbot, social-media link unfurlers, uptime checks,
+  // and generic scrapers. We still return ok:true so the client script
+  // doesn't treat it as an error.
+  const BOT_RE = /bot|crawl|spider|slurp|bingpreview|facebookexternalhit|facebot|embedly|quora|pinterest|vkshare|whatsapp|telegrambot|discordbot|slackbot|twitterbot|linkedinbot|google-?(read-?aloud|other|site|favicon)|mediapartners|apis-google|feedfetcher|duckduckbot|yandex|baiduspider|sogou|exabot|semrush|ahrefs|mj12bot|dotbot|petalbot|bytespider|gptbot|claudebot|ccbot|amazonbot|applebot|headless|monitor|uptime|pingdom|statuscake|curl|wget|python-requests|axios|go-http|java\/|okhttp|phantomjs/i;
+  if (!ua || BOT_RE.test(ua)) {
+    res.status(200).json({ ok: true, skipped: 'bot' });
+    return;
+  }
+
   const os =
     /iPhone|iPad/.test(ua) ? 'iPhone/iPad' :
     /Android/.test(ua) ? 'Android' :
