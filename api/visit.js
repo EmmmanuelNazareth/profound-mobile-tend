@@ -24,13 +24,8 @@ export default async function handler(req, res) {
   const lon     = h['x-vercel-ip-longitude'] || '';
   const tz      = decodeURIComponent(h['x-vercel-ip-timezone'] || '') || '';
 
-  // Privacy: keep first three octets only so the email isn't a creepy
-  // full IP, but is still enough to tell two visitors apart.
-  let ip = (h['x-forwarded-for'] || '').toString().split(',')[0].trim() || (h['x-real-ip'] || '').toString();
-  if (ip && ip.indexOf('.') > -1) {
-    const parts = ip.split('.');
-    if (parts.length === 4) ip = parts.slice(0, 3).join('.') + '.x';
-  }
+  // Full visitor IP — this is the owner's own analytics, so show it in full.
+  const ip = (h['x-forwarded-for'] || '').toString().split(',')[0].trim() || (h['x-real-ip'] || '').toString();
 
   const ua = (h['user-agent'] || '').toString();
   const os =
@@ -68,7 +63,7 @@ export default async function handler(req, res) {
        ['Device', `${device} · ${os} · ${browser}`],
        ['Screen', screen],
        ['Language', lang],
-       ['IP (partial)', ip || 'unknown'],
+       ['IP address', ip || 'unknown'],
      ])}
      ${mapsUrl ? `<p style="margin:16px 0 0;"><a href="${escapeHtml(mapsUrl)}" style="color:#52b84f;text-decoration:none;font-weight:600;">View on map →</a></p>` : ''}`,
     'Visitor pings fire once per browser session, so you won\'t get spammed by page-to-page navigation.',
