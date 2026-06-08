@@ -1,0 +1,10 @@
+{
+  "name": "profound-mobile-tend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Profound Mobile Tend — mobile car detailing site (static pages + Vercel serverless API functions).",
+  "engines": {
+    "node": ">=18"
+  }
+}
