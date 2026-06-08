@@ -1119,8 +1119,36 @@ function renderSlots(){
 function pickSlot(sl){selSlot=sl;document.getElementById('bkNext2').disabled=false;renderSlots();}
 
 /* ─── STEP 3 ─── */
+const DEPOSIT_RATE=0.25; /* 25% deposit collected at booking */
+/* Exact numeric price for the selected service. Tiered services carry
+   tierPrice (set when a vehicle size is picked); flat services parse
+   their "$54.99" label; "Get Quote" services return 0 = quote-only. */
+function svcPriceNum(s){
+  if(!s) return 0;
+  if(typeof s.tierPrice==='number') return s.tierPrice;
+  const m=(s.price||'').match(/([\d,]+\.\d{2}|\d+(?:\.\d+)?)/);
+  return m?parseFloat(m[1].replace(/,/g,'')):0;
+}
+function depositFor(s){ return Math.round(svcPriceNum(s)*DEPOSIT_RATE*100)/100; }
+
 function renderBkSummary(){
   const vehRow = selSvc.vehicle ? `<div class="bk-sum-row"><span class="bk-sum-k">Vehicle Size</span><span class="bk-sum-v">${selSvc.vehicle}</span></div>` : '';
+  const num=svcPriceNum(selSvc);
+  const btn=document.getElementById('bkConfirmBtn');
+  let priceRows;
+  if(num>0){
+    const dep=depositFor(selSvc);
+    const bal=Math.round((num-dep)*100)/100;
+    priceRows=`
+    <div class="bk-sum-row"><span class="bk-sum-k">Service Price</span><span class="bk-sum-v">$${num.toFixed(2)}</span></div>
+    <div class="bk-sum-row"><span class="bk-sum-k">Deposit due now (25%)</span><span class="bk-sum-v price">$${dep.toFixed(2)}</span></div>
+    <div class="bk-sum-row"><span class="bk-sum-k">Balance at service</span><span class="bk-sum-v">$${bal.toFixed(2)}</span></div>`;
+    if(btn) btn.textContent=`Pay $${dep.toFixed(2)} Deposit →`;
+  }else{
+    priceRows=`
+    <div class="bk-sum-row"><span class="bk-sum-k">Pricing</span><span class="bk-sum-v">Custom quote — we'll contact you</span></div>`;
+    if(btn) btn.textContent='Request Quote →';
+  }
   document.getElementById('bkSummary').innerHTML=`
     <div class="bk-sum-title">Booking Summary</div>
     <div class="bk-sum-row"><span class="bk-sum-k">Service</span><span class="bk-sum-v">${selSvc.name}</span></div>
@@ -1128,10 +1156,26 @@ function renderBkSummary(){
     <div class="bk-sum-row"><span class="bk-sum-k">Date</span><span class="bk-sum-v">${fmtDisp(selDate)}</span></div>
     <div class="bk-sum-row"><span class="bk-sum-k">Time</span><span class="bk-sum-v">${selSlot}</span></div>
     <div class="bk-sum-row"><span class="bk-sum-k">Duration</span><span class="bk-sum-v">${selSvc.dur}</span></div>
-    <div class="bk-sum-row"><span class="bk-sum-k">Price</span><span class="bk-sum-v price">${selSvc.price}</span></div>`;
+    ${priceRows}`;
 }
 
 /* ─── CONFIRM & EMAIL ─── */
+function showConfirmCard(b, noteHtml){
+  document.getElementById('confirmCard').innerHTML=`
+    <div class="confirm-id">Booking ID: ${b.id}</div>
+    <div class="confirm-row"><span>Name</span><span>${b.name}</span></div>
+    <div class="confirm-row"><span>Service</span><span>${b.service}</span></div>
+    ${b.vehicleSize?`<div class="confirm-row"><span>Vehicle Size</span><span>${b.vehicleSize}</span></div>`:''}
+    <div class="confirm-row"><span>Date</span><span>${fmtDisp(b.date)}</span></div>
+    <div class="confirm-row"><span>Time</span><span>${b.time}</span></div>
+    <div class="confirm-row"><span>Duration</span><span>${b.duration}</span></div>
+    <div class="confirm-row"><span>Price</span><span style="color:var(--green);font-weight:700;">${b.price}</span></div>
+    ${b.deposit?`<div class="confirm-row"><span>Deposit (25%)</span><span style="color:var(--green);font-weight:700;">$${b.deposit.toFixed(2)}</span></div>`:''}
+    <div class="confirm-row"><span>Location</span><span>${b.address}</span></div>
+    <div class="confirm-row"><span>Vehicle</span><span>${b.vehicle}</span></div>
+    ${noteHtml?`<div style="margin-top:1rem;font-size:0.85rem;line-height:1.5;color:rgba(244,242,238,0.7);">${noteHtml}</div>`:''}`;
+}
+
 async function confirmBooking(){
   const fname=document.getElementById('f_fname').value.trim();
   const lname=document.getElementById('f_lname').value.trim();
@@ -1143,68 +1187,71 @@ async function confirmBooking(){
   if(!fname||!lname||!phone||!email||!address||!vehicle){showToast('⚠ Please fill in all required fields.');return;}
 
   const btn=document.getElementById('bkConfirmBtn');
-  btn.disabled=true;btn.textContent='Confirming…';
+  const num=svcPriceNum(selSvc);
+  const isQuote = !(num>0);
+  const dep=isQuote?0:depositFor(selSvc);
+  btn.disabled=true; btn.textContent=isQuote?'Sending…':'Redirecting to payment…';
 
   const bookingId='PMT-'+Date.now().toString(36).toUpperCase().slice(-6);
   const booking={id:bookingId,name:fname+' '+lname,phone,email,address,vehicle,notes,
-    service:selSvc.name,serviceId:selSvc.id,price:selSvc.price,
-    date:selDate,time:selSlot,duration:selSvc.dur,status:'confirmed',created:new Date().toISOString()};
+    service:selSvc.name,serviceId:selSvc.id,vehicleSize:selSvc.vehicle||'',
+    price:num>0?('$'+num.toFixed(2)):selSvc.price,
+    deposit:isQuote?null:dep,
+    date:selDate,time:selSlot,duration:selSvc.dur,
+    status:isQuote?'quote_requested':'deposit_pending',created:new Date().toISOString()};
 
-  // Save locally
+  // Reserve the slot locally so it shows as taken right away.
   const bks=getBK();bks.push(booking);saveBK(bks);
 
-  // Send email via Formspree
-  const emailBody=`
-NEW BOOKING — Profound Mobile Tend
-
-Booking ID: ${bookingId}
-Customer: ${booking.name}
-Phone: ${phone}
-Email: ${email}
-
-Service: ${selSvc.name}
-Date: ${fmtDisp(selDate)}
-Time: ${selSlot}
-Duration: ${selSvc.dur}
-Price: ${selSvc.price}
-
-Service Address: ${address}
-Vehicle: ${vehicle}
-Notes: ${notes||'None'}
-
-Booked on: ${new Date().toLocaleString()}
-  `.trim();
-
+  // Notify the owner immediately (so they see it even if payment is abandoned).
   try{
     await fetch('/api/booking',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        name:booking.name, email:email, phone:phone,
-        service:selSvc.name, vehicle:vehicle,
+        name:booking.name, email, phone,
+        service:selSvc.name,
+        vehicle:(selSvc.vehicle?selSvc.vehicle+' · ':'')+vehicle,
         date:fmtDisp(selDate), time:selSlot,
-        address:address, notes:notes||'',
-        booking_id:bookingId, price:selSvc.price,
-        duration:selSvc.dur
+        address, notes:notes||'',
+        booking_id:bookingId, price:booking.price, duration:selSvc.dur,
+        deposit:isQuote?'Custom quote — no deposit':('$'+dep.toFixed(2)+' (25%)'),
+        status:isQuote?'Quote requested — needs a custom price':'Deposit pending — customer sent to Square checkout'
       })
     });
   }catch(e){console.log('Booking email note:',e);}
 
-  // Show confirmation
-  document.getElementById('confirmCard').innerHTML=`
-    <div class="confirm-id">Booking ID: ${bookingId}</div>
-    <div class="confirm-row"><span>Name</span><span>${booking.name}</span></div>
-    <div class="confirm-row"><span>Service</span><span>${booking.service}</span></div>
-    <div class="confirm-row"><span>Date</span><span>${fmtDisp(booking.date)}</span></div>
-    <div class="confirm-row"><span>Time</span><span>${booking.time}</span></div>
-    <div class="confirm-row"><span>Duration</span><span>${booking.duration}</span></div>
-    <div class="confirm-row"><span>Price</span><span style="color:var(--green);font-weight:700;">${booking.price}</span></div>
-    <div class="confirm-row"><span>Location</span><span>${booking.address}</span></div>
-    <div class="confirm-row"><span>Vehicle</span><span>${booking.vehicle}</span></div>`;
+  // "Get Quote" services (Full Detail) take no online payment.
+  if(isQuote){
+    showConfirmCard(booking, 'This service is custom-priced. We\'ve received your request and will contact you shortly with a quote — no payment was taken.');
+    bkGoStep(4);
+    showToast('✓ Quote request sent! We\'ll reach out shortly.');
+    btn.disabled=false;
+    return;
+  }
 
-  bkGoStep(4);
-  showToast('✓ Booking confirmed! See you soon.');
-  btn.disabled=false;btn.textContent='Confirm Booking →';
+  // Collect the 25% deposit through Square, then send the customer to checkout.
+  try{
+    const r=await fetch('/api/create-checkout',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        orderId:bookingId, amount:dep,
+        name:booking.name, email, phone, address,
+        note:`Deposit for ${selSvc.name}${selSvc.vehicle?' ('+selSvc.vehicle+')':''} on ${fmtDisp(selDate)} at ${selSlot}`,
+        items:[{name:`Deposit (25%) — ${selSvc.name}`, vehicle:selSvc.vehicle||'', qty:1}]
+      })
+    });
+    const data=await r.json().catch(()=>({}));
+    if(data&&data.url){ window.location.href=data.url; return; }
+    throw new Error((data&&data.error)||'No payment link returned');
+  }catch(e){
+    console.log('Checkout error:',e);
+    showConfirmCard(booking, `We couldn\'t open the payment page automatically. Your booking is saved (ID ${bookingId}) and we\'ve been notified — we\'ll send you a secure deposit link to complete payment.`);
+    bkGoStep(4);
+    showToast('⚠ Payment didn\'t open — your booking was still sent.');
+    btn.disabled=false; btn.textContent=`Pay $${dep.toFixed(2)} Deposit →`;
+  }
 }
 
 function newBooking(){
