@@ -8,10 +8,23 @@
  */
 import crypto from 'crypto';
 
-const KV_URL =
-  process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || '';
-const KV_TOKEN =
-  process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || '';
+// Find the REST URL/token regardless of any custom prefix the Vercel/Upstash
+// integration applied (e.g. PMT_KV_REST_API_URL). We match by suffix so the
+// code works whether the vars are named KV_REST_API_URL, UPSTASH_REDIS_REST_URL,
+// or <PREFIX>_KV_REST_API_URL.
+function findEnvBySuffix(suffixes) {
+  const entries = Object.entries(process.env);
+  for (const suffix of suffixes) {
+    for (const [k, v] of entries) {
+      if (!v) continue;
+      if (k === suffix || k.endsWith('_' + suffix)) return v;
+    }
+  }
+  return '';
+}
+
+const KV_URL = findEnvBySuffix(['KV_REST_API_URL', 'UPSTASH_REDIS_REST_URL']);
+const KV_TOKEN = findEnvBySuffix(['KV_REST_API_TOKEN', 'UPSTASH_REDIS_REST_TOKEN']);
 
 export function kvConfigured() {
   return !!(KV_URL && KV_TOKEN);
