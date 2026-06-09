@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="robots" content="noindex"/>
+<title>Track Your Service | Profound Mobile Tend</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--green:#3C8E39;--green-l:#52b84f;--bg:#0c0c0c;--card:#171717;--ink:#f4f2ee;--mid:rgba(244,242,238,0.6);}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.5;padding:max(1.4rem,env(safe-area-inset-top)) 1.2rem 3rem;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:540px;margin:0 auto;}
+  .brand{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green-l);font-weight:700;text-align:center;}
+  h1{font-size:1.5rem;font-weight:700;text-align:center;margin:0.3rem 0 0.2rem;letter-spacing:-0.01em;}
+  .sub{text-align:center;color:var(--mid);font-size:0.9rem;margin-bottom:1.6rem;}
+  .card{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.4rem 1.3rem;margin-bottom:1.1rem;}
+  .meta-row{display:flex;justify-content:space-between;gap:1rem;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.92rem;}
+  .meta-row:last-child{border-bottom:none;}
+  .meta-k{color:var(--mid);}
+  .meta-v{font-weight:600;text-align:right;}
+  .tl{position:relative;margin:0.4rem 0 0.2rem;padding-left:0.2rem;}
+  .stage{display:flex;align-items:flex-start;gap:0.9rem;padding:0.55rem 0;position:relative;}
+  .dot{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,0.18);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--mid);z-index:2;transition:all 0.3s;}
+  .stage.done .dot{background:var(--green);border-color:var(--green);color:#fff;}
+  .stage.current .dot{border-color:var(--green-l);color:var(--green-l);box-shadow:0 0 0 4px rgba(82,184,79,0.18);}
+  .stage:not(:last-child)::before{content:'';position:absolute;left:12px;top:30px;bottom:-6px;width:2px;background:rgba(255,255,255,0.1);z-index:1;}
+  .stage.done:not(:last-child)::before{background:var(--green);}
+  .stage-l{padding-top:0.18rem;}
+  .stage-name{font-weight:600;font-size:0.98rem;}
+  .stage.pending .stage-name{color:var(--mid);font-weight:500;}
+  .stage-time{font-size:0.75rem;color:var(--mid);margin-top:1px;}
+  .btn{display:block;width:100%;text-align:center;padding:0.95rem;border-radius:6px;text-decoration:none;font-weight:700;font-size:0.95rem;border:none;cursor:pointer;margin-top:0.5rem;}
+  .btn.p{background:var(--green);color:#fff;}
+  .btn.g{background:transparent;color:var(--ink);border:1px solid rgba(255,255,255,0.18);}
+  .pill{display:inline-block;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;padding:0.3rem 0.7rem;border-radius:999px;}
+  .pill.green{background:rgba(60,142,57,0.15);color:var(--green-l);border:1px solid rgba(60,142,57,0.4);}
+  .center{text-align:center;}
+  .muted{color:var(--mid);font-size:0.85rem;}
+  .err{text-align:center;color:#e88;padding:2rem 0;}
+  .live{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.72rem;color:var(--mid);justify-content:center;width:100%;margin-top:0.4rem;}
+  .live i{width:7px;height:7px;border-radius:50%;background:var(--green-l);display:inline-block;animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%,100%{opacity:0.3;}50%{opacity:1;}}
+  a.link{color:var(--green-l);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">Profound Mobile Tend</div>
+  <h1>Track Your Service</h1>
+  <div class="sub" id="sub">Loading your booking…</div>
+  <div id="content"></div>
+</div>
+<script>
+const p=new URLSearchParams(location.search);
+const order=p.get('order');
+const sub=document.getElementById('sub');
+const content=document.getElementById('content');
+
+function fmtTime(iso){try{return new Date(iso).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});}catch(e){return'';}}
+
+async function load(){
+  if(!order){content.innerHTML='<div class="err">No booking reference in the link.</div>';sub.textContent='';return;}
+  let d;
+  try{
+    const r=await fetch('/api/status?order='+encodeURIComponent(order),{cache:'no-store'});
+    d=await r.json();
+  }catch(e){content.innerHTML='<div class="err">Couldn\'t reach the server. Retrying…</div>';return;}
+  if(!d||!d.ok){content.innerHTML='<div class="err">We couldn\'t find that booking.<br/><span class="muted">Reference: '+(order||'')+'</span></div>';sub.textContent='';return;}
+  render(d);
+}
+
+function render(d){
+  sub.innerHTML='Booking <strong>'+d.id+'</strong>';
+  const stages=d.stages||[];
+  // Build status->time map from history isn't exposed; show current.
+  let curIdx=d.stageIndex; // -1 before deposit_paid
+  if(d.status==='paid')curIdx=stages.length-1; // treat paid as past complete
+
+  let tl='';
+  stages.forEach((s,i)=>{
+    let cls='pending';
+    if(i<curIdx||d.status==='paid')cls='done';
+    else if(i===curIdx)cls='current';
+    const icon = (cls==='done')?'✓':(i+1);
+    tl+='<div class="stage '+cls+'"><div class="dot">'+icon+'</div><div class="stage-l"><div class="stage-name">'+s.label+'</div>'+
+        (cls==='current'?'<div class="stage-time">In progress…</div>':'')+'</div></div>';
+  });
+
+  let pay='';
+  if(d.status==='paid'||d.balancePaid){
+    pay='<div class="card center"><span class="pill green">Paid in full ✓</span><p class="muted" style="margin-top:0.8rem;">Thank you! Your service is complete and paid. We\'d love a quick review:</p>'+
+        '<a class="btn g" href="/review?order='+encodeURIComponent(d.id)+'">Leave a review →</a></div>';
+  }else if(d.status==='complete'&&d.balanceUrl){
+    pay='<div class="card center"><span class="pill green">Service complete ✨</span>'+
+        '<p class="muted" style="margin:0.8rem 0;">Finish up by paying your balance — you can add a tip on the next screen.</p>'+
+        '<a class="btn p" href="'+d.balanceUrl+'">Pay balance ($'+Number(d.balance).toFixed(2)+') + tip →</a>'+
+        '<a class="btn g" href="/review?order='+encodeURIComponent(d.id)+'" style="margin-top:0.6rem;">Leave a review →</a></div>';
+  }
+
+  content.innerHTML=
+    '<div class="card">'+
+      '<div class="meta-row"><span class="meta-k">Service</span><span class="meta-v">'+(d.service||'—')+'</span></div>'+
+      (d.vehicle?'<div class="meta-row"><span class="meta-k">Vehicle</span><span class="meta-v">'+d.vehicle+'</span></div>':'')+
+      (d.when?'<div class="meta-row"><span class="meta-k">Appointment</span><span class="meta-v">'+d.when+'</span></div>':'')+
+      '<div class="meta-row"><span class="meta-k">Deposit paid</span><span class="meta-v">$'+Number(d.deposit).toFixed(2)+'</span></div>'+
+      '<div class="meta-row"><span class="meta-k">Balance</span><span class="meta-v">$'+Number(d.balance).toFixed(2)+'</span></div>'+
+    '</div>'+
+    '<div class="card"><div class="tl">'+tl+'</div><div class="live"><i></i> Live status — updates automatically</div></div>'+
+    pay;
+}
+
+load();
+setInterval(load,15000);
+</script>
+</body>
+</html>

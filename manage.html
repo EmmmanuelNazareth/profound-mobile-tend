@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="robots" content="noindex"/>
+<title>Manage Job | Profound Mobile Tend</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--green:#3C8E39;--green-l:#52b84f;--bg:#0c0c0c;--card:#171717;--ink:#f4f2ee;--mid:rgba(244,242,238,0.6);}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.5;padding:max(1.4rem,env(safe-area-inset-top)) 1.2rem 3rem;}
+  .wrap{max-width:520px;margin:0 auto;}
+  .brand{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green-l);font-weight:700;text-align:center;}
+  h1{font-size:1.4rem;font-weight:700;text-align:center;margin:0.3rem 0 1.3rem;}
+  .card{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.3rem;margin-bottom:1.1rem;}
+  .meta-row{display:flex;justify-content:space-between;gap:1rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.92rem;}
+  .meta-row:last-child{border-bottom:none;}
+  .meta-k{color:var(--mid);}
+  .meta-v{font-weight:600;text-align:right;}
+  .cur{text-align:center;margin-bottom:0.4rem;}
+  .pill{display:inline-block;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;padding:0.35rem 0.8rem;border-radius:999px;background:rgba(60,142,57,0.15);color:var(--green-l);border:1px solid rgba(60,142,57,0.4);}
+  .label{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);margin:0.2rem 0 0.7rem;text-align:center;}
+  .btn{display:block;width:100%;text-align:center;padding:1rem;border-radius:8px;font-weight:700;font-size:1rem;border:1px solid rgba(255,255,255,0.14);background:#1f1f1f;color:var(--ink);cursor:pointer;margin-bottom:0.6rem;transition:all 0.15s;}
+  .btn:active{transform:scale(0.98);}
+  .btn.done{background:rgba(60,142,57,0.12);border-color:var(--green);color:var(--green-l);}
+  .btn.next{background:var(--green);border-color:var(--green);color:#fff;}
+  .btn.complete{background:#1f1f1f;border-color:var(--green-l);color:var(--green-l);}
+  .btn:disabled{opacity:0.45;cursor:default;}
+  .toast{position:fixed;left:50%;bottom:1.5rem;transform:translateX(-50%);background:var(--green);color:#fff;padding:0.8rem 1.3rem;border-radius:8px;font-weight:600;font-size:0.9rem;opacity:0;transition:opacity 0.25s;pointer-events:none;max-width:90%;text-align:center;}
+  .toast.show{opacity:1;}
+  .err{text-align:center;color:#e88;padding:2rem 0;}
+  .muted{color:var(--mid);font-size:0.82rem;text-align:center;}
+  a.link{color:var(--green-l);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">Owner · Job Control</div>
+  <h1>Manage Job</h1>
+  <div id="content"><div class="muted">Loading…</div></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const p=new URLSearchParams(location.search);
+const order=p.get('order'), token=p.get('token');
+const content=document.getElementById('content');
+const STAGES=[
+  {key:'scheduled',label:'Scheduled'},
+  {key:'on_the_way',label:'On The Way'},
+  {key:'in_progress',label:'In Progress'},
+  {key:'complete',label:'Complete'}
+];
+let cur=null;
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+
+async function load(){
+  if(!order||!token){content.innerHTML='<div class="err">This management link is missing its security token.</div>';return;}
+  let d;
+  try{const r=await fetch('/api/status?order='+encodeURIComponent(order),{cache:'no-store'});d=await r.json();}
+  catch(e){content.innerHTML='<div class="err">Couldn\'t reach the server.</div>';return;}
+  if(!d||!d.ok){content.innerHTML='<div class="err">Booking not found.</div>';return;}
+  cur=d.status;render(d);
+}
+
+function render(d){
+  const fullOrder=['deposit_paid','scheduled','on_the_way','in_progress','complete','paid'];
+  const curRank=fullOrder.indexOf(d.status);
+  let btns='';
+  STAGES.forEach(s=>{
+    const rank=fullOrder.indexOf(s.key);
+    const isDone=rank<curRank||d.status==='paid';
+    const isCurrent=s.key===d.status;
+    const isNext=rank===curRank+1;
+    let cls='btn';
+    if(isDone||isCurrent)cls+=' done';
+    else if(isNext&&s.key!=='complete')cls+=' next';
+    if(s.key==='complete')cls+=' complete';
+    const mark=isDone?'✓ ':isCurrent?'● ':'';
+    btns+='<button class="'+cls+'" onclick="setStatus(\''+s.key+'\')"'+((isDone||isCurrent)&&d.status!=='paid'?'':' ')+'>'+mark+s.label+(s.key==='complete'?' & send balance':'')+'</button>';
+  });
+  content.innerHTML=
+    '<div class="card">'+
+      '<div class="meta-row"><span class="meta-k">Booking</span><span class="meta-v">'+d.id+'</span></div>'+
+      '<div class="meta-row"><span class="meta-k">Customer</span><span class="meta-v">'+(d.firstName||'—')+'</span></div>'+
+      '<div class="meta-row"><span class="meta-k">Service</span><span class="meta-v">'+(d.service||'—')+'</span></div>'+
+      (d.when?'<div class="meta-row"><span class="meta-k">When</span><span class="meta-v">'+d.when+'</span></div>':'')+
+      '<div class="meta-row"><span class="meta-k">Balance due</span><span class="meta-v">$'+Number(d.balance).toFixed(2)+'</span></div>'+
+    '</div>'+
+    '<div class="cur"><span class="pill">'+(d.statusLabel||d.status)+'</span></div>'+
+    '<div class="label">Tap to advance the job</div>'+
+    '<div class="card">'+btns+'</div>'+
+    '<p class="muted">Tapping <strong>Complete</strong> sends '+(d.firstName||'the customer')+' their balance + tip request and a review invite.</p>'+
+    '<p class="muted" style="margin-top:0.8rem;"><a class="link" href="/track?order='+encodeURIComponent(d.id)+'">See what the customer sees →</a></p>';
+}
+
+async function setStatus(status){
+  if(status==='complete'&&!confirm('Mark this job complete? This sends the customer their balance payment + tip request now.'))return;
+  try{
+    const r=await fetch('/api/update-status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({order,token,status})});
+    const d=await r.json();
+    if(!r.ok||!d.ok){toast('⚠ '+((d&&d.error)||'Update failed'));return;}
+    toast('✓ Updated: '+status.replace(/_/g,' '));
+    load();
+  }catch(e){toast('⚠ Network error');}
+}
+
+load();
+</script>
+</body>
+</html>

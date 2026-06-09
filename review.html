@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="robots" content="noindex"/>
+<title>Rate Your Service | Profound Mobile Tend</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--green:#3C8E39;--green-l:#52b84f;--bg:#0c0c0c;--card:#171717;--ink:#f4f2ee;--mid:rgba(244,242,238,0.6);}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.5;padding:max(1.6rem,env(safe-area-inset-top)) 1.2rem 3rem;}
+  .wrap{max-width:480px;margin:0 auto;}
+  .brand{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green-l);font-weight:700;text-align:center;}
+  h1{font-size:1.5rem;font-weight:700;text-align:center;margin:0.3rem 0 0.3rem;}
+  .sub{text-align:center;color:var(--mid);font-size:0.9rem;margin-bottom:1.6rem;}
+  .card{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.5rem 1.3rem;}
+  .stars{display:flex;justify-content:center;gap:0.35rem;margin:0.3rem 0 1.3rem;}
+  .star{font-size:2.6rem;line-height:1;color:rgba(255,255,255,0.18);cursor:pointer;transition:transform 0.1s,color 0.15s;-webkit-tap-highlight-color:transparent;}
+  .star:active{transform:scale(1.15);}
+  .star.on{color:#f5c518;}
+  label{display:block;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--mid);margin-bottom:0.5rem;}
+  textarea,input{width:100%;background:#101010;border:1px solid rgba(255,255,255,0.12);border-radius:6px;color:var(--ink);padding:0.8rem;font-size:1rem;font-family:inherit;margin-bottom:1.1rem;}
+  textarea{min-height:110px;resize:vertical;}
+  textarea:focus,input:focus{outline:none;border-color:var(--green);}
+  .btn{display:block;width:100%;text-align:center;padding:1rem;border-radius:8px;font-weight:700;font-size:1rem;border:none;cursor:pointer;background:var(--green);color:#fff;text-decoration:none;}
+  .btn:disabled{opacity:0.5;}
+  .btn.g{background:transparent;border:1px solid var(--green-l);color:var(--green-l);margin-top:0.8rem;}
+  .center{text-align:center;}
+  .big{font-size:3rem;margin-bottom:0.5rem;}
+  .muted{color:var(--mid);font-size:0.88rem;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">Profound Mobile Tend</div>
+  <h1>How did we do?</h1>
+  <div class="sub">Your feedback helps a local business grow.</div>
+  <div id="content">
+    <div class="card">
+      <label>Your rating</label>
+      <div class="stars" id="stars">
+        <span class="star" data-v="1">★</span><span class="star" data-v="2">★</span><span class="star" data-v="3">★</span><span class="star" data-v="4">★</span><span class="star" data-v="5">★</span>
+      </div>
+      <label>Tell us more (optional)</label>
+      <textarea id="comment" placeholder="What did you love? Anything we could do better?"></textarea>
+      <label>Your name (optional)</label>
+      <input id="name" type="text" placeholder="First name"/>
+      <button class="btn" id="submit" disabled>Submit review</button>
+    </div>
+  </div>
+</div>
+<script>
+const p=new URLSearchParams(location.search);
+const order=p.get('order');
+let rating=0;
+const stars=[...document.querySelectorAll('.star')];
+const submit=document.getElementById('submit');
+function paint(n){stars.forEach(s=>s.classList.toggle('on',Number(s.dataset.v)<=n));}
+stars.forEach(s=>{
+  s.addEventListener('click',()=>{rating=Number(s.dataset.v);paint(rating);submit.disabled=false;});
+  s.addEventListener('mouseenter',()=>paint(Number(s.dataset.v)));
+});
+document.getElementById('stars').addEventListener('mouseleave',()=>paint(rating));
+
+submit.addEventListener('click',async()=>{
+  if(!rating)return;
+  submit.disabled=true;submit.textContent='Sending…';
+  let res={};
+  try{
+    const r=await fetch('/api/review',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({order,rating,comment:document.getElementById('comment').value,name:document.getElementById('name').value})});
+    res=await r.json();
+  }catch(e){submit.disabled=false;submit.textContent='Submit review';alert('Network error — please try again.');return;}
+  done(res);
+});
+
+function done(res){
+  const google=res&&res.googleReviewUrl;
+  const happy=rating>=4;
+  document.getElementById('content').innerHTML=
+    '<div class="card center">'+
+      '<div class="big">'+(happy?'🙏':'💚')+'</div>'+
+      '<h2 style="margin-bottom:0.5rem;">Thank you!</h2>'+
+      '<p class="muted">Your '+rating+'-star review has been sent to our team.'+(happy?' We\'re so glad you had a great experience!':' We appreciate the honest feedback and will keep improving.')+'</p>'+
+      (happy&&google?'<p class="muted" style="margin-top:1rem;">Would you share it publicly? It helps us a lot:</p><a class="btn" style="margin-top:0.6rem;" href="'+google+'" target="_blank" rel="noopener">Review us on Google →</a>':'')+
+      '<a class="btn g" href="/">Back to site</a>'+
+    '</div>';
+}
+</script>
+</body>
+</html>

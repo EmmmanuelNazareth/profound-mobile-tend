@@ -1190,6 +1190,7 @@ async function confirmBooking(){
   const num=svcPriceNum(selSvc);
   const isQuote = !(num>0);
   const dep=isQuote?0:depositFor(selSvc);
+  const bal=isQuote?0:Math.round((num-dep)*100)/100;
   btn.disabled=true; btn.textContent=isQuote?'Sending…':'Redirecting to payment…';
 
   const bookingId='PMT-'+Date.now().toString(36).toUpperCase().slice(-6);
@@ -1210,12 +1211,14 @@ async function confirmBooking(){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         name:booking.name, email, phone,
-        service:selSvc.name,
+        service:selSvc.name, serviceId:selSvc.id,
         vehicle:(selSvc.vehicle?selSvc.vehicle+' · ':'')+vehicle,
-        date:fmtDisp(selDate), time:selSlot,
+        vehicleSize:selSvc.vehicle||'',
+        date:fmtDisp(selDate), dateRaw:selDate, time:selSlot,
         address, notes:notes||'',
-        booking_id:bookingId, price:booking.price, duration:selSvc.dur,
-        deposit:isQuote?'Custom quote — no deposit':('$'+dep.toFixed(2)+' (25%)'),
+        booking_id:bookingId, price:booking.price, priceNum:num, duration:selSvc.dur,
+        deposit:dep, balance:bal,
+        depositLabel:isQuote?'Custom quote — no deposit':('$'+dep.toFixed(2)+' (25%)'),
         status:isQuote?'Quote requested — needs a custom price':'Deposit pending — customer sent to Square checkout'
       })
     });

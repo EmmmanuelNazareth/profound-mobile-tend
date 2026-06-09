@@ -26,11 +26,11 @@ p{color:rgba(244,242,238,0.7);font-size:1rem;line-height:1.75;font-weight:300;ma
 <body>
 <div class="wrap">
   <div class="ico">✓</div>
-  <h1>Payment <em>Received</em></h1>
-  <p>Thank you for booking with Profound Mobile Tend.</p>
+  <h1 id="hl">Payment <em>Received</em></h1>
+  <p id="lead">Thank you for booking with Profound Mobile Tend.</p>
   <div class="id" id="orderId"></div>
-  <p>We've emailed your receipt and will reach out within 24 hours to confirm your appointment time and address details.</p>
-  <div class="row">
+  <p id="body2">We've emailed your receipt and will reach out within 24 hours to confirm your appointment time and address details.</p>
+  <div class="row" id="actions">
     <a class="btn p" href="/">Back to Home</a>
     <a class="btn g" href="/services">Browse Services</a>
   </div>
@@ -39,8 +39,29 @@ p{color:rgba(244,242,238,0.7);font-size:1rem;line-height:1.75;font-weight:300;ma
 <script>
 const p=new URLSearchParams(location.search);
 const id=p.get('order');
-if(id){document.getElementById('orderId').textContent='Order '+id;}
+const type=p.get('type');
+if(id){document.getElementById('orderId').textContent='Booking '+id;}
 try{localStorage.removeItem('pmt_cart_v1');}catch(e){}
+
+if(id&&type==='balance'){
+  // Balance + tip just paid — mark paid in full and invite a review.
+  document.getElementById('hl').innerHTML='Paid in <em>Full</em>';
+  document.getElementById('lead').textContent='Thank you — your balance is settled. We hope your ride feels brand new!';
+  document.getElementById('body2').textContent='A receipt is on its way to your email. If you added a tip, your detailer thanks you.';
+  document.getElementById('actions').innerHTML=
+    '<a class="btn p" href="/review?order='+encodeURIComponent(id)+'">Leave a Review</a>'+
+    '<a class="btn g" href="/">Back to Home</a>';
+  fetch('/api/balance-paid',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({order:id})}).catch(()=>{});
+}else if(id){
+  // Deposit just paid — confirm and offer the live tracker.
+  document.getElementById('hl').innerHTML='Deposit <em>Received</em>';
+  document.getElementById('lead').textContent='You\'re booked! Your deposit is in and your appointment is locked.';
+  document.getElementById('body2').textContent='We\'ve emailed your confirmation. Follow your service live, and you\'ll get a link to pay the balance (and tip, if you like) once it\'s done.';
+  document.getElementById('actions').innerHTML=
+    '<a class="btn p" href="/track?order='+encodeURIComponent(id)+'">Track My Service</a>'+
+    '<a class="btn g" href="/">Back to Home</a>';
+  fetch('/api/deposit-paid',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({order:id})}).catch(()=>{});
+}
 </script>
 </body>
 </html>
