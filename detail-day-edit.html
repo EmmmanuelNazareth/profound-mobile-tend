@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Detail Day — Event Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--green:#3C8E39;--green-l:#52b84f;--ink:#f4f2ee;--mid:rgba(244,242,238,.6)}
+  body{font-family:'Outfit',system-ui,sans-serif;background:#0b0b0b;color:var(--ink);line-height:1.6;padding:max(1.6rem,env(safe-area-inset-top)) 1.2rem 4rem}
+  .wrap{max-width:640px;margin:0 auto}
+  .eyebrow{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--green-l);font-weight:700}
+  h1{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;margin:.3rem 0 .2rem}
+  .sub{color:var(--mid);font-size:.92rem;margin-bottom:1.8rem}
+  .card{background:#161616;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:1.6rem 1.4rem;margin-bottom:1.2rem}
+  label{display:block;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mid);margin:0 0 .45rem;font-weight:600}
+  .hint{font-size:.78rem;color:var(--mid);margin:-.2rem 0 .7rem;font-weight:300}
+  input,textarea{width:100%;background:#101010;border:1px solid rgba(255,255,255,.14);border-radius:8px;color:var(--ink);padding:.8rem .85rem;font-size:1rem;font-family:inherit;margin-bottom:1.1rem}
+  textarea{min-height:120px;resize:vertical;line-height:1.7}
+  input:focus,textarea:focus{outline:none;border-color:var(--green)}
+  .btn{display:inline-block;width:100%;text-align:center;background:var(--green);color:#fff;border:none;border-radius:8px;padding:1rem;font-weight:700;font-size:1rem;cursor:pointer}
+  .btn:disabled{opacity:.5}
+  .btn.g{background:transparent;border:1px solid rgba(255,255,255,.18);color:var(--ink);margin-top:.7rem}
+  .msg{padding:.85rem 1rem;border-radius:8px;margin-bottom:1.1rem;font-size:.92rem;display:none}
+  .msg.ok{display:block;background:rgba(60,142,57,.15);border:1px solid rgba(60,142,57,.4);color:var(--green-l)}
+  .msg.err{display:block;background:rgba(200,80,80,.12);border:1px solid rgba(200,80,80,.4);color:#e88}
+  .linkrow{font-size:.85rem;color:var(--mid);margin-top:.4rem}
+  .linkrow a{color:var(--green-l)}
+  code{background:#222;padding:.1rem .4rem;border-radius:4px;font-size:.82rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Owner · Private Editor</div>
+  <h1>Detail Day Event</h1>
+  <div class="sub">Set the details for the next property. Save, then share <code>profoundmobiletend.com/detail-day</code> with that property's residents.</div>
+
+  <div class="msg" id="msg"></div>
+  <div id="gate"></div>
+
+  <form id="editForm" style="display:none">
+    <div class="card">
+      <label>Property / community name</label>
+      <input id="property" placeholder="e.g. Harbor Pointe Apartments" required>
+      <label>Date &amp; time</label>
+      <div class="hint">One line, shown under the title. Example: Saturday, July 12 · 9 AM – 4 PM</div>
+      <input id="date" placeholder="Saturday, July 12 · 9 AM – 4 PM" required>
+      <label>Location</label>
+      <input id="location" placeholder="Main parking lot (by the leasing office)">
+    </div>
+
+    <div class="card">
+      <label>Services offered</label>
+      <div class="hint">One per line, using:  Name | Description | Price</div>
+      <textarea id="services" placeholder="Express Wash | Exterior wash, wheels, tires & glass | $45
+Full Detail | Exterior + interior vacuum & wipe-down | $120"></textarea>
+
+      <label>Time slots</label>
+      <div class="hint">One time per line. Put <code>x</code> in front of a time to mark it full.</div>
+      <textarea id="slots" placeholder="9:00 AM
+9:45 AM
+x 10:30 AM"></textarea>
+    </div>
+
+    <button class="btn" id="saveBtn" type="submit">Save event</button>
+    <a class="btn g" id="previewLink" href="/detail-day" target="_blank">Preview the live page →</a>
+    <div class="linkrow" id="updated"></div>
+  </form>
+</div>
+<script>
+const params = new URLSearchParams(location.search);
+const token = params.get('token') || '';
+const msg = document.getElementById('msg');
+const form = document.getElementById('editForm');
+const gate = document.getElementById('gate');
+
+function showMsg(text, kind){ msg.textContent = text; msg.className = 'msg ' + kind; }
+
+if(!token){
+  gate.innerHTML = '<div class="card">This editor link is missing its security token. Use the full private link that was shared with you.</div>';
+} else {
+  form.style.display = 'block';
+  load();
+}
+
+async function load(){
+  try{
+    const r = await fetch('/api/detail-day',{cache:'no-store'});
+    const d = await r.json();
+    const c = d && d.config;
+    if(c){
+      document.getElementById('property').value = c.property || '';
+      document.getElementById('date').value = c.date || '';
+      document.getElementById('location').value = c.location || '';
+      if(Array.isArray(c.services))
+        document.getElementById('services').value = c.services.map(s=>[s.name,s.desc,s.price].filter(Boolean).join(' | ')).join('\n');
+      if(Array.isArray(c.slots))
+        document.getElementById('slots').value = c.slots.map(s=>(s.taken?'x ':'')+s.t).join('\n');
+      if(c.updatedAt) document.getElementById('updated').textContent = 'Last saved: ' + new Date(c.updatedAt).toLocaleString();
+    }
+  }catch(e){}
+}
+
+function parseServices(text){
+  return text.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
+    const p = l.split('|').map(x=>x.trim());
+    return { name:p[0]||'', desc:p[1]||'', price:p[2]||'' };
+  }).filter(s=>s.name);
+}
+function parseSlots(text){
+  return text.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
+    const taken = /^x\s+/i.test(l);
+    return { t: l.replace(/^x\s+/i,'').trim(), taken };
+  }).filter(s=>s.t);
+}
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const btn = document.getElementById('saveBtn');
+  const body = {
+    token,
+    property: document.getElementById('property').value.trim(),
+    date: document.getElementById('date').value.trim(),
+    location: document.getElementById('location').value.trim(),
+    services: parseServices(document.getElementById('services').value),
+    slots: parseSlots(document.getElementById('slots').value)
+  };
+  if(!body.property || !body.date){ showMsg('Property name and date are required.','err'); return; }
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try{
+    const r = await fetch('/api/detail-day',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const d = await r.json();
+    if(!r.ok || !d.ok) throw new Error((d&&d.error)||'Save failed');
+    showMsg('✓ Saved! The /detail-day page now shows this event. Share the link with residents.','ok');
+    if(d.config && d.config.updatedAt) document.getElementById('updated').textContent = 'Last saved: ' + new Date(d.config.updatedAt).toLocaleString();
+    window.scrollTo(0,0);
+  }catch(err){
+    showMsg('⚠ ' + (err.message || 'Could not save') + '. If this keeps happening, the editor link may be wrong.','err');
+  }
+  btn.disabled = false; btn.textContent = 'Save event';
+});
+</script>
+</body>
+</html>

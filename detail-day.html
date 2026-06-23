@@ -206,12 +206,15 @@
 
 <script>
 /* ============================================================
-   EDIT THIS BLOCK FOR EACH PROPERTY / EVENT — that's all you touch
+   Detail Day event is now editable from the private editor page:
+   /detail-day-edit?token=...  (the owner sets property/date/location/
+   services/slots there). The object below is only a fallback default
+   used if nothing has been saved yet.
    ============================================================ */
-const EVENT = {
-  property: "Harbor Pointe Apartments",      // community name
-  date:     "Saturday, July 12 · 9 AM – 4 PM",
-  location: "Main parking lot (by the leasing office)",
+const DEFAULT_EVENT = {
+  property: "Your Community",
+  date:     "Date & time to be announced",
+  location: "On-site in the parking lot",
   // Services offered at this event. Edit names/prices freely.
   services: [
     { name: "Express Wash",   desc: "Exterior wash, wheels, tires & glass",                 price: "$45" },
@@ -227,6 +230,7 @@ const EVENT = {
     { t: "3:00 PM",  taken:false }, { t: "3:45 PM",  taken:false }
   ]
 };
+let EVENT = DEFAULT_EVENT;
 /* ============================================================ */
 
 // Icons
@@ -235,49 +239,74 @@ const ICONS = {
   IC_PIN:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3C8E39" stroke-width="1.9"><path d="M12 21s-6-5.2-6-10a6 6 0 1112 0c0 4.8-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg>'
 };
 
-// Hydrate hero
-document.getElementById('h-prop').textContent = EVENT.property;
-document.getElementById('h-date').textContent = EVENT.date;
-document.getElementById('h-loc').textContent  = EVENT.location;
+// Static chip icons
 document.querySelectorAll('.chip').forEach(c=>{
   c.innerHTML = c.innerHTML.replace('{IC_CAL}',ICONS.IC_CAL).replace('{IC_PIN}',ICONS.IC_PIN);
 });
 
 const state = { service:null, slot:null };
 
-// Build services
-const svcGrid = document.getElementById('svcGrid');
-EVENT.services.forEach((s,i)=>{
-  const el = document.createElement('div');
-  el.className='svc-opt'; el.dataset.i=i;
-  el.innerHTML = `<div class="svc-left"><div class="s-radio"></div><div><div class="s-name">${s.name}</div><div class="s-desc">${s.desc}</div></div></div><div class="s-price">${s.price}</div>`;
-  el.addEventListener('click',()=>{
-    document.querySelectorAll('.svc-opt').forEach(o=>o.classList.remove('sel'));
-    el.classList.add('sel');
-    state.service = `${s.name} (${s.price})`;
-    document.getElementById('serviceField').value = state.service;
-    refresh();
-  });
-  svcGrid.appendChild(el);
-});
+function buildPage(){
+  // Hero text
+  document.getElementById('h-prop').textContent = EVENT.property;
+  document.getElementById('h-date').textContent = EVENT.date;
+  document.getElementById('h-loc').textContent  = EVENT.location;
 
-// Build slots
-const slotGrid = document.getElementById('slotGrid');
-EVENT.slots.forEach(s=>{
-  const el = document.createElement('div');
-  el.className = 'slot' + (s.taken?' taken':'');
-  el.textContent = s.t;
-  if(!s.taken){
+  // Build services
+  const svcGrid = document.getElementById('svcGrid');
+  svcGrid.innerHTML = '';
+  EVENT.services.forEach((s,i)=>{
+    const el = document.createElement('div');
+    el.className='svc-opt'; el.dataset.i=i;
+    el.innerHTML = `<div class="svc-left"><div class="s-radio"></div><div><div class="s-name">${s.name}</div><div class="s-desc">${s.desc}</div></div></div><div class="s-price">${s.price}</div>`;
     el.addEventListener('click',()=>{
-      document.querySelectorAll('.slot').forEach(o=>o.classList.remove('sel'));
+      document.querySelectorAll('.svc-opt').forEach(o=>o.classList.remove('sel'));
       el.classList.add('sel');
-      state.slot = s.t;
-      document.getElementById('slotField').value = s.t;
+      state.service = `${s.name} (${s.price})`;
+      document.getElementById('serviceField').value = state.service;
       refresh();
     });
-  }
-  slotGrid.appendChild(el);
-});
+    svcGrid.appendChild(el);
+  });
+
+  // Build slots
+  const slotGrid = document.getElementById('slotGrid');
+  slotGrid.innerHTML = '';
+  EVENT.slots.forEach(s=>{
+    const el = document.createElement('div');
+    el.className = 'slot' + (s.taken?' taken':'');
+    el.textContent = s.t;
+    if(!s.taken){
+      el.addEventListener('click',()=>{
+        document.querySelectorAll('.slot').forEach(o=>o.classList.remove('sel'));
+        el.classList.add('sel');
+        state.slot = s.t;
+        document.getElementById('slotField').value = s.t;
+        refresh();
+      });
+    }
+    slotGrid.appendChild(el);
+  });
+}
+
+// Load the live (owner-editable) event config, then build the page.
+(async()=>{
+  try{
+    const r = await fetch('/api/detail-day',{cache:'no-store'});
+    const d = await r.json();
+    if(d && d.ok && d.config && d.config.property){
+      const c = d.config;
+      EVENT = {
+        property: c.property,
+        date: c.date,
+        location: c.location || DEFAULT_EVENT.location,
+        services: (c.services && c.services.length) ? c.services : DEFAULT_EVENT.services,
+        slots: (c.slots && c.slots.length) ? c.slots : DEFAULT_EVENT.slots
+      };
+    }
+  }catch(e){}
+  buildPage();
+})();
 
 // Summary + enable submit
 function refresh(){

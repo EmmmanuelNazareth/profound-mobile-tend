@@ -76,6 +76,20 @@ export async function saveReview(review) {
   await cmd(['LPUSH', 'reviews:list', JSON.stringify(review)]).catch(() => {});
 }
 
+/* ─── Generic JSON config storage (used by the editable Detail Day page) ─── */
+export async function kvGetJSON(key) {
+  const v = await cmd(['GET', key]);
+  if (v == null) return null;
+  try {
+    return JSON.parse(v);
+  } catch (e) {
+    return null;
+  }
+}
+export async function kvSetJSON(key, obj) {
+  return cmd(['SET', key, JSON.stringify(obj)]);
+}
+
 /* ─── Service stages (single source of truth, shared shape with the UI) ─── */
 export const STAGES = [
   { key: 'deposit_paid', label: 'Deposit Paid' },
