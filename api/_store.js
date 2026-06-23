@@ -90,6 +90,17 @@ export async function kvSetJSON(key, obj) {
   return cmd(['SET', key, JSON.stringify(obj)]);
 }
 
+/* ─── Set ops (used for Detail Day slot occupancy) ─── */
+export async function kvSMembers(key) {
+  const r = await cmd(['SMEMBERS', key]);
+  return Array.isArray(r) ? r : [];
+}
+export async function kvSAdd(key, members) {
+  const list = (Array.isArray(members) ? members : [members]).map(String);
+  if (!list.length) return 0;
+  return cmd(['SADD', key, ...list]);
+}
+
 /* ─── Service stages (single source of truth, shared shape with the UI) ─── */
 export const STAGES = [
   { key: 'deposit_paid', label: 'Deposit Paid' },

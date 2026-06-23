@@ -1,15 +1,67 @@
 /**
- * /api/detail-day
- *   GET  → returns the current Detail Day event config (public, read-only).
- *   POST → saves a new config (owner only — requires the management token).
+ * /api/detail-day  — editable, self-booking Detail Day event.
  *
- * Lets the owner reconfigure the single shareable /detail-day page per
- * property/event without any code changes. Token is HMAC-signed for the
- * fixed id "detailday".
+ *   GET                         → { config, slots[], booked[] } for the page
+ *   POST {token, ...config}     → owner saves the event (property/date/services)
+ *   POST {action:'book', ...}   → a resident reserves a time (public). Locks the
+ *                                 consecutive 45-min slots the service needs, so
+ *                                 it shows filled to everyone else. Emails owner.
+ *
+ * Hours (business rule): 8:00 AM–7:00 PM Mon–Sat, Wed until 4:50 PM, closed Sun.
+ * Base slot = 45 min (Express Wash). A service's minutes / 45 (rounded up) =
+ * how many back-to-back slots it locks (Full Detail 90 min = 2 slots).
  */
-import { kvGetJSON, kvSetJSON, verifyManageToken, kvConfigured } from './_store.js';
+import { kvGetJSON, kvSetJSON, kvSMembers, kvSAdd, verifyManageToken, kvConfigured } from './_store.js';
+import { sendMail, shell, kvTable, escapeHtml } from './_sendmail.js';
 
-const KEY = 'detailday:config';
+const CONFIG_KEY = 'detailday:config';
+const SLOT_MIN = 45;
+const OPEN_MIN = 8 * 60;            // 8:00 AM
+const CLOSE_DEFAULT = 19 * 60;      // 7:00 PM
+const CLOSE_WED = 16 * 60 + 50;     // 4:50 PM
+const WD = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MON = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function label(min) {
+  let h = Math.floor(min / 60), m = min % 60;
+  const ap = h < 12 ? 'AM' : 'PM';
+  const dh = h % 12 === 0 ? 12 : h % 12;
+  return `${dh}:${String(m).padStart(2, '0')} ${ap}`;
+}
+function closeFor(weekday) {
+  if (weekday === 0) return null;            // Sunday closed
+  return weekday === 3 ? CLOSE_WED : CLOSE_DEFAULT;
+}
+function weekdayOf(dateStr) {
+  // noon avoids any timezone day-shift
+  const d = new Date(dateStr + 'T12:00:00');
+  return isNaN(d) ? null : d.getDay();
+}
+function genSlots(dateStr) {
+  const wd = weekdayOf(dateStr);
+  if (wd == null) return { slots: [], close: null, wd: null };
+  const close = closeFor(wd);
+  if (close == null) return { slots: [], close: null, wd };
+  const slots = [];
+  for (let m = OPEN_MIN; m + SLOT_MIN <= close; m += SLOT_MIN) slots.push({ min: m, label: label(m) });
+  return { slots, close, wd };
+}
+function slotsNeeded(mins) {
+  const n = Number(mins) || SLOT_MIN;
+  return Math.max(1, Math.ceil(n / SLOT_MIN));
+}
+function displayDate(dateStr) {
+  const wd = weekdayOf(dateStr);
+  if (wd == null) return '';
+  const d = new Date(dateStr + 'T12:00:00');
+  const close = closeFor(wd);
+  const hours = close == null ? 'Closed' : `${label(OPEN_MIN)} – ${label(close)}`;
+  return `${WD[wd]}, ${MON[d.getMonth()]} ${d.getDate()} · ${hours}`;
+}
+function eventKey(cfg) {
+  const slug = (cfg.property || 'event').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return `detailday:booked:${cfg.eventDate || 'nodate'}:${slug}`.slice(0, 90);
+}
 
 export default async function handler(req, res) {
   if (!kvConfigured()) {
@@ -17,65 +69,139 @@ export default async function handler(req, res) {
     return;
   }
 
+  // ── GET: page data ──
   if (req.method === 'GET') {
     res.setHeader('Cache-Control', 'no-store');
-    let cfg = null;
-    try { cfg = await kvGetJSON(KEY); } catch (e) {}
-    res.status(200).json({ ok: true, config: cfg });
+    const cfg = (await kvGetJSON(CONFIG_KEY)) || null;
+    let slots = [], booked = [];
+    if (cfg && cfg.eventDate) {
+      slots = genSlots(cfg.eventDate).slots;
+      try {
+        booked = (await kvSMembers(eventKey(cfg))).map(Number);
+      } catch (e) {}
+    }
+    const out = cfg ? { ...cfg, displayDate: cfg.eventDate ? displayDate(cfg.eventDate) : (cfg.date || '') } : null;
+    res.status(200).json({ ok: true, config: out, slots, booked });
     return;
   }
 
-  if (req.method === 'POST') {
-    let body = {};
-    try {
-      body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-    } catch (e) {
-      res.status(400).json({ ok: false, error: 'Invalid JSON' });
-      return;
-    }
-    if (!verifyManageToken('detailday', (body.token || '').toString())) {
-      res.status(403).json({ ok: false, error: 'Invalid editor token' });
-      return;
-    }
-
-    const property = (body.property || '').toString().trim().slice(0, 120);
-    const date = (body.date || '').toString().trim().slice(0, 120);
-    const location = (body.location || '').toString().trim().slice(0, 160);
-    if (!property || !date) {
-      res.status(400).json({ ok: false, error: 'Property name and date are required.' });
-      return;
-    }
-
-    // Services: array of {name, desc, price}
-    const services = Array.isArray(body.services)
-      ? body.services
-          .map((s) => ({
-            name: (s.name || '').toString().trim().slice(0, 80),
-            desc: (s.desc || '').toString().trim().slice(0, 160),
-            price: (s.price || '').toString().trim().slice(0, 24),
-          }))
-          .filter((s) => s.name)
-          .slice(0, 12)
-      : [];
-
-    // Slots: array of {t, taken}
-    const slots = Array.isArray(body.slots)
-      ? body.slots
-          .map((s) => ({ t: (s.t || '').toString().trim().slice(0, 24), taken: !!s.taken }))
-          .filter((s) => s.t)
-          .slice(0, 40)
-      : [];
-
-    const config = { property, date, location, services, slots, updatedAt: new Date().toISOString() };
-    try {
-      await kvSetJSON(KEY, config);
-    } catch (e) {
-      res.status(502).json({ ok: false, error: 'Could not save config.' });
-      return;
-    }
-    res.status(200).json({ ok: true, config });
+  if (req.method !== 'POST') {
+    res.status(405).json({ ok: false, error: 'Method not allowed' });
     return;
   }
 
-  res.status(405).json({ ok: false, error: 'Method not allowed' });
+  let body = {};
+  try {
+    body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+  } catch (e) {
+    res.status(400).json({ ok: false, error: 'Invalid JSON' });
+    return;
+  }
+
+  // ── POST book: resident reserves a slot (public) ──
+  if (body.action === 'book') {
+    const cfg = await kvGetJSON(CONFIG_KEY);
+    if (!cfg || !cfg.eventDate) {
+      res.status(409).json({ ok: false, error: 'No active event right now.' });
+      return;
+    }
+    const serviceName = (body.service || '').toString().trim();
+    const startMin = parseInt(body.startMin, 10);
+    const name = (body.name || '').toString().trim();
+    const email = (body.email || '').toString().trim();
+    const phone = (body.phone || '').toString().trim();
+    const vehicle = (body.vehicle || '').toString().trim();
+    const unit = (body.unit || '').toString().trim();
+
+    if (!serviceName || isNaN(startMin) || !name || (!email && !phone)) {
+      res.status(400).json({ ok: false, error: 'Missing required booking details.' });
+      return;
+    }
+
+    const svc = (cfg.services || []).find((s) => s.name === serviceName);
+    if (!svc) {
+      res.status(400).json({ ok: false, error: 'Unknown service.' });
+      return;
+    }
+    const need = slotsNeeded(svc.mins);
+    const { slots } = genSlots(cfg.eventDate);
+    const startIdx = slots.findIndex((s) => s.min === startMin);
+    if (startIdx < 0 || startIdx + need > slots.length) {
+      res.status(400).json({ ok: false, error: 'That time does not fit this service before closing.' });
+      return;
+    }
+    const required = slots.slice(startIdx, startIdx + need).map((s) => s.min);
+
+    const key = eventKey(cfg);
+    const booked = (await kvSMembers(key)).map(Number);
+    const clash = required.some((m) => booked.includes(m));
+    if (clash) {
+      res.status(409).json({ ok: false, error: 'Sorry — that time was just booked. Please pick another.', booked });
+      return;
+    }
+    await kvSAdd(key, required);
+    const newBooked = booked.concat(required);
+
+    const endLabel = label(startMin + need * SLOT_MIN);
+    const when = `${label(startMin)} – ${endLabel}`;
+    // Notify owner
+    const html = shell(
+      `Detail Day booking — ${cfg.property || ''}`,
+      `<p style="margin:0 0 14px;color:rgba(244,242,238,0.85);">New reservation for your Detail Day event.</p>
+       ${kvTable([
+         ['Property', cfg.property],
+         ['Event date', displayDate(cfg.eventDate)],
+         ['Service', `${svc.name}${svc.price ? ' (' + svc.price + ')' : ''}`],
+         ['Time', when],
+         ['Name', name],
+         ['Unit / Apt', unit],
+         ['Phone', phone],
+         ['Email', email],
+         ['Vehicle', vehicle],
+         ['Booked at', new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })],
+       ])}`,
+      email ? `Reply goes to <strong>${escapeHtml(email)}</strong>.` : 'No email — call the number above to confirm.',
+    );
+    await sendMail({ subject: `📅 Detail Day — ${name} · ${label(startMin)} · ${cfg.property || ''}`, html, replyTo: email || undefined });
+
+    res.status(200).json({ ok: true, booked: newBooked, when });
+    return;
+  }
+
+  // ── POST save config: owner only ──
+  if (!verifyManageToken('detailday', (body.token || '').toString())) {
+    res.status(403).json({ ok: false, error: 'Invalid editor token' });
+    return;
+  }
+  const property = (body.property || '').toString().trim().slice(0, 120);
+  const eventDate = (body.eventDate || '').toString().trim().slice(0, 10);
+  const location = (body.location || '').toString().trim().slice(0, 160);
+  if (!property || !eventDate || weekdayOf(eventDate) == null) {
+    res.status(400).json({ ok: false, error: 'Property name and a valid date are required.' });
+    return;
+  }
+  if (closeFor(weekdayOf(eventDate)) == null) {
+    res.status(400).json({ ok: false, error: 'That date is a Sunday — we are closed. Pick Mon–Sat.' });
+    return;
+  }
+  const services = Array.isArray(body.services)
+    ? body.services
+        .map((s) => ({
+          name: (s.name || '').toString().trim().slice(0, 80),
+          desc: (s.desc || '').toString().trim().slice(0, 160),
+          price: (s.price || '').toString().trim().slice(0, 24),
+          mins: Math.max(15, Math.min(480, parseInt(s.mins, 10) || SLOT_MIN)),
+        }))
+        .filter((s) => s.name)
+        .slice(0, 12)
+    : [];
+
+  const config = { property, eventDate, location, services, updatedAt: new Date().toISOString() };
+  try {
+    await kvSetJSON(CONFIG_KEY, config);
+  } catch (e) {
+    res.status(502).json({ ok: false, error: 'Could not save config.' });
+    return;
+  }
+  res.status(200).json({ ok: true, config: { ...config, displayDate: displayDate(eventDate) } });
 }

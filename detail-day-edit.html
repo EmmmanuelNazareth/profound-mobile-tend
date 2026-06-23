@@ -44,24 +44,18 @@
     <div class="card">
       <label>Property / community name</label>
       <input id="property" placeholder="e.g. Harbor Pointe Apartments" required>
-      <label>Date &amp; time</label>
-      <div class="hint">One line, shown under the title. Example: Saturday, July 12 · 9 AM – 4 PM</div>
-      <input id="date" placeholder="Saturday, July 12 · 9 AM – 4 PM" required>
+      <label>Event date</label>
+      <div class="hint">Pick the day. Hours are automatic: 8:00 AM–7:00 PM (Wednesdays until 4:50 PM). Closed Sundays.</div>
+      <input id="eventDate" type="date" required>
       <label>Location</label>
       <input id="location" placeholder="Main parking lot (by the leasing office)">
     </div>
 
     <div class="card">
       <label>Services offered</label>
-      <div class="hint">One per line, using:  Name | Description | Price</div>
-      <textarea id="services" placeholder="Express Wash | Exterior wash, wheels, tires & glass | $45
-Full Detail | Exterior + interior vacuum & wipe-down | $120"></textarea>
-
-      <label>Time slots</label>
-      <div class="hint">One time per line. Put <code>x</code> in front of a time to mark it full.</div>
-      <textarea id="slots" placeholder="9:00 AM
-9:45 AM
-x 10:30 AM"></textarea>
+      <div class="hint">One per line:  Name | Description | Price | Minutes<br>Minutes = how long it blocks the calendar (45 = one slot, 90 = two slots). Time slots are generated automatically from your hours and lock as residents book.</div>
+      <textarea id="services" placeholder="Express Wash | Exterior wash, wheels, tires & glass | $45 | 45
+Full Detail | Exterior + interior vacuum & wipe-down | $120 | 90"></textarea>
     </div>
 
     <button class="btn" id="saveBtn" type="submit">Save event</button>
@@ -92,12 +86,10 @@ async function load(){
     const c = d && d.config;
     if(c){
       document.getElementById('property').value = c.property || '';
-      document.getElementById('date').value = c.date || '';
+      document.getElementById('eventDate').value = c.eventDate || '';
       document.getElementById('location').value = c.location || '';
       if(Array.isArray(c.services))
-        document.getElementById('services').value = c.services.map(s=>[s.name,s.desc,s.price].filter(Boolean).join(' | ')).join('\n');
-      if(Array.isArray(c.slots))
-        document.getElementById('slots').value = c.slots.map(s=>(s.taken?'x ':'')+s.t).join('\n');
+        document.getElementById('services').value = c.services.map(s=>[s.name,s.desc,s.price,(s.mins||45)].join(' | ')).join('\n');
       if(c.updatedAt) document.getElementById('updated').textContent = 'Last saved: ' + new Date(c.updatedAt).toLocaleString();
     }
   }catch(e){}
@@ -106,14 +98,8 @@ async function load(){
 function parseServices(text){
   return text.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
     const p = l.split('|').map(x=>x.trim());
-    return { name:p[0]||'', desc:p[1]||'', price:p[2]||'' };
+    return { name:p[0]||'', desc:p[1]||'', price:p[2]||'', mins: parseInt(p[3],10)||45 };
   }).filter(s=>s.name);
-}
-function parseSlots(text){
-  return text.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
-    const taken = /^x\s+/i.test(l);
-    return { t: l.replace(/^x\s+/i,'').trim(), taken };
-  }).filter(s=>s.t);
 }
 
 form.addEventListener('submit', async (e)=>{
@@ -122,12 +108,11 @@ form.addEventListener('submit', async (e)=>{
   const body = {
     token,
     property: document.getElementById('property').value.trim(),
-    date: document.getElementById('date').value.trim(),
+    eventDate: document.getElementById('eventDate').value,
     location: document.getElementById('location').value.trim(),
-    services: parseServices(document.getElementById('services').value),
-    slots: parseSlots(document.getElementById('slots').value)
+    services: parseServices(document.getElementById('services').value)
   };
-  if(!body.property || !body.date){ showMsg('Property name and date are required.','err'); return; }
+  if(!body.property || !body.eventDate){ showMsg('Property name and event date are required.','err'); return; }
   btn.disabled = true; btn.textContent = 'Saving…';
   try{
     const r = await fetch('/api/detail-day',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});

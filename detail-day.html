@@ -206,145 +206,157 @@
 
 <script>
 /* ============================================================
-   Detail Day event is now editable from the private editor page:
-   /detail-day-edit?token=...  (the owner sets property/date/location/
-   services/slots there). The object below is only a fallback default
-   used if nothing has been saved yet.
+   Detail Day is configured from the private editor (/detail-day-edit).
+   Time slots are generated from business hours for the event date, and
+   each booking locks the consecutive 45-min slots its service needs, so
+   taken times show as filled to everyone in real time.
    ============================================================ */
-const DEFAULT_EVENT = {
-  property: "Your Community",
-  date:     "Date & time to be announced",
-  location: "On-site in the parking lot",
-  // Services offered at this event. Edit names/prices freely.
-  services: [
-    { name: "Express Wash",   desc: "Exterior wash, wheels, tires & glass",                 price: "$45" },
-    { name: "Full Detail",    desc: "Exterior wash + interior vacuum, wipe-down & windows",  price: "$120" },
-    { name: "Interior Deep Clean", desc: "Seats, carpets, console & full interior reset",    price: "$95" }
-  ],
-  // Available time slots. Mark booked ones as taken:true as they fill.
-  slots: [
-    { t: "9:00 AM",  taken:false }, { t: "9:45 AM",  taken:false },
-    { t: "10:30 AM", taken:false }, { t: "11:15 AM", taken:false },
-    { t: "12:00 PM", taken:false }, { t: "12:45 PM", taken:false },
-    { t: "1:30 PM",  taken:false }, { t: "2:15 PM",  taken:false },
-    { t: "3:00 PM",  taken:false }, { t: "3:45 PM",  taken:false }
-  ]
-};
-let EVENT = DEFAULT_EVENT;
-/* ============================================================ */
-
-// Icons
 const ICONS = {
   IC_CAL:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3C8E39" stroke-width="1.9"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>',
   IC_PIN:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3C8E39" stroke-width="1.9"><path d="M12 21s-6-5.2-6-10a6 6 0 1112 0c0 4.8-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg>'
 };
+const DEFAULT = {
+  property:'Your Community', displayDate:'Date & time to be announced', location:'On-site in the parking lot',
+  services:[
+    { name:'Express Wash', desc:'Exterior wash, wheels, tires & glass', price:'$45', mins:45 },
+    { name:'Full Detail', desc:'Exterior + interior vacuum & wipe-down', price:'$120', mins:90 },
+    { name:'Interior Deep Clean', desc:'Seats, carpets, console & full interior reset', price:'$95', mins:90 }
+  ]
+};
+let DD = { config:null, slots:[], booked:[] };
+let sel = { service:null, price:'', mins:45, startMin:null };
+let finished = false;
+
+function slotsNeeded(m){ return Math.max(1, Math.ceil((Number(m)||45)/45)); }
+function svcList(){ return (DD.config && DD.config.services && DD.config.services.length) ? DD.config.services : DEFAULT.services; }
 
 // Static chip icons
-document.querySelectorAll('.chip').forEach(c=>{
-  c.innerHTML = c.innerHTML.replace('{IC_CAL}',ICONS.IC_CAL).replace('{IC_PIN}',ICONS.IC_PIN);
-});
+document.querySelectorAll('.chip').forEach(c=>{ c.innerHTML = c.innerHTML.replace('{IC_CAL}',ICONS.IC_CAL).replace('{IC_PIN}',ICONS.IC_PIN); });
 
-const state = { service:null, slot:null };
+function renderHero(){
+  const c = DD.config || {};
+  document.getElementById('h-prop').textContent = c.property || DEFAULT.property;
+  document.getElementById('h-date').textContent = c.displayDate || DEFAULT.displayDate;
+  document.getElementById('h-loc').textContent  = c.location || DEFAULT.location;
+}
 
-function buildPage(){
-  // Hero text
-  document.getElementById('h-prop').textContent = EVENT.property;
-  document.getElementById('h-date').textContent = EVENT.date;
-  document.getElementById('h-loc').textContent  = EVENT.location;
-
-  // Build services
-  const svcGrid = document.getElementById('svcGrid');
-  svcGrid.innerHTML = '';
-  EVENT.services.forEach((s,i)=>{
+function renderServices(){
+  const grid = document.getElementById('svcGrid'); if(!grid) return;
+  grid.innerHTML = '';
+  svcList().forEach(s=>{
+    const dur = slotsNeeded(s.mins)*45;
     const el = document.createElement('div');
-    el.className='svc-opt'; el.dataset.i=i;
-    el.innerHTML = `<div class="svc-left"><div class="s-radio"></div><div><div class="s-name">${s.name}</div><div class="s-desc">${s.desc}</div></div></div><div class="s-price">${s.price}</div>`;
+    el.className = 'svc-opt' + (sel.service===s.name?' sel':'');
+    el.innerHTML = `<div class="svc-left"><div class="s-radio"></div><div><div class="s-name">${s.name}</div><div class="s-desc">${s.desc||''} · ~${dur} min</div></div></div><div class="s-price">${s.price||''}</div>`;
     el.addEventListener('click',()=>{
-      document.querySelectorAll('.svc-opt').forEach(o=>o.classList.remove('sel'));
-      el.classList.add('sel');
-      state.service = `${s.name} (${s.price})`;
-      document.getElementById('serviceField').value = state.service;
-      refresh();
+      sel.service = s.name; sel.price = s.price||''; sel.mins = Number(s.mins)||45;
+      sel.startMin = null;
+      document.getElementById('serviceField').value = `${s.name}${s.price?' ('+s.price+')':''}`;
+      document.getElementById('slotField').value = '';
+      renderServices(); renderSlots(); refresh();
     });
-    svcGrid.appendChild(el);
+    grid.appendChild(el);
   });
+}
 
-  // Build slots
-  const slotGrid = document.getElementById('slotGrid');
-  slotGrid.innerHTML = '';
-  EVENT.slots.forEach(s=>{
+function renderSlots(){
+  const grid = document.getElementById('slotGrid'); if(!grid) return;
+  grid.innerHTML = '';
+  if(!DD.slots.length){
+    grid.innerHTML = '<div style="color:rgba(244,242,238,.6);font-size:.92rem">No Detail Day is currently scheduled. Please check back soon.</div>';
+    return;
+  }
+  const need = sel.service ? slotsNeeded(sel.mins) : 1;
+  const bookedSet = new Set(DD.booked);
+  DD.slots.forEach((slot,i)=>{
+    const taken = bookedSet.has(slot.min);
+    let fits = true;
+    if(sel.service){
+      if(i+need > DD.slots.length) fits = false;
+      else for(let k=0;k<need;k++){ if(bookedSet.has(DD.slots[i+k].min)){ fits=false; break; } }
+    }
+    const disabled = taken || (sel.service && !fits);
     const el = document.createElement('div');
-    el.className = 'slot' + (s.taken?' taken':'');
-    el.textContent = s.t;
-    if(!s.taken){
+    el.className = 'slot' + (disabled?' taken':'') + (sel.startMin===slot.min?' sel':'');
+    el.textContent = slot.label;
+    if(!disabled){
       el.addEventListener('click',()=>{
-        document.querySelectorAll('.slot').forEach(o=>o.classList.remove('sel'));
-        el.classList.add('sel');
-        state.slot = s.t;
-        document.getElementById('slotField').value = s.t;
-        refresh();
+        if(!sel.service){ alert('Pick a service first.'); return; }
+        sel.startMin = slot.min;
+        document.getElementById('slotField').value = slot.label;
+        renderSlots(); refresh();
       });
     }
-    slotGrid.appendChild(el);
+    grid.appendChild(el);
   });
 }
 
-// Load the live (owner-editable) event config, then build the page.
-(async()=>{
-  try{
-    const r = await fetch('/api/detail-day',{cache:'no-store'});
-    const d = await r.json();
-    if(d && d.ok && d.config && d.config.property){
-      const c = d.config;
-      EVENT = {
-        property: c.property,
-        date: c.date,
-        location: c.location || DEFAULT_EVENT.location,
-        services: (c.services && c.services.length) ? c.services : DEFAULT_EVENT.services,
-        slots: (c.slots && c.slots.length) ? c.slots : DEFAULT_EVENT.slots
-      };
-    }
-  }catch(e){}
-  buildPage();
-})();
-
-// Summary + enable submit
 function refresh(){
-  const sum = document.getElementById('summary');
-  const btn = document.getElementById('submitBtn');
-  if(state.service && state.slot){
+  const sum = document.getElementById('summary'); const btn = document.getElementById('submitBtn');
+  if(!sum || !btn) return;
+  if(sel.service && sel.startMin!=null){
+    const lbl = (DD.slots.find(s=>s.min===sel.startMin)||{}).label || '';
     sum.classList.add('show');
-    sum.innerHTML = `You're booking <b>${state.service}</b> at <b>${state.slot}</b> on Detail Day. Add your details below and reserve.`;
+    sum.innerHTML = `You're booking <b>${sel.service}</b> at <b>${lbl}</b> (~${slotsNeeded(sel.mins)*45} min). Add your details below and reserve.`;
     btn.disabled = false;
-  } else {
-    sum.classList.remove('show');
-    btn.disabled = true;
-  }
+  } else { sum.classList.remove('show'); btn.disabled = true; }
 }
 
-// Submit the reservation to the site's Resend email endpoint.
-document.getElementById('bookForm').addEventListener('submit',async function(e){
+async function loadDD(){
+  let d = null;
+  try{ const r = await fetch('/api/detail-day',{cache:'no-store'}); d = await r.json(); }catch(e){}
+  if(d && d.ok){ DD.config = d.config; DD.slots = d.slots||[]; DD.booked = (d.booked||[]).map(Number); }
+  renderHero(); renderServices(); renderSlots(); refresh();
+}
+
+document.getElementById('bookForm').addEventListener('submit', async function(e){
   e.preventDefault();
-  var form=this;
-  var data={property:EVENT.property};
-  new FormData(form).forEach(function(v,k){ if(String(v).trim()) data[k]=v; });
-  var name=data.name||'', email=data.email||'', phone=data.phone||'';
-  var lines=Object.keys(data).filter(function(k){return ['name','email','phone'].indexOf(k)<0;})
-    .map(function(k){ return k.replace(/_/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();})+': '+data[k]; });
-  var message=lines.join('\n');
-  var btn=document.getElementById('submitBtn'); var orig=btn.textContent;
-  btn.disabled=true; btn.textContent='Reserving…';
+  if(!sel.service || sel.startMin==null){ alert('Pick a service and a time first.'); return; }
+  const form = this;
+  const data = {}; new FormData(form).forEach((v,k)=>{ if(String(v).trim()) data[k]=v; });
+  const btn = document.getElementById('submitBtn'); const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Reserving…';
   try{
-    var r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name:name,email:email,phone:phone,subject:'Detail Day signup — '+EVENT.property,message:message})});
-    var d=await r.json();
-    if(!r.ok||!d.ok) throw new Error((d&&d.error)||'failed');
-    form.innerHTML='<div style="text-align:center;padding:30px 10px;"><h3 style="font-size:1.6rem;margin-bottom:8px;">You\'re reserved!</h3><p>We\'ll text you to confirm. Payment is collected at the appointment.</p></div>';
+    const r = await fetch('/api/detail-day',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ action:'book', service:sel.service, startMin:sel.startMin,
+        name:data.name||'', email:data.email||'', phone:data.phone||'', vehicle:data.vehicle||'', unit:data.unit||'' })});
+    const d = await r.json();
+    if(r.status===409){
+      if(d.booked) DD.booked = d.booked.map(Number);
+      sel.startMin = null; document.getElementById('slotField').value='';
+      renderSlots(); refresh(); btn.disabled=false; btn.textContent=orig;
+      alert(d.error || 'That time was just taken — please pick another.');
+      return;
+    }
+    if(!r.ok || !d.ok) throw new Error((d&&d.error)||'failed');
+    finished = true;
+    const lbl = (DD.slots.find(s=>s.min===sel.startMin)||{}).label || '';
+    form.innerHTML = `<div style="text-align:center;padding:30px 10px"><h3 style="font-size:1.6rem;margin-bottom:8px">You're reserved! ✓</h3><p>${sel.service} at ${lbl}. We'll text you to confirm. Payment is collected at the appointment.</p></div>`;
   }catch(err){
     btn.disabled=false; btn.textContent=orig;
     alert('Sorry, something went wrong. Please call 240-903-4345 or email sales@profoundmobiletend.com.');
   }
 });
+
+loadDD();
+// Keep availability fresh for everyone still choosing a time.
+setInterval(async()=>{
+  if(finished) return;
+  try{
+    const r = await fetch('/api/detail-day',{cache:'no-store'}); const d = await r.json();
+    if(d && d.ok){
+      DD.booked = (d.booked||[]).map(Number);
+      if(sel.startMin!=null){
+        const need = slotsNeeded(sel.mins);
+        const i = DD.slots.findIndex(s=>s.min===sel.startMin);
+        let bad = (i<0 || i+need>DD.slots.length);
+        if(!bad) for(let k=0;k<need;k++){ if(DD.booked.includes(DD.slots[i+k].min)){ bad=true; break; } }
+        if(bad){ sel.startMin=null; document.getElementById('slotField').value=''; }
+      }
+      renderSlots(); refresh();
+    }
+  }catch(e){}
+}, 25000);
 </script>
 </body>
 </html>
