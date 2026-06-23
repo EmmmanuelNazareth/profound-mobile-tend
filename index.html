@@ -540,6 +540,8 @@ nav.nav-menu-open{transform:translateY(0)!important;}
       </div>
     </li>
     <li><a href="/shop">Shop</a></li>
+    <li><a href="/membership">Membership</a></li>
+    <li><a href="/business">For Business</a></li>
     <li><a href="/about">About</a></li>
     <li><a href="#hours">Hours</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -561,6 +563,8 @@ nav.nav-menu-open{transform:translateY(0)!important;}
   <a href="#booking" onclick="scrollToBooking('full-detail')">Profound Full Detail — Get Quote</a>
   <div class="mob-label">Menu</div>
   <a href="/shop">Shop</a>
+  <a href="/membership">Membership</a>
+  <a href="/business">For Business</a>
   <a href="/about">About</a>
   <a href="#hours">Hours</a>
   <a href="#contact">Contact</a>
@@ -619,6 +623,47 @@ nav.nav-menu-open{transform:translateY(0)!important;}
     </div>
   </div>
   <div class="faith-badge"><div class="faith-badge-in"><span>✝</span><p>Faith<br/>Drives<br/>Clean</p></div></div>
+</section>
+<!-- EXPLORE: membership + business entry points -->
+<section class="pmt-explore">
+  <style>
+    .pmt-explore{background:#0c0c0c;padding:5rem 1.5rem;}
+    .pmt-explore .pe-wrap{max-width:1080px;margin:0 auto;}
+    .pmt-explore .pe-head{text-align:center;margin-bottom:2.6rem;}
+    .pmt-explore .pe-eyebrow{font-size:0.72rem;letter-spacing:0.22em;text-transform:uppercase;color:#52b84f;font-weight:700;}
+    .pmt-explore .pe-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:600;color:#f4f2ee;margin-top:0.4rem;letter-spacing:-0.01em;}
+    .pmt-explore .pe-sub{color:rgba(244,242,238,0.6);font-size:1rem;margin-top:0.5rem;font-weight:300;}
+    .pmt-explore .pe-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;}
+    .pmt-explore .pe-card{background:linear-gradient(160deg,#181818,#121212);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:2.2rem;display:flex;flex-direction:column;transition:border-color 0.25s,transform 0.25s;}
+    .pmt-explore .pe-card:hover{border-color:rgba(60,142,57,0.55);transform:translateY(-3px);}
+    .pmt-explore .pe-tag{font-size:0.7rem;letter-spacing:0.16em;text-transform:uppercase;color:#52b84f;font-weight:700;}
+    .pmt-explore .pe-h{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;color:#f4f2ee;margin:0.7rem 0 0.5rem;}
+    .pmt-explore .pe-p{color:rgba(244,242,238,0.65);font-size:0.96rem;line-height:1.7;font-weight:300;flex:1;}
+    .pmt-explore .pe-btn{display:inline-flex;align-items:center;gap:0.4rem;margin-top:1.5rem;align-self:flex-start;background:#3C8E39;color:#fff;text-decoration:none;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;padding:0.85rem 1.5rem;border-radius:3px;transition:background 0.2s;}
+    .pmt-explore .pe-btn:hover{background:#52b84f;}
+    @media(max-width:720px){.pmt-explore{padding:3.5rem 1.2rem;}.pmt-explore .pe-grid{grid-template-columns:1fr;}}
+  </style>
+  <div class="pe-wrap">
+    <div class="pe-head">
+      <div class="pe-eyebrow">More Ways to Keep It Clean</div>
+      <div class="pe-title">Membership &amp; Fleet Care</div>
+      <div class="pe-sub">Recurring detailing for your driveway, or flat-rate care for your whole operation.</div>
+    </div>
+    <div class="pe-grid">
+      <div class="pe-card">
+        <div class="pe-tag">For Drivers</div>
+        <div class="pe-h">Membership Plans</div>
+        <div class="pe-p">Keep your vehicle showroom-clean year round with recurring visits to your driveway. No contract, cancel anytime.</div>
+        <a class="pe-btn" href="/membership">Explore Membership →</a>
+      </div>
+      <div class="pe-card">
+        <div class="pe-tag">For Business</div>
+        <div class="pe-h">Fleets &amp; Properties</div>
+        <div class="pe-p">Communities, fleets, dealerships, and marinas — one flat monthly rate, on a cadence built around your account.</div>
+        <a class="pe-btn" href="/business">Get a Fleet Quote →</a>
+      </div>
+    </div>
+  </div>
 </section>
 <!-- STRIP -->
 <div class="strip reveal">
@@ -841,9 +886,11 @@ nav.nav-menu-open{transform:translateY(0)!important;}
     <div class="f-tag">Faith Drives Clean · Baltimore &amp; DMV</div>
   </div>
   <ul class="f-links">
-    <li><a href="#services">Services</a></li>
-    <li><a href="#shop">Shop</a></li>
-    <li><a href="#about">About</a></li>
+    <li><a href="/services">Services</a></li>
+    <li><a href="/shop">Shop</a></li>
+    <li><a href="/membership">Membership</a></li>
+    <li><a href="/business">For Business</a></li>
+    <li><a href="/about">About</a></li>
     <li><a href="#hours">Hours</a></li>
     <li><a href="#booking">Book Now</a></li>
     <li><a href="#contact">Contact</a></li>

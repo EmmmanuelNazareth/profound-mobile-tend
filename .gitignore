@@ -1,1 +1,15 @@
 .vercel
+.DS_Store
+.tmp_extract/
+
+# Source drops & internal tools — must NEVER be deployed (the site is public on Vercel)
+CLAUDE_CODE_HANDOFF.md
+*.zip
+*.pdf
+profound-membership.html
+profound-business.html
+profound-detail-day.html
+profound-pipeline-tracker.html
+profound-fleet-outreach.md
+profound-fleet-sellsheet.html
+email-samples.html
