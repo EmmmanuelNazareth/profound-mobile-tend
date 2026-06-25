@@ -69,7 +69,7 @@ export default async function handler(req, res) {
   if (b.email) {
     const custHtml = shell(
       'Deposit received — you\'re booked!',
-      `<p style="margin:0 0 14px;color:rgba(244,242,238,0.85);">Thank you, ${escapeHtml(b.name || 'there')}! Your 25% deposit is in and your appointment is locked.</p>
+      `<p style="margin:0 0 14px;color:rgba(244,242,238,0.85);">Thank you, ${escapeHtml(b.name || 'there')}! Your deposit is in and your appointment is locked.</p>
        ${kvTable([
          ['Booking ID', b.id],
          ['Service', b.service],

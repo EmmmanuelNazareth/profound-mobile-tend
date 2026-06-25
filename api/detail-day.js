@@ -11,9 +11,12 @@
  * Base slot = 45 min (Express Wash). A service's minutes / 45 (rounded up) =
  * how many back-to-back slots it locks (Full Detail 90 min = 2 slots).
  */
-import { kvGetJSON, kvSetJSON, kvSMembers, kvSAdd, verifyManageToken, kvConfigured } from './_store.js';
+import { kvGetJSON, kvSetJSON, kvSMembers, kvSAdd, kvSRem, saveBooking, verifyManageToken, kvConfigured } from './_store.js';
 import { sendMail, shell, kvTable, escapeHtml } from './_sendmail.js';
+import { createSquarePaymentLink } from './create-checkout.js';
 
+const SITE_URL = process.env.SITE_URL || 'https://profoundmobiletend.com';
+const DEPOSIT_RATE = 0.5; // Detail Day collects 50% up front
 const CONFIG_KEY = 'detailday:config';
 const SLOT_MIN = 45;
 const OPEN_MIN = 8 * 60;            // 8:00 AM
@@ -139,16 +142,60 @@ export default async function handler(req, res) {
       res.status(409).json({ ok: false, error: 'Sorry — that time was just booked. Please pick another.', booked });
       return;
     }
+    // Lock the slots first so a parallel request can't grab them while we set up payment.
     await kvSAdd(key, required);
     const newBooked = booked.concat(required);
 
-    const endLabel = label(startMin + need * SLOT_MIN);
-    const when = `${label(startMin)} – ${endLabel}`;
-    // Notify owner
+    const when = `${label(startMin)} – ${label(startMin + need * SLOT_MIN)}`;
+    const priceMatch = String(svc.price || '').match(/([\d,]+\.\d{2}|\d+(?:\.\d+)?)/);
+    const priceNum = priceMatch ? parseFloat(priceMatch[1].replace(/,/g, '')) : 0;
+    const deposit = Math.round(priceNum * DEPOSIT_RATE * 100) / 100;
+    const balance = Math.round((priceNum - deposit) * 100) / 100;
+
+    const bookingId = 'PMT-' + Date.now().toString(36).toUpperCase().slice(-6);
+    const now = new Date().toISOString();
+    const addr = (cfg.property || '') + (cfg.location ? ' — ' + cfg.location : '');
+
+    // For priced services, take a 50% deposit through Square and route the
+    // resident into the live tracking pipeline (deposit → track → balance → review).
+    let payUrl = null;
+    if (priceNum > 0) {
+      const pay = await createSquarePaymentLink({
+        orderId: bookingId,
+        amount: deposit,
+        name, email, phone, address: addr,
+        note: `Detail Day 50% deposit — ${svc.name} @ ${when} · ${cfg.property || ''}`,
+        items: [{ name: `Deposit (50%) — ${svc.name} · Detail Day`, qty: 1 }],
+      });
+      if (!pay.ok) {
+        await kvSRem(key, required); // release the lock — payment couldn't start
+        res.status(502).json({ ok: false, error: pay.error || 'Could not start payment. Please try again.' });
+        return;
+      }
+      payUrl = pay.url;
+    }
+
+    const booking = {
+      id: bookingId, name, email, phone,
+      address: addr, vehicle, vehicleSize: '', notes: unit ? ('Unit/Apt: ' + unit) : '',
+      service: svc.name, serviceId: 'detail-day', duration: need * SLOT_MIN + ' min',
+      price: priceNum, deposit, balance, isQuote: false,
+      date: cfg.eventDate, dateDisp: displayDate(cfg.eventDate), time: when,
+      status: priceNum > 0 ? 'pending_deposit' : 'scheduled',
+      depositPaid: priceNum > 0 ? false : true, balancePaid: false, balanceUrl: '',
+      rating: null,
+      statusHistory: [{ status: priceNum > 0 ? 'pending_deposit' : 'scheduled', at: now }],
+      createdAt: now,
+      detailDay: { property: cfg.property, eventDate: cfg.eventDate, startMin, slots: required, eventKey: key },
+    };
+    try { await saveBooking(booking); } catch (e) { console.log('detail-day booking save note:', e && e.message); }
+
+    // Notify the owner now (lead is captured even if the deposit is abandoned).
     const html = shell(
       `Detail Day booking — ${cfg.property || ''}`,
-      `<p style="margin:0 0 14px;color:rgba(244,242,238,0.85);">New reservation for your Detail Day event.</p>
+      `<p style="margin:0 0 14px;color:rgba(244,242,238,0.85);">New Detail Day reservation${priceNum > 0 ? ' — resident was sent to pay the 50% deposit' : ''}.</p>
        ${kvTable([
+         ['Booking ID', bookingId],
          ['Property', cfg.property],
          ['Event date', displayDate(cfg.eventDate)],
          ['Service', `${svc.name}${svc.price ? ' (' + svc.price + ')' : ''}`],
@@ -158,13 +205,15 @@ export default async function handler(req, res) {
          ['Phone', phone],
          ['Email', email],
          ['Vehicle', vehicle],
-         ['Booked at', new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })],
+         ['Deposit (50%)', priceNum > 0 ? `$${deposit.toFixed(2)}` : 'n/a'],
+         ['Balance', priceNum > 0 ? `$${balance.toFixed(2)}` : 'n/a'],
+         ['Status', priceNum > 0 ? 'Deposit pending' : 'Reserved'],
        ])}`,
       email ? `Reply goes to <strong>${escapeHtml(email)}</strong>.` : 'No email — call the number above to confirm.',
     );
     await sendMail({ subject: `📅 Detail Day — ${name} · ${label(startMin)} · ${cfg.property || ''}`, html, replyTo: email || undefined });
 
-    res.status(200).json({ ok: true, booked: newBooked, when });
+    res.status(200).json({ ok: true, booked: newBooked, when, url: payUrl, orderId: bookingId });
     return;
   }
 

@@ -100,6 +100,11 @@ export async function kvSAdd(key, members) {
   if (!list.length) return 0;
   return cmd(['SADD', key, ...list]);
 }
+export async function kvSRem(key, members) {
+  const list = (Array.isArray(members) ? members : [members]).map(String);
+  if (!list.length) return 0;
+  return cmd(['SREM', key, ...list]);
+}
 
 /* ─── Service stages (single source of truth, shared shape with the UI) ─── */
 export const STAGES = [

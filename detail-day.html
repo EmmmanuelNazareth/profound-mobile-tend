@@ -190,7 +190,7 @@
 
         <div class="selected-summary" id="summary"></div>
         <button type="submit" class="btn" id="submitBtn" disabled>Reserve my spot</button>
-        <p class="fine">You'll get a text to confirm. Payment is collected at the appointment.</p>
+        <p class="fine">A 50% deposit locks your spot. You'll get a tracking link, then a link to pay the balance after your service.</p>
       </form>
     </div>
   </div>
@@ -330,8 +330,10 @@ document.getElementById('bookForm').addEventListener('submit', async function(e)
     }
     if(!r.ok || !d.ok) throw new Error((d&&d.error)||'failed');
     finished = true;
+    if(d.url){ window.location.href = d.url; return; } // → Square 50% deposit, then live tracking
     const lbl = (DD.slots.find(s=>s.min===sel.startMin)||{}).label || '';
-    form.innerHTML = `<div style="text-align:center;padding:30px 10px"><h3 style="font-size:1.6rem;margin-bottom:8px">You're reserved! ✓</h3><p>${sel.service} at ${lbl}. We'll text you to confirm. Payment is collected at the appointment.</p></div>`;
+    const track = d.orderId ? ('/track?order='+encodeURIComponent(d.orderId)) : '/';
+    form.innerHTML = `<div style="text-align:center;padding:30px 10px"><h3 style="font-size:1.6rem;margin-bottom:8px">You're reserved! ✓</h3><p>${sel.service} at ${lbl}.</p><a href="${track}" style="display:inline-block;margin-top:14px;background:#3C8E39;color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:8px">Track your service →</a></div>`;
   }catch(err){
     btn.disabled=false; btn.textContent=orig;
     alert('Sorry, something went wrong. Please call 240-903-4345 or email sales@profoundmobiletend.com.');
