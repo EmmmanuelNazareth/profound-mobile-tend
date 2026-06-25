@@ -239,6 +239,7 @@ export default async function handler(req, res) {
           name: (s.name || '').toString().trim().slice(0, 80),
           desc: (s.desc || '').toString().trim().slice(0, 160),
           price: (s.price || '').toString().trim().slice(0, 24),
+          was: (s.was || '').toString().trim().slice(0, 24),
           mins: Math.max(15, Math.min(480, parseInt(s.mins, 10) || SLOT_MIN)),
         }))
         .filter((s) => s.name)

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Bookings — Profound Mobile Tend</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--green:#3C8E39;--green-l:#52b84f;--ink:#f4f2ee;--mid:rgba(244,242,238,.6)}
+  body{font-family:'Outfit',system-ui,sans-serif;background:#0b0b0b;color:var(--ink);line-height:1.55;padding:max(1.4rem,env(safe-area-inset-top)) 1.1rem 4rem}
+  .wrap{max-width:820px;margin:0 auto}
+  .eyebrow{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--green-l);font-weight:700}
+  h1{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;margin:.3rem 0 .2rem}
+  .sub{color:var(--mid);font-size:.9rem;margin-bottom:1.4rem}
+  .filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.2rem}
+  .filt{background:#161616;border:1px solid rgba(255,255,255,.1);color:var(--mid);border-radius:999px;padding:.4rem .9rem;font-size:.82rem;cursor:pointer;font-family:inherit}
+  .filt.on{background:rgba(60,142,57,.18);border-color:var(--green);color:var(--green-l)}
+  .card{background:#161616;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.9rem}
+  .card.cancelled{opacity:.55}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.6rem}
+  .svc{font-weight:600;font-size:1.05rem}
+  .when{color:var(--mid);font-size:.86rem;margin-top:1px}
+  .badge{font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:.28rem .6rem;border-radius:999px;white-space:nowrap}
+  .b-pending{background:rgba(214,178,46,.15);color:#e8c84f;border:1px solid rgba(214,178,46,.4)}
+  .b-active{background:rgba(60,142,57,.15);color:var(--green-l);border:1px solid rgba(60,142,57,.4)}
+  .b-done{background:rgba(120,120,120,.18);color:#bdbdbd;border:1px solid rgba(160,160,160,.3)}
+  .b-cancel{background:rgba(200,80,80,.14);color:#e88;border:1px solid rgba(200,80,80,.4)}
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:.3rem 1rem;font-size:.86rem;margin:.5rem 0 .2rem}
+  .meta .k{color:var(--mid)}
+  .pay{display:flex;gap:.6rem;flex-wrap:wrap;font-size:.8rem;color:var(--mid);margin-top:.3rem}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}
+  .dot.y{background:var(--green-l)} .dot.n{background:#666}
+  .row{display:flex;gap:.6rem;margin-top:.8rem;flex-wrap:wrap}
+  .btn{border:none;border-radius:7px;padding:.55rem 1rem;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-block}
+  .btn.cancel{background:transparent;border:1px solid rgba(200,80,80,.5);color:#e88}
+  .btn.manage{background:transparent;border:1px solid rgba(255,255,255,.18);color:var(--ink)}
+  .btn.track{background:transparent;border:1px solid rgba(82,184,79,.4);color:var(--green-l)}
+  .empty,.err{text-align:center;color:var(--mid);padding:2.5rem 1rem}
+  .toast{position:fixed;left:50%;bottom:1.4rem;transform:translateX(-50%);background:var(--green);color:#fff;padding:.75rem 1.2rem;border-radius:8px;font-weight:600;font-size:.88rem;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90%;text-align:center}
+  .toast.show{opacity:1}
+  .count{color:var(--mid);font-size:.82rem;margin-left:.3rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Owner · Dashboard</div>
+  <h1>Bookings</h1>
+  <div class="sub">All appointments and Detail Day reservations. Cancelling a Detail Day booking frees its time slot for others.</div>
+  <div class="filters" id="filters"></div>
+  <div id="list"><div class="empty">Loading…</div></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const token = new URLSearchParams(location.search).get('token') || '';
+const listEl = document.getElementById('list');
+const filtersEl = document.getElementById('filters');
+let all = [], filter = 'active';
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+function money(n){ return '$'+Number(n||0).toFixed(2); }
+function badge(s){
+  const map={pending_deposit:['Deposit pending','b-pending'],scheduled:['Scheduled','b-active'],on_the_way:['On the way','b-active'],in_progress:['In progress','b-active'],complete:['Complete','b-done'],paid:['Paid in full','b-done'],cancelled:['Cancelled','b-cancel'],quote_requested:['Quote','b-pending']};
+  const m=map[s]||[s,'b-done']; return '<span class="badge '+m[1]+'">'+m[0]+'</span>';
+}
+
+async function load(){
+  if(!token){ listEl.innerHTML='<div class="err">This dashboard link is missing its security token.</div>'; return; }
+  let d;
+  try{ const r=await fetch('/api/bookings?token='+encodeURIComponent(token),{cache:'no-store'}); d=await r.json(); }
+  catch(e){ listEl.innerHTML='<div class="err">Couldn\'t reach the server.</div>'; return; }
+  if(!d||!d.ok){ listEl.innerHTML='<div class="err">'+((d&&d.error)||'Access denied')+'</div>'; return; }
+  all = d.bookings||[];
+  renderFilters(); render();
+}
+
+function renderFilters(){
+  const active = all.filter(b=>['pending_deposit','scheduled','on_the_way','in_progress','complete'].includes(b.status)).length;
+  const defs=[['active','Active ('+active+')'],['all','All ('+all.length+')'],['cancelled','Cancelled']];
+  filtersEl.innerHTML = defs.map(([k,l])=>`<button class="filt${filter===k?' on':''}" onclick="setFilter('${k}')">${l}</button>`).join('');
+}
+function setFilter(f){ filter=f; renderFilters(); render(); }
+
+function render(){
+  let rows = all.slice();
+  if(filter==='active') rows = rows.filter(b=>['pending_deposit','scheduled','on_the_way','in_progress','complete'].includes(b.status));
+  else if(filter==='cancelled') rows = rows.filter(b=>b.status==='cancelled');
+  if(!rows.length){ listEl.innerHTML='<div class="empty">No bookings here yet.</div>'; return; }
+  listEl.innerHTML = rows.map(b=>{
+    const cancelled = b.status==='cancelled';
+    const when = [b.dateDisp,b.time].filter(Boolean).join(' · ');
+    const star = b.rating ? ' · '+'★'.repeat(b.rating) : '';
+    return `<div class="card${cancelled?' cancelled':''}">
+      <div class="top">
+        <div><div class="svc">${b.service||'Service'}${b.isDetailDay?' <span class="count">· Detail Day</span>':''}</div>
+        <div class="when">${when||'—'}${star}</div></div>
+        ${badge(b.status)}
+      </div>
+      <div class="meta">
+        <div><span class="k">Customer:</span> ${b.name||'—'}</div>
+        <div><span class="k">Booking:</span> ${b.id}</div>
+        <div><span class="k">Phone:</span> ${b.phone||'—'}</div>
+        <div><span class="k">Email:</span> ${b.email||'—'}</div>
+        ${b.address?`<div style="grid-column:1/-1"><span class="k">Where:</span> ${b.address}</div>`:''}
+      </div>
+      <div class="pay">
+        <span><span class="dot ${b.depositPaid?'y':'n'}"></span>Deposit ${money(b.deposit)}</span>
+        <span><span class="dot ${b.balancePaid?'y':'n'}"></span>Balance ${money(b.balance)}</span>
+        <span>Total ${money(b.price)}</span>
+      </div>
+      ${cancelled?'':`<div class="row">
+        <a class="btn track" href="/track?order=${encodeURIComponent(b.id)}" target="_blank">Tracking</a>
+        <button class="btn cancel" onclick="cancelBooking('${b.id}')">Cancel booking</button>
+      </div>`}
+    </div>`;
+  }).join('');
+}
+
+async function cancelBooking(id){
+  if(!confirm('Cancel this booking? If it\'s a Detail Day reservation, its time slot will reopen for others.')) return;
+  try{
+    const r=await fetch('/api/bookings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'cancel',id,token})});
+    const d=await r.json();
+    if(!r.ok||!d.ok){ toast('⚠ '+((d&&d.error)||'Could not cancel')); return; }
+    toast('✓ Cancelled'+(d.freed?' · '+d.freed+' slot(s) reopened':''));
+    load();
+  }catch(e){ toast('⚠ Network error'); }
+}
+
+load();
+</script>
+</body>
+</html>

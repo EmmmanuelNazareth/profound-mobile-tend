@@ -247,7 +247,10 @@ function renderServices(){
     const dur = slotsNeeded(s.mins)*45;
     const el = document.createElement('div');
     el.className = 'svc-opt' + (sel.service===s.name?' sel':'');
-    el.innerHTML = `<div class="svc-left"><div class="s-radio"></div><div><div class="s-name">${s.name}</div><div class="s-desc">${s.desc||''} · ~${dur} min</div></div></div><div class="s-price">${s.price||''}</div>`;
+    const priceHtml = s.was
+      ? `<span style="text-decoration:line-through;opacity:.45;font-size:.62em;display:block;font-weight:400;line-height:1">${s.was}</span>${s.price||''}`
+      : (s.price||'');
+    el.innerHTML = `<div class="svc-left"><div class="s-radio"></div><div><div class="s-name">${s.name}</div><div class="s-desc">${s.desc||''} · ~${dur} min</div></div></div><div class="s-price" style="text-align:right">${priceHtml}</div>`;
     el.addEventListener('click',()=>{
       sel.service = s.name; sel.price = s.price||''; sel.mins = Number(s.mins)||45;
       sel.startMin = null;
